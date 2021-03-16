@@ -11,6 +11,7 @@ import {
 
 import colours from '../colours';
 import {windowHeight, windowWidth} from '../utils/Dimensions';
+
 const LoginForm = ({userType}) => {
   //   userType = 'Shopkeeper';
   return (
@@ -84,6 +85,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 15,
+    fontFamily: 'Roboto-Regular',
     fontWeight: 'bold',
     alignSelf: 'center',
   },
