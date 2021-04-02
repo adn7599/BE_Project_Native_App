@@ -1,7 +1,7 @@
-import React,{useState} from 'react';
+import React,{useState,useContext} from 'react';
 import { Card,CardItem,CheckBox, Left,Right,Body,Content, Header, Item, Input, Button, Text, Label} from 'native-base';
 import { View,TextInput } from 'react-native';
-
+import Context from '../../global/context';
 
 
 const ShowCard = (item) => {
@@ -9,42 +9,35 @@ const ShowCard = (item) => {
     const [Quantity,setQuantity] = useState(1);
     //var [Order,setOrder] = useState([]);
     //var [Amount,setAmount] = useState(0);
+    const {changeTotal} = useContext(Context);
+    var price
 
     function toggleCheck(){
       if (SelectItem == 'ADD'){
         setSelectItem('REMOVE')
-        /*array = Order
-        console.log(typeof(array))
-        console.log(array)
-        index = array.indexOf(item)
-        array.splice(index,1)
-        console.log(typeof(Order))
-        setOrder(Order = array)
-        console.log(Order)*/
+        price = (item.price*Quantity)
+        changeTotal(price);
       }
       else{
         setSelectItem('ADD')
-        /*array = Order
-
-        console.log(typeof(array))
-        console.log(array)
-        array.push(item)
-        setOrder(Order = array)
-        console.log(Order)
-        console.log(typeof(item))
-        */
+        price = -(item.price*Quantity)
+        changeTotal(price);
       }
     }
 
     function decrement(){
         if (Quantity != 1 && SelectItem == 'REMOVE'){
             setQuantity(prevQuantity => prevQuantity - 1);
+            price = -(item.price)
+            changeTotal(price);
         }
     }
 
     function increment(){
         if (SelectItem == 'REMOVE'){
             setQuantity(prevQuantity => prevQuantity + 1);
+            price = (item.price)
+            changeTotal(price);
         }
         
     }
@@ -64,9 +57,9 @@ const ShowCard = (item) => {
               <View style={{flex:1}}>
                 <Text style={{fontSize:20}}>{item.title}</Text>
               </View>
-              <View style={{flex:1 ,paddingLeft:135}}>
-                <Button onPress={() => toggleCheck()} style={{width:90,alignSelf:'center'}}>
-                  <Text >
+              <View style={{flex:1 ,flexDirection:'row-reverse'}}>
+                <Button onPress={() => toggleCheck()} style={{width:90}}>
+                  <Text style={{textAlign:'center'}}>
                     {SelectItem}
                   </Text>
                 </Button>
@@ -97,7 +90,7 @@ const ShowCard = (item) => {
                   </View>
                 </View>
             </View>
-            <View style={{flex:1 ,flexDirection:'row'}}>
+            <View style={{flex:1 ,flexDirection:'row',paddingBottom:10}}>
               <View style={{flex:1}}>
                 <Text style={{fontSize:20}}>Amount</Text>
               </View>
@@ -106,6 +99,13 @@ const ShowCard = (item) => {
                     <CalculateAmount />
                 </Text>
               </View>
+            </View>
+            <View style={{flex:1,alignSelf:'flex-end'}}>
+              <Button>
+                <Text>
+                  Delete Item
+                </Text>
+              </Button>
             </View>
           </Body>
         </CardItem>

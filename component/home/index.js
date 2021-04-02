@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { Container,Card,CardItem,Left,Right,Thumbnail,Body,Content, Header, Item, Input, Icon, Button, Text} from 'native-base';
-import { Dimensions,FlatList } from 'react-native';
+import { Container,Card,Title,CardItem,Left,Right,Thumbnail,Body,Content, Header, Item, Input, Icon, Button, Text} from 'native-base';
+import { Dimensions,FlatList, View } from 'react-native';
 
 import Context from '../../global/context';
 
@@ -34,10 +34,13 @@ const DATA = [
 const dimension = Dimensions.get('screen');
 
 
-const HomeScreen = () =>{
+const HomeScreen = ({navigation}) =>{
 
-  const {addToCart} = useContext(Context);
+  const {TotalAmount,changeTotal} = useContext(Context);
+
   
+  //changeTotal(-(TotalAmount));
+
   const renderItem = ({ item }) => (
     <Content style={{ paddingHorizontal: 20 }}>
       <Card style={{ flex: 0 }}>
@@ -62,7 +65,7 @@ const HomeScreen = () =>{
             <Button 
               textStyle={{ color: '#87838B' }} 
               style={{ alignSelf: 'flex-end' }}
-              onPress={() => addToCart(item)}
+              onPress={() => navigation.openDrawer()}
               >
               <Icon name="cart" />
               <Text>Add To Cart</Text>
@@ -97,7 +100,7 @@ const HomeScreen = () =>{
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
-        
+
       </Container>
     );
 }

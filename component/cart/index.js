@@ -3,7 +3,7 @@ import { Container,Body,Content, Header,Right, Item, Input, Icon, Button, Text, 
 import { Dimensions,View,FlatList} from 'react-native';
 
 
-//import Context from '../../global/context';
+import Context from '../../global/context';
 import ShowCard from './ShowCard';
 
 const DATA = [
@@ -70,6 +70,8 @@ const dimension = Dimensions.get('screen');
 
 const CartScreen = ({navigation}) =>{
 
+  const {TotalAmount} = useContext(Context);
+
   const renderItem = ({ item }) => {  
     return(
       <ShowCard {...item} />
@@ -97,9 +99,17 @@ const CartScreen = ({navigation}) =>{
               Total Amount
             </Text>
           </View>
+          <View style={{padding:20,alignItems:'flex-end'}}>
+            <Text style={{fontSize:20,alignSelf:'flex-end'}}>
+              {TotalAmount}
+            </Text>
+          </View>
         </View>
         <View style={{alignSelf:'center',paddingBottom: 20}}>
-        <Button onPress={() => navigation.navigate('SelectProvider')}>
+        <Button 
+          onPress={() => navigation.navigate('SelectProvider')}
+          disabled = {TotalAmount === 0 ? true : false } 
+        >
           <Text>
             Proceed To Order
           </Text>

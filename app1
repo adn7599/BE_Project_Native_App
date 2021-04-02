@@ -1,7 +1,7 @@
 import React,{ useRef } from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {Icon} from 'native-base';
-import { createStackNavigator, HeaderBackButton,} from '@react-navigation/stack';
+import { createStackNavigator,} from '@react-navigation/stack';
 import { createDrawerNavigator,} from '@react-navigation/drawer';
 import { Provider as PaperProvider } from 'react-native-paper';
 
@@ -19,25 +19,46 @@ import RequestConfirmMsgScreen from './component/cart/RequestConfirmMsg';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const DrawerNavigation = () => {
+function DrawerNavigation () {
   return (
-    <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={StackNavigation} />
+        <Drawer.Screen name="Home" component={HomeScreen} />
       </Drawer.Navigator>
-    </NavigationContainer>
   );
 }
 
 const StackNavigation = () =>{
   return(
+    
+    <NavigationContainer>
       <Stack.Navigator initialRouteName="HomeScreen">
+        <Stack.Screen 
+         name ="Home"
+         component={DrawerNavigation}
+         options={({ navigation }) => ({
+          headerShown : false, 
+          headerLeft: (props) => (
+            <Icon
+              {...props}
+              onPress= {() => navigation.openDrawer()}
+              name= "md-menu"
+              style={{fontSize: 35, color: 'red', padding:20}}/>
+          ),
+          headerRight: (props) => (
+            <Icon
+              {...props}
+              onPress= {() => navigation.navigate('Cart')}
+              name= "cart"
+              style={{fontSize: 35, color: 'red', padding:20}}/>
+          ),
+        })}
+        />
         <Stack.Screen
-          name="Home"
+          name="Home1"
           component={HomeScreen}
           options={({ navigation }) => ({
             headerTitleAlign: 'center',
-            //headerShown : false, 
+            headerShown : false, 
             headerLeft: (props) => (
               <Icon
                 {...props}
@@ -72,28 +93,43 @@ const StackNavigation = () =>{
         <Stack.Screen 
         name="SelectProvider"
         component={SelectProviderScreen}
-        options ={{
-          headerLeft:null
-        }}
         />
         <Stack.Screen 
         name="RequestConfirmMsg"
         component={RequestConfirmMsgScreen}
-        options ={{
-          headerLeft:null
-        }}
         />
       </Stack.Navigator>
+    </NavigationContainer>
+  
   );
 }
 
 const App = () =>{
+  /*function SideBar(props){
+    return(
+      <NavigationContainer>
+      <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Screen name="Home" component={HomeScreen} />
+      </Drawer.Navigator>
+    </NavigationContainer>
+    );
+  };
+  function menu(props){
+    return(
+      <Icon
+        {...props}
+        onPress= {() => {alert('You have click menu')}}
+        name= "md-menu"
+        style={{fontSize: 35, color: 'red', padding:20}}/>
+    );
+  };*/
+
   const cartArray = CartArray();
 
   return (
     <Context.Provider value={cartArray}>
       <PaperProvider>
-        <DrawerNavigation />
+        <StackNavigation />
       </PaperProvider>
     </Context.Provider>
   );

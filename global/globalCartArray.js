@@ -3,6 +3,7 @@ import {useState} from 'react';
 const CartArray = () =>{
     var [CartList,setCartList] = useState([]);
     //var [Order,setOrder] = useState([]);
+    var [TotalAmount,setTotalAmount] = useState(0);
 
 
     const addToCart = (action) =>{
@@ -16,8 +17,15 @@ const CartArray = () =>{
         console.log(CartList)
     }
 
+    const changeTotal = (newPrice) =>{
+        const price = newPrice
+        console.log(typeof(price))
+        setTotalAmount(TotalAmount = TotalAmount +parseInt( price))
+        console.log(TotalAmount);
+    }
+
     
-    return {CartList,addToCart}
+    return {CartList,addToCart,TotalAmount,changeTotal}
 }
 
 export default CartArray;

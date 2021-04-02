@@ -1,7 +1,14 @@
 import React, { useContext,useState } from 'react';
-import { Container,Body,Content, Header,Card,CardItem,Radio,Left,Right, Item, Input, Icon, Button, Text, Title,} from 'native-base';
-import { Dimensions,View,FlatList} from 'react-native';
+import { 
+  Container,Body,Content,Header,
+  Card,CardItem,Radio,Left,
+  Right,Item, Input,Icon,
+  Button,Text, Title,Form,
+  Picker,
+  } from 'native-base';
+import { Dimensions,View,FlatList,} from 'react-native';
 import { List } from 'react-native-paper';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 
 
@@ -43,18 +50,13 @@ const DATA = [
     },
 ];
 
-const dimension = Dimensions.get('screen');
-
-const dataArray = [
-  {title: "Item Satisfied: 3/4", content: "Item 1,Item2, Item3"},
-  {title: "Item Satisfied: 3/4", content: "Item 1,Item2, Item3"}
-];
 
 
 const SelectProviderScreen = ({navigation}) =>{
 
   const [Selected,setSelected] = useState('');
   const [Expanded,setExpanded] = useState('');
+  const [Range,setRange] = useState(100);
 
 
   const renderItem = ({ item }) => {  
@@ -105,7 +107,31 @@ const SelectProviderScreen = ({navigation}) =>{
             </Body>
             <Right />
         </Header>
-        <View style={{paddingTop:20}}></View>
+        <View style={{padding:20,flexDirection:'row'}}>
+          <View style={{flex:1}}>
+            <Text>
+              Range
+            </Text>
+          </View>
+          <View style={{flex:1}}>
+          <DropDownPicker
+            items={[
+                {label:'100', value: 100},
+                {label:'200', value: 200},
+                {label:'300', value: 300},
+                {label:'400', value: 400},
+                {label:'500', value: 500},
+              ]}
+            defaultValue={Range}
+            containerStyle={{height: 40}}
+            itemStyle={{
+                justifyContent: 'flex-start'
+            }}
+            dropDownStyle={{backgroundColor: '#fafafa'}}
+            onChangeItem={ item => setRange(item.value)}
+        />
+          </View>
+        </View>
         <FlatList
             data={DATA}
             initialNumToRender= {6}
@@ -120,7 +146,9 @@ const SelectProviderScreen = ({navigation}) =>{
           </View>
         </View>
         <View style={{alignSelf:'center',paddingBottom: 20}}>
-        <Button onPress ={() => navigation.navigate('RequestConfirmMsg')}>
+        <Button 
+          onPress ={() => navigation.navigate('RequestConfirmMsg')}
+          disabled ={Selected === "" ? true : false}>
           <Text>
             Proceed To Order
           </Text>
