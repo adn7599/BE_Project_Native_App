@@ -2,9 +2,7 @@ import React, { useContext,useState } from 'react';
 import { 
   Container,Body,Content,Header,
   Card,CardItem,Radio,Left,
-  Right,Item, Input,Icon,
-  Button,Text, Title,Form,
-  Picker,
+  Right,Button,Text, 
   } from 'native-base';
 import { Dimensions,View,FlatList,} from 'react-native';
 import { List } from 'react-native-paper';

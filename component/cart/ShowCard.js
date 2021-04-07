@@ -7,8 +7,6 @@ import Context from '../../global/context';
 const ShowCard = (item) => {
     var [SelectItem,setSelectItem] = useState('ADD');
     const [Quantity,setQuantity] = useState(1);
-    //var [Order,setOrder] = useState([]);
-    //var [Amount,setAmount] = useState(0);
     const {changeTotal} = useContext(Context);
     var price
 

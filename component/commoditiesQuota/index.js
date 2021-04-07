@@ -12,6 +12,8 @@ const DATA = [
     price: '11',
     unit: 'Kg',
     image: '../../assect/image/wheat.png',
+    allotted_quota: 10,
+    remaining_quota: 5,
   },
   {
     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
@@ -20,6 +22,8 @@ const DATA = [
     price: '11',
     unit: 'Kg',
     image: '../../assect/image/wheat.png',
+    allotted_quota: 10,
+    remaining_quota: 5,
   },
   {
     id: '58694a0f-3da1-471f-bd96-145571e29d72',
@@ -28,18 +32,15 @@ const DATA = [
     price: '11',
     unit: 'Kg',
     image: '../../assect/image/wheat.png',
+    allotted_quota: 10,
+    remaining_quota: 5,
   },
 ];
 
 const dimension = Dimensions.get('screen');
 
 
-const HomeScreen = ({navigation}) =>{
-
-  const {TotalAmount,changeTotal} = useContext(Context);
-
-  
-  //changeTotal(-(TotalAmount));
+const QuotaScreen = ({navigation}) =>{
 
   const renderItem = ({ item }) => (
     <Content style={{ paddingHorizontal: 20 }}>
@@ -62,14 +63,16 @@ const HomeScreen = ({navigation}) =>{
                 </Text>
               </Body>
             </CardItem>
-            <Button 
-              textStyle={{ color: '#87838B' }} 
-              style={{ alignSelf: 'flex-end' }}
-              onPress={() => console.log(dimension.width)}
-              >
-              <Icon name="cart" />
-              <Text>Add To Cart</Text>
-            </Button>
+            <CardItem>
+                <Body>
+                    <Text>
+                        Allotted Quota : {item.allotted_quota}
+                    </Text>
+                    <Text>
+                        Remaining Quota : {item.remaining_quota}
+                    </Text>
+                </Body>
+            </CardItem>
           </Body>
         </CardItem>
       </Card>
@@ -79,6 +82,19 @@ const HomeScreen = ({navigation}) =>{
 
     return (
       <Container style={{backgroundColor:'#F9D1A3'}}>
+          <Header style ={{backgroundColor:'white'}}>
+              <Left>
+                  <Icon onPress= {() => navigation.openDrawer()}
+                    name= "md-menu"
+                    style={{fontSize: 35, color: 'red'}} />
+              </Left>
+              <Body>
+                  <Title style={{color:'black',paddingLeft:100}}>
+                      Quota
+                  </Title>
+              </Body>
+              <Right />
+          </Header>
         <Header searchBar rounded style={{backgroundColor:''}}>
           <Item>
             <Icon name="ios-search" />
@@ -94,6 +110,7 @@ const HomeScreen = ({navigation}) =>{
             </Body>
             <Right />
         </Header>
+        <View style={{paddingTop:10}}></View>
         <FlatList
         data={DATA}
         initialNumToRender= {4}
@@ -105,4 +122,4 @@ const HomeScreen = ({navigation}) =>{
     );
 }
 
-export default HomeScreen;
+export default QuotaScreen;
