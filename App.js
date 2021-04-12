@@ -16,6 +16,8 @@ import QuotaScreen from './component/commoditiesQuota';
 import OrderScreen from './component/yourOrder';
 import OrderDetailScreen from './component/yourOrder/orderDetails';
 import UPIPaymentScreen from './component/yourOrder/upiPayment';
+import CashPaymentScreen from './component/yourOrder/cashPayment';
+import ConfirmationQRScreen from './component/yourOrder/confirmationQR';
 
 
 //console.reportErrorAsExceptions = false;
@@ -42,25 +44,53 @@ const DrawerNavigation = () => {
         />
         <Drawer.Screen 
         name = 'YourOrder' 
-        component ={OrderScreen} 
+        component ={YourOrderStack}
         />
-        <Drawer.Screen 
-        name = 'OrderDetails' 
-        component ={OrderDetailScreen} 
-        
-        options={() => ({
-          drawerLabel: () => null,
-          title: null,
-          drawerIcon: () => null,
-          })}
-           />
-          <Drawer.Screen
-            name = 'UPIPayment'
-            component ={UPIPaymentScreen}
-          />
       </Drawer.Navigator>
     </NavigationContainer>
   );
+}
+
+const YourOrderStack = () => {
+  return(
+    <Stack.Navigator initialRouteName='YourOrder'>
+    <Stack.Screen 
+    name = 'YourOrder'
+    component = {OrderScreen}
+    options={{
+      headerShown : false
+    }}
+    />
+    <Stack.Screen 
+    name = 'OrderDetails' 
+    component ={OrderDetailScreen}
+    options={{
+      headerShown : false
+    }}
+    />
+    <Stack.Screen 
+    name = 'UPIPayment'
+    component ={UPIPaymentScreen}
+    options={{
+      headerShown : false
+    }}
+    />
+    <Stack.Screen 
+    name = 'CashPayment'
+    component ={CashPaymentScreen}
+    options={{
+      headerShown : false
+    }}
+    />
+    <Stack.Screen 
+    name = 'ConfirmationQR'
+    component ={ConfirmationQRScreen}
+    options={{
+      headerShown : false
+    }}
+    />
+  </Stack.Navigator>
+  )
 }
 
 const StackNavigation = () =>{

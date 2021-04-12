@@ -52,7 +52,7 @@ const DATA = [
 const OrderScreen = ({navigation}) =>{
 
     const IsPayed = (item) => {
-        var itemStatus = item.status
+        const itemStatus = item.status
         if(( itemStatus) === "Request"){
             return(
                 <Text>

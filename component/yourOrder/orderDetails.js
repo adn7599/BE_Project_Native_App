@@ -20,7 +20,7 @@ const Data = [
 
 const OrderDetailScreen = ({navigation}) =>{
     const item = Data[0]
-    var [PaymentMode,setPaymentMode] = useState("");
+    const [PaymentMode,setPaymentMode] = useState("");
 
     const IsPayed = () =>{
         if (item.status === "Request")
@@ -52,7 +52,10 @@ const OrderDetailScreen = ({navigation}) =>{
                 <View style={{flex:4,}}>
                     <Button 
                         disabled = {PaymentMode === "" ? true : false}
-                        onPress = {() => navigation.navigate('UPIPayment')}>
+                        onPress = {() => {
+                            PaymentMode === "cash" ? 
+                            navigation.navigate('CashPayment') : 
+                            navigation.navigate('UPIPayment') }}>
                         <Text>
                             Proceed  To Pay
                         </Text>
@@ -72,7 +75,7 @@ const OrderDetailScreen = ({navigation}) =>{
                     </Text>
                 </View>
                 <View style={{alignSelf:'center',paddingTop:10}}>
-                    <Button>
+                    <Button onPress = {() => navigation.navigate('ConfirmationQR')}>
                         <Text>
                             Proceed  To Confirmation
                         </Text>

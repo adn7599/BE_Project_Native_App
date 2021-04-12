@@ -201,6 +201,7 @@ dependencies {
     }
 
     compile project(':react-native-vector-icons')
+    compile project(':react-native-upi-payment')
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

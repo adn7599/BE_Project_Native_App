@@ -67,17 +67,16 @@ const SelectProviderScreen = ({navigation}) =>{
               <View style={{flex:1}}>
                 <Text style={{fontSize:20}}>{item.name}</Text>
               </View>
-              <View style={{flex:1 ,paddingLeft:135,alignItems:'flex-end'}}>
+              <View style={{flex:1 ,flexDirection:'row-reverse'}}>
               <Radio
                 color={"#f0ad4e"}
                 selectedColor={"#5cb85c"}
-                
                 selected={Selected === item.id ? true: false}
                 onPress={() => setSelected(item.id)}
               />
               </View>
             </View>
-            <View style={{flex:1,paddingBottom:10}}>
+            <View style={{flex:1}}>
                 <Text>
                   Address : {item.address}
                 </Text>
@@ -86,8 +85,15 @@ const SelectProviderScreen = ({navigation}) =>{
               <List.Accordion title = "Item Satisfied 3/4"
                 expanded={Expanded === item.id ? true:false}
                 onPress={() => setExpanded(item.id)}>
-                <List.Item title="item Satisfied : Item 1, item 2 ,Item 4" />
-                <List.Item title="Item Not satisfied : item 3" />
+                <Text style={{paddingLeft:20,color:'green'}}>
+                item Satisfied {'\n'}Item 1, Item 2, Item 3
+                </Text>
+                <Text style={{paddingLeft:20,color:'orange'}}>
+                item Partially Satisfied {'\n'}Item 4   3/5{'\n'}Item 5   2/5{'\n'}Item 6   4/6
+                </Text>
+                <Text style={{paddingLeft:20,color:'red'}}>
+                item Not Satisfied {'\n'}Item 7, Item 8, Item 9
+                </Text>
               </List.Accordion>
             </View>
           </Body>

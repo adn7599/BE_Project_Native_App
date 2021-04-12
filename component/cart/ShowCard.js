@@ -5,10 +5,10 @@ import Context from '../../global/context';
 
 
 const ShowCard = (item) => {
-    var [SelectItem,setSelectItem] = useState('ADD');
+    const [SelectItem,setSelectItem] = useState('ADD');
     const [Quantity,setQuantity] = useState(1);
     const {changeTotal} = useContext(Context);
-    var price
+    let price
 
     function toggleCheck(){
       if (SelectItem == 'ADD'){
@@ -67,21 +67,22 @@ const ShowCard = (item) => {
               <View style={{flex:1}}> 
                 <Text note style={{fontSize:20}}>{item.price} Rs/{item.unit}</Text>
               </View>
-              <View style={{flex:1,flexDirection:'row',}}>
-                  <View style={{flex:1,paddingLeft:40}}>
+              <View style={{flex:1,flexDirection:'row-reverse',}}>
+                  <View style={{flex:1}}>
                     <Button style={{width:40,height:40}} onPress={() => decrement()}>
-                    <Text>-</Text>
+                    <Text>+</Text>
                     </Button>
                   </View>
                   <View style={{flex:1}}>
                     <TextInput
                         value = {Quantity.toString()}
                         textAlign = 'center'
-                        editable = {false}
+                        editable = {SelectItem === 'REMOVE' ? true : false}
+                        onChangeText ={Text => setQuantity(Text)}
                         style ={{width:40,height:40,borderWidth:1,color:'black'}}
                     />
                   </View>
-                  <View style={{flex:1,alignItems:'flex-end',}}>
+                  <View style={{flex:1,paddingLeft:40}}>
                     <Button style={{width:40,height:40}} onPress={() => increment()}>
                     <Text>+</Text>
                     </Button>
@@ -92,13 +93,13 @@ const ShowCard = (item) => {
               <View style={{flex:1}}>
                 <Text style={{fontSize:20}}>Amount</Text>
               </View>
-              <View style={{flex:1 ,alignItems:'flex-end',paddingHorizontal:10}}>
+              <View style={{flex:1 ,flexDirection:'row-reverse',paddingStart:10}}>
                 <Text>
                     <CalculateAmount />
                 </Text>
               </View>
             </View>
-            <View style={{flex:1,alignSelf:'flex-end'}}>
+            <View style={{alignSelf:'flex-end'}}>
               <Button>
                 <Text>
                   Delete Item

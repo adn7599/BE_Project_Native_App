@@ -94,13 +94,13 @@ const CartScreen = ({navigation}) =>{
             keyExtractor={item => item.id}
           />
         <View style={{flexDirection:'row'}}>
-          <View style={{padding:20,}}>
+          <View style={{flex : 1,padding:30,}}>
             <Text style={{fontSize:20}}>
               Total Amount
             </Text>
           </View>
-          <View style={{padding:20,alignItems:'flex-end'}}>
-            <Text style={{fontSize:20,alignSelf:'flex-end'}}>
+          <View style={{flex : 1,padding:30,flexDirection:'row-reverse'}}>
+            <Text style={{fontSize:20}}>
               {TotalAmount}
             </Text>
           </View>

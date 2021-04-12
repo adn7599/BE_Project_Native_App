@@ -23,7 +23,7 @@ const RequestConfirmMsgScreen = ({navigation}) =>{
     return (
       <View style ={{flex:1,backgroundColor:'#F9D1A3'}}>
         <View style ={{flex:1,alignItems:'center', justifyContent:'center'}}>
-          <Text style={{padding:20}}>
+          <Text style={{paddingHorizontal:10,textAlign:'center',fontSize:20}}>
             Your request is sent to provider, you can go and purchase your commodities
           </Text>
           <Text style={{padding:20}}>

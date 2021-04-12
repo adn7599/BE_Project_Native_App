@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Container,Card,Title,CardItem,Left,Right,Thumbnail,Body,Content, Header, Item, Input, Icon, Button, Text} from 'native-base';
 import { Dimensions,FlatList, View } from 'react-native';
 
-import Context from '../../global/context';
 
 const DATA = [
   {
