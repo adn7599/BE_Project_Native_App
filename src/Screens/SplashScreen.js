@@ -1,26 +1,35 @@
-import React, {Component} from 'react';
+import React, {useState,useEffect} from 'react';
 import {Image, Text, StyleSheet, SafeAreaView} from 'react-native';
 import colours from '../colours';
+import App from '../App';
 
 const logo = require('../Assets/Logo.png');
 
-export default class SplashScreen extends Component {
-  constructor(props) {
-    super(props);
-    setTimeout(() => {
-      this.props.navigation.navigate('LoginForm');
-    }, 2000);
-  }
+const SplashScreen = ({navigation}) => {
+  const [timePassed,setTimePassed] = useState(false);
 
-  render() {
+  useEffect(() =>{
+    setTimeout(() => {
+      setTimePassed({timePassed: true})},
+      //return (navigation.navigate('CustomerDashboard')) },
+       1000);
+  },[]);
+
+    if (timePassed)
+    {
+      return <App />
+    }
+    else{
     return (
       <SafeAreaView style={styles.container}>
         <Image source={logo} style={styles.logo} />
         <Text style={styles.title}>Commodity Distribution System</Text>
       </SafeAreaView>
     );
+    }
   }
-}
+  
+
 
 const styles = StyleSheet.create({
   container: {
@@ -41,3 +50,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default SplashScreen;

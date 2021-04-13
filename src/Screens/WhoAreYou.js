@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{useContext} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+import Context from '../Global/context';
 
 import Customer from '../Assets/svgComponents/Customer';
 import Supplier from '../Assets/svgComponents/Supplier';
@@ -13,15 +14,20 @@ import Distributor from '../Assets/svgComponents/Distributor';
 
 import colours from '../colours';
 
-const MyButton = ({title, colour}) => {
-  return (
-    <TouchableOpacity style={[styles.button, {backgroundColor: colour}]}>
-      <Text style={styles.btText}>{title}</Text>
-    </TouchableOpacity>
-  );
-};
 
-const WhoAreYou = () => {
+
+const WhoAreYou = ({navigation}) => {
+
+  const MyButton = ({title, colour}) => {
+    const {setUser} = useContext(Context);
+    return (
+      <TouchableOpacity style={[styles.button, {backgroundColor: colour}]} 
+      onPress={() => [setUser(title), navigation.navigate('LoginForm')]}>
+        <Text style={styles.btText}>{title}</Text>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>

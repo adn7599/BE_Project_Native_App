@@ -7,12 +7,16 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Dimensions
 } from 'react-native';
 
 import colours from '../colours';
-import {windowHeight, windowWidth} from '../utils/Dimensions';
 
-const LoginForm = ({userType}) => {
+const windowHeight = Dimensions.get('screen').height;
+const windowWidth = Dimensions.get('screen').width;
+//import {windowHeight, windowWidth} from '../utils/Dimensions';
+
+const LoginForm = ({navigation}) => {
   //   userType = 'Shopkeeper';
   return (
     <SafeAreaView>

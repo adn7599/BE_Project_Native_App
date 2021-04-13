@@ -1,4 +1,4 @@
-import React,{ useRef } from 'react';
+import React,{ useRef,useContext } from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {Icon} from 'native-base';
 import { createStackNavigator} from '@react-navigation/stack';
@@ -7,6 +7,10 @@ import { Provider as PaperProvider } from 'react-native-paper';
 
 import Context from './Global/context';
 import CartArray from './Global/GlobalVariable';
+import SplashScreen from './Screens/SplashScreen';
+import LoginOrRegister from './Screens/LoginOrRegister';
+import WhoAreYou from './Screens/WhoAreYou';
+import LoginForm from './Screens/LoginForm';
 import CustomerDashboardScreen from './Screens/Customer';
 import CartScreen from './Screens/Customer/Cart';
 import SelectProviderScreen from './Screens/Customer/Cart/SelectProvider';
@@ -32,19 +36,31 @@ const DrawerNavigation = () => {
       <Drawer.Navigator initialRouteName="CustomerDashboard">
         <Drawer.Screen 
           name="CustomerDashboard" 
-          component={StackNavigation} 
+          component={WhichStack} 
+          options = {{
+            swipeEnabled : false
+          }}
         />
         <Drawer.Screen 
         name='Profile' 
         component ={ProfileScreen} 
+        options = {{
+          swipeEnabled : false
+        }}
         />
         <Drawer.Screen 
         name ='Quota' 
         component ={QuotaScreen} 
+        options = {{
+          swipeEnabled : false
+        }}
         />
         <Drawer.Screen 
         name = 'YourOrder' 
         component ={YourOrderStack}
+        options = {{
+          swipeEnabled : false
+        }}
         />
       </Drawer.Navigator>
     </NavigationContainer>
@@ -93,7 +109,7 @@ const YourOrderStack = () => {
   )
 }
 
-const StackNavigation = () =>{
+const CartStack = () =>{
   return(
       <Stack.Navigator initialRouteName="CustomerDashboard">
         <Stack.Screen
@@ -150,6 +166,54 @@ const StackNavigation = () =>{
         
       </Stack.Navigator>
   );
+}
+
+const StartStack = () => {
+  return (
+    
+      <Stack.Navigator initialRouteName ='LoginOrRegister'>
+        <Stack.Screen 
+        name = 'LoginOrRegister'
+        component ={LoginOrRegister}
+        options = {{
+          headerShown : false
+        }} />
+        <Stack.Screen 
+        name = 'WhoAreYou'
+        component ={WhoAreYou}
+        options = {{
+          headerShown : false
+        }} />
+        <Stack.Screen 
+        name = 'LoginForm'
+        component ={LoginForm}
+        options = {{
+          headerShown : false
+        }} />
+        <Stack.Screen 
+        name = 'CustomerDashboard'
+        component ={CartStack}
+        />
+      </Stack.Navigator>
+    
+  )
+}
+
+const WhichStack = () =>{
+  const {UserType} = useContext(Context);
+  if (UserType == ''){
+    return (
+    <StartStack />
+    )
+  }
+  else{
+    return (
+    <CartStack />
+    )
+  }
+  /*return(
+    <StartStack />
+  )*/
 }
 
 const App = () =>{

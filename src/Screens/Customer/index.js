@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext,useEffect } from 'react';
 import { 
     Container,Card,CardItem,
     Left,Right,Thumbnail,
@@ -6,7 +6,7 @@ import {
     Item, Input, Icon,
     Button, Text}
     from 'native-base';
-import { Dimensions,FlatList, View,StyleSheet } from 'react-native';
+import { Dimensions,FlatList, View,StyleSheet,BackHandler } from 'react-native';
 
 //import Context from '../../global/context';
 
@@ -42,6 +42,18 @@ const dimension = Dimensions.get('screen');
 
 const CustomerDashboardScreen = ({navigation}) =>{
 
+    /*useEffect(() => {
+        const backAction = () => {
+          return true;
+        };
+    
+        const backHandler = BackHandler.addEventListener(
+          "hardwareBackPress",
+          backAction
+        );
+    
+        return () => backHandler.remove();
+      }, []);*/
 
     const renderItem = ({ item }) => (
         <Content style={Sytles.cardContainer}>

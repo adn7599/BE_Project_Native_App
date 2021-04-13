@@ -5,7 +5,7 @@ import Logo from '../Assets/svgComponents/Logo';
 import colours from '../colours';
 
 
-const LoginOrRegister = () => {
+const LoginOrRegister = ({navigation}) => {
   return (
     <SafeAreaView style={{flex: 1}}>
       
@@ -19,7 +19,8 @@ const LoginOrRegister = () => {
             account,
           </Text>
 
-          <TouchableOpacity style={[styles.button,{backgroundColor: colours.green}]}>
+          <TouchableOpacity style={[styles.button,{backgroundColor: colours.green}]}
+          onPress ={() => navigation.navigate('WhoAreYou')}>
             <Text style={styles.btText}>
               Log In
             </Text>
@@ -30,7 +31,8 @@ const LoginOrRegister = () => {
             new one,
           </Text>
 
-          <TouchableOpacity style={[styles.button,{backgroundColor: colours.orange}]}>
+          <TouchableOpacity style={[styles.button,{backgroundColor: colours.orange}]}
+          onPress ={() => navigation.navigate('WhoAreYou')}>
             <Text style={styles.btText}>
               Register 
             </Text>

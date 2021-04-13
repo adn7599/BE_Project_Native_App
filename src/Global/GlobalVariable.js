@@ -1,9 +1,10 @@
 import {useState} from 'react';
 
 const CartArray = () =>{
-    var [CartList,setCartList] = useState([]);
+    const [CartList,setCartList] = useState([]);
     //var [Order,setOrder] = useState([]);
-    var [TotalAmount,setTotalAmount] = useState(0);
+    let [TotalAmount,setTotalAmount] = useState(0);
+    let [UserType,setUserType] = useState('');
 
 
     const addToCart = (action) =>{
@@ -24,8 +25,16 @@ const CartArray = () =>{
         console.log(TotalAmount);
     }
 
+    const setUser = (User) =>{
+        const user = User
+        console.log(user)
+        console.log(typeof(user))
+        setUserType(UserType = user)
+        console.log(UserType);
+    }
+
     
-    return {CartList,addToCart,TotalAmount,changeTotal}
+    return {CartList,addToCart,TotalAmount,changeTotal,UserType,setUser}
 }
 
 export default CartArray;
