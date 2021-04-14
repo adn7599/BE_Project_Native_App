@@ -22,7 +22,9 @@ const WhoAreYou = ({navigation}) => {
     const {setUser} = useContext(Context);
     return (
       <TouchableOpacity style={[styles.button, {backgroundColor: colour}]} 
-      onPress={() => [setUser(title), navigation.navigate('LoginForm')]}>
+      onPress={() => navigation.navigate('LoginForm',{
+        UserType : title
+      })}>
         <Text style={styles.btText}>{title}</Text>
       </TouchableOpacity>
     );

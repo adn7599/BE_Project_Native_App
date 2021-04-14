@@ -61,9 +61,11 @@ const ShowCard = (item) => {
                             </View>
                             <View style={common.cardRowEnd}>
                                 <Button onPress={() => toggleCheck()} style={{width:90}}>
+                                    <View style ={{alignSelf : 'center'}}>
                                     <Text style={Styles.btnText}>
                                         {SelectItem}
                                     </Text>
+                                    </View>
                                 </Button>
                             </View>
                         </View>

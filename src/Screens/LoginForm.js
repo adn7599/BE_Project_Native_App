@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext,useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -7,23 +7,42 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  Dimensions
+  Dimensions,
+  BackHandler
 } from 'react-native';
 
 import colours from '../colours';
+import Context from '../Global/context';
 
 const windowHeight = Dimensions.get('screen').height;
 const windowWidth = Dimensions.get('screen').width;
 //import {windowHeight, windowWidth} from '../utils/Dimensions';
 
-const LoginForm = ({navigation}) => {
+const LoginForm = ({route, navigation}) => {
   //   userType = 'Shopkeeper';
+  const {setUser} = useContext(Context);
+  const {UserType} = route.params;
+
+  /*useEffect(() => {
+    const backAction = () => {
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);*/
+
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.heading}>
           <Text style={styles.headingText}>
-            Welcome {userType}! Login to start exploring.
+            Welcome {UserType}! Login to start exploring.
           </Text>
           <Image source={require('../Assets/Logo.png')} />
         </View>
@@ -43,7 +62,8 @@ const LoginForm = ({navigation}) => {
             placeholderTextColor={colours.brown}
           />
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} 
+        onPress = {() => setUser(UserType)}>
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
       </View>

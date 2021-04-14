@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {StyleSheet, View } from 'react-native';
+import {StyleSheet, View, Modal } from 'react-native';
 import { 
     Container,Title,Left,
     Right,Body,Header,
@@ -23,6 +23,45 @@ const Data = [
 const OrderDetailScreen = ({navigation}) =>{
     const item = Data[0]
     const [PaymentMode,setPaymentMode] = useState("");
+    const [ModalVisible,setModalVisible] = useState(false);
+
+    const PaymentBtn = () => {
+        return (
+            <View style={Styles.centeredView}>
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={ModalVisible}
+                onRequestClose={() => navigation.goBack()}
+              >
+                <View style={Styles.centeredView}>
+                  <View style={Styles.modalView}>
+                    <Text style={Styles.modalText}>
+                        Please pay {item.amount} to Supplier 
+                    </Text>
+                    <View style={Styles.btnView}>
+                    <Button
+                      style={[Styles.button, Styles.buttonClose]}
+                      onPress={() => navigation.goBack()}
+                    >
+                      <Text style={Styles.textStyle}>Ok</Text>
+                    </Button>
+                    </View>
+                  </View>
+                </View>
+              </Modal>
+              <Button
+                style={[Styles.button, Styles.buttonOpen]}
+                disabled = {PaymentMode === "" ? true : false}
+                onPress={() => PaymentMode === "cash" ? 
+                setModalVisible(true) :
+                navigation.navigate('UPIPayment')}
+              >
+                <Text style={Styles.textStyle}>Proceed To Pay</Text>
+              </Button>
+            </View>
+          );
+    }
 
     const IsPayed = () =>{
         if (item.status === "Request")
@@ -52,16 +91,7 @@ const OrderDetailScreen = ({navigation}) =>{
                     />
                     </View>
                 <View style={Styles.paymentBtnView}>
-                    <Button 
-                        disabled = {PaymentMode === "" ? true : false}
-                        onPress = {() => {
-                            PaymentMode === "cash" ? 
-                            navigation.navigate('CashPayment') : 
-                            navigation.navigate('UPIPayment') }}>
-                        <Text>
-                            Proceed  To Pay
-                        </Text>
-                    </Button>
+                    <PaymentBtn />
                 </View>
                 </View>
                 </>
@@ -76,7 +106,7 @@ const OrderDetailScreen = ({navigation}) =>{
                         Ammount paid : {item.amount}
                     </Text>
                 </View>
-                <View style={Styles.confirmBtnView}>
+                <View style={Styles.btnView}>
                     <Button onPress = {() => navigation.navigate('ConfirmationQR')}>
                         <Text>
                             Proceed  To Confirmation
@@ -125,11 +155,58 @@ const OrderDetailScreen = ({navigation}) =>{
             </Text>
         </View>
         <IsPayed />
+        <View style ={common.rightcornerBtn}> 
+          <Button>
+            <Text>
+              Cancel Request
+            </Text>
+          </Button>
+        </View>
       </Container>
     );
 }
 
 const Styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+      },
+      button: {
+        borderRadius: 20,
+        padding:10,
+        elevation: 2
+      },
+      buttonOpen: {
+        backgroundColor: "#F194FF",
+      },
+      buttonClose: {
+        backgroundColor: "#2196F3",
+      },
+      textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+      },
+      modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+      },
     rowView : {
         flexDirection:'row',
         padding:20,
@@ -140,10 +217,11 @@ const Styles = StyleSheet.create({
     paymentBtnView : {
         flex : 4,
     },
-    confirmBtnView : {
+    btnView : {
         alignSelf:'center',
         paddingTop:10,
     },
+
 })
 
 export default OrderDetailScreen;

@@ -1,10 +1,10 @@
 import {useState} from 'react';
 
-const CartArray = () =>{
+const GlobalVariable = () =>{
     const [CartList,setCartList] = useState([]);
     //var [Order,setOrder] = useState([]);
     let [TotalAmount,setTotalAmount] = useState(0);
-    let [UserType,setUserType] = useState('');
+    let [UserType,setUserType] = useState('Customer');
 
 
     const addToCart = (action) =>{
@@ -37,4 +37,4 @@ const CartArray = () =>{
     return {CartList,addToCart,TotalAmount,changeTotal,UserType,setUser}
 }
 
-export default CartArray;
+export default GlobalVariable;

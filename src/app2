@@ -32,11 +32,11 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNavigation = () => {
   return (
-    <NavigationContainer>
+    
       <Drawer.Navigator initialRouteName="CustomerDashboard">
         <Drawer.Screen 
           name="CustomerDashboard" 
-          component={WhichStack} 
+          component={CartStack} 
           options = {{
             swipeEnabled : false
           }}
@@ -63,7 +63,7 @@ const DrawerNavigation = () => {
         }}
         />
       </Drawer.Navigator>
-    </NavigationContainer>
+    
   );
 }
 
@@ -170,7 +170,7 @@ const CartStack = () =>{
 
 const StartStack = () => {
   return (
-    
+    <NavigationContainer>
       <Stack.Navigator initialRouteName ='LoginOrRegister'>
         <Stack.Screen 
         name = 'LoginOrRegister'
@@ -191,16 +191,19 @@ const StartStack = () => {
           headerShown : false
         }} />
         <Stack.Screen 
-        name = 'CustomerDashboard'
-        component ={CartStack}
+        name = 'WhichDrawer'
+        component ={WhichDrawer}
+        options = {{
+          headerShown : false
+        }} 
         />
       </Stack.Navigator>
-    
+    </NavigationContainer>
   )
 }
 
-const WhichStack = () =>{
-  const {UserType} = useContext(Context);
+const WhichDrawer = () =>{
+  /*const {UserType} = useContext(Context);
   if (UserType == ''){
     return (
     <StartStack />
@@ -210,10 +213,10 @@ const WhichStack = () =>{
     return (
     <CartStack />
     )
-  }
-  /*return(
-    <StartStack />
-  )*/
+  }*/
+  return(
+    <DrawerNavigation />
+  )
 }
 
 const App = () =>{
@@ -222,7 +225,7 @@ const App = () =>{
   return (
     <Context.Provider value={globalVariable}>
       <PaperProvider>
-        <DrawerNavigation />
+        <StartStack />
       </PaperProvider>
     </Context.Provider>
   );
