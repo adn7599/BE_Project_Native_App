@@ -6,11 +6,10 @@ export async function getProducts(relayToken) {
   try {
     const config = {
       method: 'get',
-      url: `${URL.RELAY}/supplier/products`,
+      url: `${URL.RELAY}/supplier/requester/products`,
       headers: {
         Authorization: `Bearer ${relayToken}`,
       },
-      data: data,
       validateStatus: (status) => {
         return [200, 400, 403].includes(status);
       },
@@ -27,11 +26,10 @@ export async function getCart(relayToken) {
   try {
     const config = {
       method: 'get',
-      url: `${URL.RELAY}/supplier/cart`,
+      url: `${URL.RELAY}/supplier/requester/cart`,
       headers: {
         Authorization: `Bearer ${relayToken}`,
       },
-      data: data,
       validateStatus: (status) => {
         return [200, 400, 403].includes(status);
       },
@@ -52,7 +50,7 @@ export async function postCart(relayToken, product, quantity) {
     };
     const config = {
       method: 'post',
-      url: `${URL.RELAY}/supplier/cart`,
+      url: `${URL.RELAY}/supplier/requester/cart`,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${relayToken}`,
@@ -77,7 +75,7 @@ export async function getDistributors(relayToken, ordersArray) {
     };
     const config = {
       method: 'post',
-      url: `${URL.RELAY}/supplier/distributor`,
+      url: `${URL.RELAY}/supplier/requester/distributor`,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${relayToken}`,
@@ -103,7 +101,7 @@ export async function postRequest(relayToken, request, requestSign) {
     };
     const config = {
       method: 'post',
-      url: `${URL.RELAY}/supplier/request`,
+      url: `${URL.RELAY}/supplier/requester/request`,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${relayToken}`,
@@ -129,7 +127,7 @@ export async function cancelRequest(relayToken, cancel, cancelSign) {
     };
     const config = {
       method: 'delete',
-      url: `${URL.RELAY}/supplier/request`,
+      url: `${URL.RELAY}/supplier/requester/request`,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${relayToken}`,
@@ -155,7 +153,7 @@ export async function postPayment(relayToken, payment, paymentSign) {
     };
     const config = {
       method: 'post',
-      url: `${URL.RELAY}/supplier/payment`,
+      url: `${URL.RELAY}/supplier/requester/payment`,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${relayToken}`,
@@ -177,11 +175,10 @@ export async function getOrders(relayToken, stageCompleted) {
   try {
     const config = {
       method: 'get',
-      url: `${URL.RELAY}/supplier/orders/${stageCompleted}`,
+      url: `${URL.RELAY}/supplier/requester/orders/${stageCompleted}`,
       headers: {
         Authorization: `Bearer ${relayToken}`,
       },
-      data: data,
       validateStatus: (status) => {
         return [200, 400, 403].includes(status);
       },

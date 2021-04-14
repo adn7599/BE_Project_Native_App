@@ -10,7 +10,6 @@ export async function getProducts(relayToken) {
       headers: {
         Authorization: `Bearer ${relayToken}`,
       },
-      data: data,
       validateStatus: (status) => {
         return [200, 400, 403].includes(status);
       },
@@ -31,7 +30,6 @@ export async function getCart(relayToken) {
       headers: {
         Authorization: `Bearer ${relayToken}`,
       },
-      data: data,
       validateStatus: (status) => {
         return [200, 400, 403].includes(status);
       },
@@ -181,7 +179,7 @@ export async function postPayment(relayToken, payment, paymentSign) {
   }
 }
 
-export async function getOrders(relayToken,stageCompleted) {
+export async function getOrders(relayToken, stageCompleted) {
   try {
     const config = {
       method: 'get',
@@ -189,7 +187,6 @@ export async function getOrders(relayToken,stageCompleted) {
       headers: {
         Authorization: `Bearer ${relayToken}`,
       },
-      data: data,
       validateStatus: (status) => {
         return [200, 400, 403].includes(status);
       },
