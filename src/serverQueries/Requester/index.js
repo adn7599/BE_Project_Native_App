@@ -7,7 +7,18 @@ export const custReqQueries = {
   postCart: cust.postCart,
   getSuppliers: cust.getSuppliers,
   request: cust.request,
-  cancelRequest: cust.cancel,
-  postPayment: cust.payment,
+  cancel: cust.cancel,
+  payment: cust.payment,
   getOrders: cust.getOrders,
+};
+
+export const suppReqQueries = {
+  getProducts: supp.getProducts,
+  getCart: supp.getCart,
+  postCart: supp.postCart,
+  getDistributors: supp.getDistributors,
+  request: supp.request,
+  cancel: supp.cancel,
+  payment: supp.payment,
+  getOrders: supp.getOrders,
 };

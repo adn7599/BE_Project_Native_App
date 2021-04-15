@@ -15,7 +15,7 @@ import {
 import {ROLE} from './serverQueries/config';
 import {login, loginRelay, loginTTP} from './serverQueries/User/login';
 import {sign, verifySign} from './serverQueries/User/sign';
-import {custReqQueries} from './serverQueries/Requester/';
+import {custReqQueries, suppReqQueries} from './serverQueries/Requester/';
 import {sha256} from 'react-native-sha256';
 
 function App() {
@@ -24,21 +24,21 @@ function App() {
   const role = 'customer';
   const reg_id = '1111111111';
   const relayToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiY3VzdG9tZXIiLCJyZWdfaWQiOiIxMTExMTExMTExIiwiaWF0IjoxNjE4NDc4Mzg5LCJleHAiOjE2MTg0ODE5ODl9.APcLVdwk5VRdaY2mIIlyMuooO7JopYzbnCBiRvHqbXQ';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1AiLCJyZWdfaWQiOiJTUDExMTExMTExMTEiLCJpYXQiOjE2MTg1MDk1NDYsImV4cCI6MTYxODUxMzE0Nn0.sJ0Aa7jlE3VtZkqHm5TpES2nhyLPHBjeDmyV7Of_oOM';
   const ttpToken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiY3VzdG9tZXIiLCJyZWdfaWQiOiIxMTExMTExMTExIiwiaWF0IjoxNjE4NDc5MzMwLCJleHAiOjE2MTg0ODI5MzB9.u4PziQE49RlevHDvka5Xp-WAT5yhrKonfk88o5LnBEE';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1AiLCJyZWdfaWQiOiJTUDExMTExMTExMTEiLCJpYXQiOjE2MTg1MDk0MjIsImV4cCI6MTYxODUxMzAyMn0.c7C0OIVV9VFTwnyNNZ7sGo8yz2jRu3dn7_G4AeXFEVk';
   const password = '';
 
   useEffect(() => {
     (async () => {
       try {
-        const resp = await custReqQueries.request(
+        const resp = await suppReqQueries.payment(
           ttpToken,
           relayToken,
-          reg_id,
-          'SP1111111111',
-          [{product: 1001, quantity: 3, totalCost: 60}],
-          60,
+          '60788310fcbd212dc748a80b',
+          '12341234',
+          'cash',
+          160,
         );
         console.log(resp);
         setResp(resp);

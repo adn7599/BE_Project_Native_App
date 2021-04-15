@@ -257,6 +257,102 @@ export async function request(
   }
 }
 
-export async function cancel() {}
+export async function cancel(ttpToken, relaytoken, transaction_id) {
+  try {
+    //constructing cancel object
+    const cancel = {
+      transaction_id,
+      time: new Date(),
+    };
 
-export async function payment() {}
+    //Need to calculate the hash before signing
+    const cancelObjStr = JSON.stringify(cancel);
+    console.log('Cancel Obj string: ', cancelObjStr);
+    //caculating hash
+    const cancelHash = await sha256(cancelObjStr);
+    console.log('Cancel Obj string hash: ', cancelHash);
+
+    //signing the hash
+    const [signErr, signResp] = await sign(ttpToken, cancelHash);
+
+    if (signErr) {
+      //Error while signing
+      return [signErr, null];
+    } else {
+      if (signResp.status == 200) {
+        //response OK
+        //got sign can continue
+        const cancelSign = signResp.data.sign;
+        console.log('cancelSign: ', cancelSign);
+        //Sending the cancel request
+        const [cancelErr, cancelResp] = await cancelRequest(
+          relaytoken,
+          cancel,
+          cancelSign,
+        );
+
+        return [cancelErr, cancelResp];
+      } else {
+        //unsuccesfull
+        return [null, signResp];
+      }
+    }
+  } catch (err) {
+    return [err, null];
+  }
+}
+
+export async function payment(
+  ttpToken,
+  relaytoken,
+  transaction_id,
+  paymentId,
+  mode,
+  amount,
+) {
+  try {
+    //constructing payment object
+    const payment = {
+      id: paymentId,
+      transaction_id,
+      time: new Date(),
+      mode,
+      amount,
+    };
+
+    //Need to calculate the hash before signing
+    const paymentObjStr = JSON.stringify(payment);
+    console.log('Payment Obj string: ', paymentObjStr);
+    //caculating hash
+    const paymentHash = await sha256(paymentObjStr);
+    console.log('Payment Obj string hash: ', paymentHash);
+
+    //signing the hash
+    const [signErr, signResp] = await sign(ttpToken, paymentHash);
+
+    if (signErr) {
+      //Error while signing
+      return [signErr, null];
+    } else {
+      if (signResp.status == 200) {
+        //response OK
+        //got sign can continue
+        const paymentSign = signResp.data.sign;
+        console.log('paymentSign: ', paymentSign);
+        //Sending the cancel request
+        const [paymentErr, paymentResp] = await postPayment(
+          relaytoken,
+          payment,
+          paymentSign,
+        );
+
+        return [paymentErr, paymentResp];
+      } else {
+        //unsuccesfull
+        return [null, signResp];
+      }
+    }
+  } catch (err) {
+    return [err, null];
+  }
+}
