@@ -21,6 +21,7 @@
     "react-native-reanimated": "^2.0.0",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.18.1",
+    "react-native-sha256": "^1.4.7",
     "react-native-svg": "^12.1.0"
   },
   "devDependencies": {

@@ -15,19 +15,30 @@ import {
 import {ROLE} from './serverQueries/config';
 import {login, loginRelay, loginTTP} from './serverQueries/User/login';
 import {sign, verifySign} from './serverQueries/User/sign';
-import {changePassword} from './serverQueries/User/changePassword';
+import {custReqQueries} from './serverQueries/Requester/';
+import {sha256} from 'react-native-sha256';
 
 function App() {
   const [resp, setResp] = useState('loading');
 
+  const role = 'customer';
+  const reg_id = '1111111111';
+  const relayToken =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiY3VzdG9tZXIiLCJyZWdfaWQiOiIxMTExMTExMTExIiwiaWF0IjoxNjE4NDc4Mzg5LCJleHAiOjE2MTg0ODE5ODl9.APcLVdwk5VRdaY2mIIlyMuooO7JopYzbnCBiRvHqbXQ';
+  const ttpToken =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiY3VzdG9tZXIiLCJyZWdfaWQiOiIxMTExMTExMTExIiwiaWF0IjoxNjE4NDc5MzMwLCJleHAiOjE2MTg0ODI5MzB9.u4PziQE49RlevHDvka5Xp-WAT5yhrKonfk88o5LnBEE';
+  const password = '';
+
   useEffect(() => {
     (async () => {
       try {
-        const resp = await resetPassword(
-          ROLE.CUSTOMER,
-          '1111111111',
-          'password',
-          'ac66b5f1772ddda2659e179edeab547b69fa782c49facee8ee595ae03d2c711c.1618300761703',
+        const resp = await custReqQueries.request(
+          ttpToken,
+          relayToken,
+          reg_id,
+          'SP1111111111',
+          [{product: 1001, quantity: 3, totalCost: 60}],
+          60,
         );
         console.log(resp);
         setResp(resp);
@@ -50,7 +61,6 @@ function App() {
     <SafeAreaView>
       <View style={{alignItems: 'center', justifyContent: 'center'}}>
         <ScrollView>
-          <Text>Hello hey</Text>
           <Text>Response</Text>
           <Text>{output}</Text>
         </ScrollView>
