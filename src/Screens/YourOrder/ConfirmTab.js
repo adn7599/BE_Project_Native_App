@@ -49,25 +49,7 @@ const DATA = [
 
 
 
-const OrderScreen = ({navigation}) =>{
-
-    const IsPayed = (item) => {
-        const itemStatus = item.status
-        if(( itemStatus) === "Request"){
-            return(
-                <Text>
-                    Status : Payment action needed
-                </Text>
-            );
-        }
-        else{
-            return(
-                <Text>
-                    Status : Payment Completed
-                </Text>
-            );
-        }
-    }
+const ConfirmOrderScreen = ({navigation}) =>{
 
   const renderItem = ({ item }) => (
       
@@ -85,7 +67,9 @@ const OrderScreen = ({navigation}) =>{
             <Text>
                 Payable Amount : {item.amount} 
             </Text>
-            <IsPayed {...item}/>
+            <Text>
+                Status : Payment Completed {'\n'}               Confirmation needed
+            </Text>
           </Body>
         </CardItem>
       </Card>
@@ -125,4 +109,4 @@ const OrderScreen = ({navigation}) =>{
     );
 }
 
-export default OrderScreen;
+export default ConfirmOrderScreen;

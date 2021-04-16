@@ -10,75 +10,93 @@ import common from '../../../Global/stylesheet';
 import Context from '../../../Global/context';
 import ShowCard from '../../../Component/ShowCard';
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'Wheat1',
-    discription: 'Wheat is a grass widely cultivated for its seed, a cereal grain which is a worldwide staple food. The many species of wheat together make up the genus Triticum; the most widely grown is common wheat.',
-    price: '11',
-    unit: 'Kg',
-    image: '../../assect/image/wheat.png',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Wheat2',
-    discription: 'Wheat is a grass widely cultivated for its seed, a cereal grain which is a worldwide staple food. The many species of wheat together make up the genus Triticum; the most widely grown is common wheat.',
-    price: '11',
-    unit: 'Kg',
-    image: '../../assect/image/wheat.png',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Wheat3',
-    discription: 'Wheat is a grass widely cultivated for its seed, a cereal grain which is a worldwide staple food. The many species of wheat together make up the genus Triticum; the most widely grown is common wheat.',
-    price: '11',
-    unit: 'Kg',
-    image: '../../assect/image/wheat.png',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d7',
-    title: 'Wheat4',
-    discription: 'Wheat is a grass widely cultivated for its seed, a cereal grain which is a worldwide staple food. The many species of wheat together make up the genus Triticum; the most widely grown is common wheat.',
-    price: '11',
-    unit: 'Kg',
-    image: '../../assect/image/wheat.png',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d',
-    title: 'Wheat5',
-    discription: 'Wheat is a grass widely cultivated for its seed, a cereal grain which is a worldwide staple food. The many species of wheat together make up the genus Triticum; the most widely grown is common wheat.',
-    price: '11',
-    unit: 'Kg',
-    image: '../../assect/image/wheat.png',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29',
-    title: 'Wheat6',
-    discription: 'Wheat is a grass widely cultivated for its seed, a cereal grain which is a worldwide staple food. The many species of wheat together make up the genus Triticum; the most widely grown is common wheat.',
-    price: '11',
-    unit: 'Kg',
-    image: '../../assect/image/wheat.png',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e2',
-    title: 'Wheat7',
-    discription: 'Wheat is a grass widely cultivated for its seed, a cereal grain which is a worldwide staple food. The many species of wheat together make up the genus Triticum; the most widely grown is common wheat.',
-    price: '11',
-    unit: 'Kg',
-    image: '../../assect/image/wheat.png',
-  },
-];
+const resp = {
+  "_id": "1111111111",
+  "orders": [
+      {
+          "product": {
+              "_id": 1002,
+              "name": "Rice",
+              "description": "Rice Description",
+              "unit": "Kg",
+              "price": 30
+          },
+          "allotedQuantity": 25,
+          "availableQuantity": 5,
+          "cartQuantity": 3,
+          "cartCost": 90
+      },
+      {
+          "product": {
+              "_id": 1001,
+              "name": "Wheat",
+              "description": "Wheat Description",
+              "unit": "Kg",
+              "price": 20
+          },
+          "allotedQuantity": 20,
+          "availableQuantity": 20,
+          "cartQuantity": 3,
+          "cartCost": 60
+      }
+  ],
+  "__v": 24,
+  "totalCartCost": 150
+}
+
+resp.orders.forEach((item) => item.isSelected = false)
+resp.selectedItemsTotalAmount = 0
+console.log(resp)
+
 
 const dimension = Dimensions.get('screen');
 
 
 const CartScreen = ({navigation}) =>{
 
-  const {TotalAmount} = useContext(Context);
+  const [Cart,setCart] = useState(resp);
+
+  const updateCartQuantity = (productId,newQuantity) =>{
+    setCart((prevCart) => {
+      const item = prevCart.orders.find((item) => item.product._id === productId)
+      item.cartQuantity = newQuantity
+      prevCart.selectedItemsTotalAmount = prevCart.selectedItemsTotalAmount - item.cartCost
+      item.cartCost = item.cartQuantity * item.product.price
+      prevCart.selectedItemsTotalAmount = prevCart.selectedItemsTotalAmount + item.cartCost
+      return {...prevCart}
+    })
+  }
+
+  const deleteCartItem = (productId) =>{
+    setCart((prevCart) => {
+      const loc = prevCart.orders.findIndex((item) => item.product._id === productId)
+      prevCart.selectedItemsTotalAmount = prevCart.selectedItemsTotalAmount - prevCart.orders[loc].cartCost
+      prevCart.orders.splice(loc,1)
+      return {...prevCart}
+    })
+  }
+
+  const toggleSelect = (productId) => {
+      setCart((prevCart) => {
+        const item = prevCart.orders.find((item) => item.product._id === productId)
+        item.isSelected = !item.isSelected
+        if(item.isSelected){
+            prevCart.selectedItemsTotalAmount += item.cartCost
+        }
+        else{
+            prevCart.selectedItemsTotalAmount -= item.cartCost
+        }
+        return {...prevCart}
+      })
+  }
 
   const renderItem = ({ item }) => {  
     return(
-      <ShowCard {...item} />
+      <ShowCard 
+        item = {item} 
+        updateCartQuantity={updateCartQuantity} 
+        deleteCartItem={deleteCartItem} 
+        toggleSelect = {toggleSelect}/>
     );
   }
 
@@ -92,10 +110,10 @@ const CartScreen = ({navigation}) =>{
             </Header>
             <View style={common.topBottomSep}></View>
             <FlatList
-                data={DATA}
+                data={Cart.orders}
                 initialNumToRender= {6}
                 renderItem={renderItem}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.product._id.toString()}
             />
             <View style={Styles.amountDisplayRow}>
                 <View style={Styles.amountView}>
@@ -105,14 +123,14 @@ const CartScreen = ({navigation}) =>{
                 </View>
                 <View style={Styles.totalAmount}>
                     <Text style={common.text}>
-                        {TotalAmount}
+                        {Cart.selectedItemsTotalAmount}
                     </Text>
                 </View>
             </View>
             <View style={Styles.centerBtnView}>
                 <Button 
                 onPress={() => navigation.navigate('SelectProvider')}
-                disabled = {TotalAmount === 0 ? true : false } >
+                disabled = {Cart.selectedItemsTotalAmount === 0 ? true : false } >
                     <Text>
                         Proceed To Order
                     </Text>

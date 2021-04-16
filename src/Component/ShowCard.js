@@ -8,47 +8,21 @@ import { View,TextInput,StyleSheet } from 'react-native';
 import Context from '../Global/context';
 import common from '../Global/stylesheet';
 
-const ShowCard = (item) => {
-    const [SelectItem,setSelectItem] = useState('ADD');
-    const [Quantity,setQuantity] = useState(1);
-    const {changeTotal} = useContext(Context);
-    let price
+const ShowCard = ({item,updateCartQuantity,deleteCartItem,toggleSelect}) => {
 
-    function toggleCheck(){
-        if (SelectItem == 'ADD'){
-            setSelectItem('REMOVE')
-            price = (item.price*Quantity)
-            changeTotal(price);
-        }
-        else{
-            setSelectItem('ADD')
-            price = -(item.price*Quantity)
-            changeTotal(price);
-        }
+    function setQuantity (text) {
+        updateCartQuantity(item.product._id,parseInt(text))
     }
 
     function decrement(){
-        if (Quantity != 1 && SelectItem == 'REMOVE'){
-            setQuantity(prevQuantity => prevQuantity - 1);
-            price = -(item.price)
-            changeTotal(price);
-        }
-    }
-
-    function increment(){
-        if (SelectItem == 'REMOVE'){
-            setQuantity(prevQuantity => prevQuantity + 1);
-            price = (item.price)
-            changeTotal(price);
-        }
+        updateCartQuantity(item.product._id,item.cartQuantity - 1)
         
     }
 
-    const CalculateAmount = () =>{
-        return(
-            item.price*Quantity
-        )
+    function increment(){
+        updateCartQuantity(item.product._id,item.cartQuantity + 1)
     }
+
     
     return(
         <Content style={common.cardContainer}>
@@ -57,13 +31,13 @@ const ShowCard = (item) => {
                     <Body>
                         <View style={common.cardRow}>
                             <View style={common.flexOne}>
-                                <Text style={common.text}>{item.title}</Text>
+                                <Text style={common.text}>{item.product.name}</Text>
                             </View>
                             <View style={common.cardRowEnd}>
-                                <Button onPress={() => toggleCheck()} style={{width:90}}>
+                                <Button onPress={() => toggleSelect(item.product._id)} style={{width:90}}>
                                     <View style ={{alignSelf : 'center'}}>
                                     <Text style={Styles.btnText}>
-                                        {SelectItem}
+                                        {item.isSelected ? 'REMOVE' : 'ADD'}
                                     </Text>
                                     </View>
                                 </Button>
@@ -71,7 +45,7 @@ const ShowCard = (item) => {
                         </View>
                         <View style={common.cardRow}>
                             <View style={common.flexOne}> 
-                                <Text note style={common.text}>{item.price} Rs/{item.unit}</Text>
+                                <Text note style={common.text}>{item.product.price} Rs/{item.product.unit}</Text>
                             </View>
                             <View style={common.cardRowEnd}>
                                 <View style={common.flexOne}>
@@ -81,10 +55,13 @@ const ShowCard = (item) => {
                                 </View>
                                 <View style={common.flexOne}>
                                     <TextInput
-                                        value = {Quantity.toString()}
-                                        textAlign = 'center'
-                                        editable = {SelectItem === 'REMOVE' ? true : false}
-                                        onChangeText ={Text => setQuantity(Text)}
+                                        value = {item.cartQuantity.toString()}
+                                        textAlign = {'center'}
+                                        keyboardType = {'numeric'}
+                                        returnKeyType = {'done'}
+                                        returnKeyLabel = {'submitQuantity'}
+                                        onChangeText ={text => setQuantity(text)}
+                                        //onSubmitEditing={(event) => setQuantity( event.nativeEvent.text)}
                                         style ={Styles.quantityText}
                                     />
                                 </View>
@@ -101,12 +78,12 @@ const ShowCard = (item) => {
                             </View>
                             <View style={Styles.itemAmount}>
                                 <Text>
-                                    <CalculateAmount />
+                                    {item.cartCost}
                                 </Text>
                             </View>
                         </View>
                         <View style={common.rightcornerBtn}>
-                            <Button>
+                            <Button onPress ={() => deleteCartItem(item.product._id)}>
                                 <Text>
                                     Delete Item
                                 </Text>

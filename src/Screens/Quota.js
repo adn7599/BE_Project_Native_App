@@ -4,38 +4,49 @@ import { Dimensions,FlatList, View } from 'react-native';
 
 import common from '../Global/stylesheet';
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'Wheat',
-    discription: 'Wheat is a grass widely cultivated for its seed, a cereal grain which is a worldwide staple food. The many species of wheat together make up the genus Triticum; the most widely grown is common wheat.',
-    price: '11',
-    unit: 'Kg',
-    image: '../../assect/image/wheat.png',
-    allotted_quota: 10,
-    remaining_quota: 5,
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Wheat',
-    discription: 'Wheat is a grass widely cultivated for its seed, a cereal grain which is a worldwide staple food. The many species of wheat together make up the genus Triticum; the most widely grown is common wheat.',
-    price: '11',
-    unit: 'Kg',
-    image: '../../assect/image/wheat.png',
-    allotted_quota: 10,
-    remaining_quota: 5,
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Wheat',
-    discription: 'Wheat is a grass widely cultivated for its seed, a cereal grain which is a worldwide staple food. The many species of wheat together make up the genus Triticum; the most widely grown is common wheat.',
-    price: '11',
-    unit: 'Kg',
-    image: '../../assect/image/wheat.png',
-    allotted_quota: 10,
-    remaining_quota: 5,
-  },
-];
+const resp = {
+  "_id": "1111111111",
+  "commodities": [
+      {
+          "product": {
+              "_id": 1001,
+              "name": "Wheat",
+              "description": "Wheat Description",
+              "unit": "Kg",
+              "price": 20
+          },
+          "allotedQuantity": 20,
+          "availableQuantity": 20,
+          "addedToCart": true,
+          "cartQuantity": 3
+      },
+      {
+          "product": {
+              "_id": 1002,
+              "name": "Rice",
+              "description": "Rice Description",
+              "unit": "Kg",
+              "price": 30
+          },
+          "allotedQuantity": 25,
+          "availableQuantity": 5,
+          "addedToCart": true,
+          "cartQuantity": 3
+      },
+      {
+          "product": {
+              "_id": 1005,
+              "name": "Oil",
+              "description": "Oil Description",
+              "unit": "ltr",
+              "price": 35
+          },
+          "allotedQuantity": 5,
+          "availableQuantity": 0,
+          "addedToCart": false
+      }
+  ]
+}
 
 const dimension = Dimensions.get('screen');
 
@@ -53,25 +64,25 @@ const QuotaScreen = ({navigation}) =>{
             <CardItem>
               <Left>
                 <Body>
-                  <Text>{item.title}</Text>
-                  <Text note>{item.price} Rs/{item.unit}</Text>
+                  <Text>{item.product.name}</Text>
+                  <Text note>{item.product.price} Rs/{item.product.unit}</Text>
                 </Body>
               </Left>
             </CardItem>
             <CardItem>
               <Body>
                 <Text>
-                  {item.discription}
+                  {item.product.description}
                 </Text>
               </Body>
             </CardItem>
             <CardItem>
                 <Body>
                     <Text>
-                        Allotted Quota : {item.allotted_quota}
+                        Allotted Quota : {item.allottedQuantity}
                     </Text>
                     <Text>
-                        Remaining Quota : {item.remaining_quota}
+                        Remaining Quota : {item.availableQuantity}
                     </Text>
                 </Body>
             </CardItem>
@@ -113,10 +124,10 @@ const QuotaScreen = ({navigation}) =>{
         </Header>
         <View style={common.topBottomSep}></View>
         <FlatList
-        data={DATA}
+        data={resp.commodities}
         initialNumToRender= {4}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.product._id.toString()}
       />
       </Container>
     );

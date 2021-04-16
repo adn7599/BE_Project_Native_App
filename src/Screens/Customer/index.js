@@ -7,53 +7,70 @@ import {
     Button, Text}
     from 'native-base';
 import { Dimensions,FlatList, View,StyleSheet,BackHandler } from 'react-native';
+import { useState } from 'react/cjs/react.development';
 
 //import Context from '../../global/context';
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'Wheat',
-    discription: 'Wheat is a grass widely cultivated for its seed, a cereal grain which is a worldwide staple food. The many species of wheat together make up the genus Triticum; the most widely grown is common wheat.',
-    price: '11',
-    unit: 'Kg',
-    image: '../../assect/image/wheat.png',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Wheat',
-    discription: 'Wheat is a grass widely cultivated for its seed, a cereal grain which is a worldwide staple food. The many species of wheat together make up the genus Triticum; the most widely grown is common wheat.',
-    price: '11',
-    unit: 'Kg',
-    image: '../../assect/image/wheat.png',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Wheat',
-    discription: 'Wheat is a grass widely cultivated for its seed, a cereal grain which is a worldwide staple food. The many species of wheat together make up the genus Triticum; the most widely grown is common wheat.',
-    price: '11',
-    unit: 'Kg',
-    image: '../../assect/image/wheat.png',
-  },
-];
+const resp = {
+    "_id": "1111111111",
+    "commodities": [
+        {
+            "product": {
+                "_id": 1001,
+                "name": "Wheat",
+                "description": "Wheat Description",
+                "unit": "Kg",
+                "price": 20
+            },
+            "allotedQuantity": 20,
+            "availableQuantity": 20,
+            "addedToCart": true,
+            "cartQuantity": 3
+        },
+        {
+            "product": {
+                "_id": 1002,
+                "name": "Rice",
+                "description": "Rice Description",
+                "unit": "Kg",
+                "price": 30
+            },
+            "allotedQuantity": 25,
+            "availableQuantity": 5,
+            "addedToCart": true,
+            "cartQuantity": 3
+        },
+        {
+            "product": {
+                "_id": 1005,
+                "name": "Oil",
+                "description": "Oil Description",
+                "unit": "ltr",
+                "price": 35
+            },
+            "allotedQuantity": 5,
+            "availableQuantity": 0,
+            "addedToCart": false
+        }
+    ]
+}
+
+
 
 const dimension = Dimensions.get('screen');
 
 
 const CustomerDashboardScreen = ({navigation}) =>{
 
-    /*useEffect(() => {
-        const backAction = () => {
-          return true;
-        };
-    
-        const backHandler = BackHandler.addEventListener(
-          "hardwareBackPress",
-          backAction
-        );
-    
-        return () => backHandler.remove();
-      }, []);*/
+    const [prodList,setProdList] = useState(resp.commodities);
+
+    const toggleAddToCart = (productId) => {
+        setProdList((prevProdList) => {
+            const item = prodList.find((prod) => prod.product._id === productId)
+            item.addedToCart = !item.addedToCart
+            return [...prevProdList]
+        })
+    }
 
     const renderItem = ({ item }) => (
         <Content style={Sytles.cardContainer}>
@@ -67,25 +84,26 @@ const CustomerDashboardScreen = ({navigation}) =>{
                         <CardItem>
                         <Left>
                             <Body>
-                                <Text>{item.title}</Text>
-                                <Text note>{item.price} Rs/{item.unit}</Text>
+                                <Text>{item.product.name}</Text>
+                                <Text note>{item.product.price} Rs/{item.product.unit}</Text>
                             </Body>
                         </Left>
                         </CardItem>
                         <CardItem>
                         <Body>
                             <Text>
-                                {item.discription}
+                                {item.product.description}
                             </Text>
                         </Body>
                         </CardItem>
                         <Button 
                             textStyle={{ color: '#87838B' }} 
-                            style={Sytles.cartButton}
-                            onPress={() => console.log(dimension.width)}
+                            style={[Sytles.cartButton,
+                                {backgroundColor : item.addedToCart ? 'red' : 'green'}]}
+                            onPress={() => toggleAddToCart(item.product._id)}
                         >
                         <Icon name="cart" />
-                        <Text>Add To Cart</Text>
+                        <Text>{item.addedToCart ? 'REMOVE' : 'ADD'}</Text>
                         </Button>
                     </Body>
                 </CardItem>
@@ -112,10 +130,10 @@ const CustomerDashboardScreen = ({navigation}) =>{
                 <Right />
             </Header>
             <FlatList
-                data={DATA}
+                data={prodList}
                 initialNumToRender= {4}
                 renderItem={renderItem}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.product._id.toString()}
             />
 
         </Container>

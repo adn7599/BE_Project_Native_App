@@ -16,7 +16,7 @@ const Data = [
         address : "XXXXX",
         items : "Item1, Item2, Item3",
         amount : "200",
-        status : "Request"
+        status : "Reques"
     },
 ];
 
@@ -94,6 +94,13 @@ const OrderDetailScreen = ({navigation}) =>{
                     <PaymentBtn />
                 </View>
                 </View>
+                <View style ={[common.rightcornerBtn,common.leftTopIndent]}> 
+                  <Button>
+                    <Text>
+                      Cancel Request
+                    </Text>
+                  </Button>
+                </View>
                 </>
             )
         }
@@ -155,13 +162,7 @@ const OrderDetailScreen = ({navigation}) =>{
             </Text>
         </View>
         <IsPayed />
-        <View style ={common.rightcornerBtn}> 
-          <Button>
-            <Text>
-              Cancel Request
-            </Text>
-          </Button>
-        </View>
+        
       </Container>
     );
 }

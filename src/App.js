@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {Icon} from 'native-base';
 import { createStackNavigator} from '@react-navigation/stack';
 import { createDrawerNavigator,} from '@react-navigation/drawer';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider as PaperProvider } from 'react-native-paper';
 
 import Context from './Global/context';
@@ -17,10 +18,10 @@ import SelectProviderScreen from './Screens/Customer/Cart/SelectProvider';
 import RequestConfirmMsgScreen from './Screens/Customer/Cart/RequestConfirmMsg';
 import ProfileScreen from './Screens/Profile';
 import QuotaScreen from './Screens/Quota';
-import OrderScreen from './Screens/YourOrder';
+import ConfirmOrderScreen from './Screens/YourOrder/ConfirmTab';
+import PaymentOrderScreen from './Screens/YourOrder/PaymentTab';
 import OrderDetailScreen from './Screens/YourOrder/OrderDetails';
 import UPIPaymentScreen from './Screens/YourOrder/upiPayment';
-import CashPaymentScreen from './Screens/YourOrder/CashPayment';
 import ConfirmationQRScreen from './Screens/YourOrder/ConfirmationQR';
 
 
@@ -29,6 +30,7 @@ import ConfirmationQRScreen from './Screens/YourOrder/ConfirmationQR';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
 
 const DrawerNavigation = () => {
   return (
@@ -57,7 +59,7 @@ const DrawerNavigation = () => {
         />
         <Drawer.Screen 
         name = 'YourOrder' 
-        component ={YourOrderStack}
+        component ={YourOrderTab}
         options = {{
           swipeEnabled : false
         }}
@@ -67,21 +69,41 @@ const DrawerNavigation = () => {
   );
 }
 
-const YourOrderStack = () => {
+const YourOrderTab = () => {
+  return(
+    <Tab.Navigator tabBarOptions ={{labelStyle : {fontSize : 15 , paddingBottom : 10}}}>
+      <Tab.Screen 
+      name = 'Payment'
+      component = {YourPaymentStack}
+      options = {{
+        title : 'Payment',
+        //tabBarVisible : false
+      }}
+      />
+    <Tab.Screen 
+      name = 'Confirm'
+      component = {YourConfirmStack}
+      />
+    </Tab.Navigator>
+  )
+}
+
+const YourConfirmStack = () => {
   return(
     <Stack.Navigator initialRouteName='YourOrder'>
     <Stack.Screen 
     name = 'YourOrder'
-    component = {OrderScreen}
+    component = {ConfirmOrderScreen}
     options={{
-      headerShown : false
+      headerShown : false,
+      
     }}
     />
     <Stack.Screen 
     name = 'OrderDetails' 
     component ={OrderDetailScreen}
     options={{
-      headerShown : false
+      headerShown : false,
     }}
     />
     <Stack.Screen 
@@ -91,9 +113,23 @@ const YourOrderStack = () => {
       headerShown : false
     }}
     />
+  </Stack.Navigator>
+  )
+}
+
+const YourPaymentStack = () => {
+  return(
+    <Stack.Navigator initialRouteName='YourOrder'>
     <Stack.Screen 
-    name = 'CashPayment'
-    component ={CashPaymentScreen}
+    name = 'YourOrder'
+    component = {PaymentOrderScreen}
+    options={{
+      headerShown : false
+    }}
+    />
+    <Stack.Screen 
+    name = 'OrderDetails' 
+    component ={OrderDetailScreen}
     options={{
       headerShown : false
     }}

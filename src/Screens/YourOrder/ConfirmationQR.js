@@ -6,6 +6,8 @@ import QRCode from 'react-native-qrcode-svg';
 
 const qrcode = require('../../Assets/QRcode.png')
 
+const PaymentInfo = "Upi transaction ID\n11052115436\n\nTo: Ajay Pandit\najaypandit@upi\n\nFrom: Ajay\n123456@upi\n\nAmount Paid: 500\n\nApr 16, 12.00 PM"
+
 const ConfirmationQRScreen = ({navigation}) =>{
 
     
@@ -13,7 +15,7 @@ const ConfirmationQRScreen = ({navigation}) =>{
     <Container style={Styles.container}>
         <View style ={Styles.qrcodeView}>
         <QRCode
-            value="Just some string value"
+            value={PaymentInfo}
             //logo={qrcode}
             //logoSize={100}
             size ={250}
