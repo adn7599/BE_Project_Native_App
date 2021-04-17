@@ -4,8 +4,10 @@ import {Icon} from 'native-base';
 import { createStackNavigator} from '@react-navigation/stack';
 import { createDrawerNavigator,} from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Provider as PaperProvider } from 'react-native-paper';
 
+import SideDrawerContent from './SideDrawerContent';
 import Context from './Global/context';
 import GlobalVariable from './Global/GlobalVariable';
 import SplashScreen from './Screens/SplashScreen';
@@ -18,6 +20,7 @@ import SelectProviderScreen from './Screens/Customer/Cart/SelectProvider';
 import RequestConfirmMsgScreen from './Screens/Customer/Cart/RequestConfirmMsg';
 import ProfileScreen from './Screens/Profile';
 import QuotaScreen from './Screens/Quota';
+import OrderScreen from './Screens/YourOrder';
 import ConfirmOrderScreen from './Screens/YourOrder/ConfirmTab';
 import PaymentOrderScreen from './Screens/YourOrder/PaymentTab';
 import OrderDetailScreen from './Screens/YourOrder/OrderDetails';
@@ -30,12 +33,14 @@ import ConfirmationQRScreen from './Screens/YourOrder/ConfirmationQR';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
-const Tab = createBottomTabNavigator();
+//const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 const DrawerNavigation = () => {
   return (
-    <NavigationContainer>
-      <Drawer.Navigator initialRouteName="CustomerDashboard">
+    <NavigationContainer >
+      <Drawer.Navigator initialRouteName="CustomerDashboard"
+      drawerContent = {(props) => <SideDrawerContent {...props} />}>
         <Drawer.Screen 
           name="CustomerDashboard" 
           component={WhichStack} 
@@ -71,18 +76,18 @@ const DrawerNavigation = () => {
 
 const YourOrderTab = () => {
   return(
-    <Tab.Navigator tabBarOptions ={{labelStyle : {fontSize : 15 , paddingBottom : 10}}}>
+    <Tab.Navigator
+    initialRouteName = {"Payment"}>
+      
       <Tab.Screen 
-      name = 'Payment'
+      name = 'Payment' 
       component = {YourPaymentStack}
-      options = {{
-        title : 'Payment',
-        //tabBarVisible : false
-      }}
+      
       />
     <Tab.Screen 
       name = 'Confirm'
       component = {YourConfirmStack}
+      
       />
     </Tab.Navigator>
   )
@@ -96,7 +101,6 @@ const YourConfirmStack = () => {
     component = {ConfirmOrderScreen}
     options={{
       headerShown : false,
-      
     }}
     />
     <Stack.Screen 
@@ -107,8 +111,8 @@ const YourConfirmStack = () => {
     }}
     />
     <Stack.Screen 
-    name = 'UPIPayment'
-    component ={UPIPaymentScreen}
+    name = 'ConfirmationQR'
+    component ={ConfirmationQRScreen}
     options={{
       headerShown : false
     }}
@@ -130,6 +134,55 @@ const YourPaymentStack = () => {
     <Stack.Screen 
     name = 'OrderDetails' 
     component ={OrderDetailScreen}
+    options={{
+      headerShown : false
+    }}
+    />
+    <Stack.Screen 
+    name = 'UPIPayment'
+    component ={UPIPaymentScreen}
+    options={{
+      headerShown : false
+    }}
+    />
+  </Stack.Navigator>
+  )
+}
+
+const YourOrderStack = () => {
+  return(
+    <Stack.Navigator initialRouteName='YourOrder'>
+      <Stack.Screen 
+      name = "YourOrder" 
+      component ={OrderScreen}
+      options={{
+        headerShown : false
+      }}
+      />
+    <Stack.Screen 
+    name = 'PaymentOrder'
+    component = {PaymentOrderScreen}
+    options={{
+      headerShown : false
+    }}
+    />
+    <Stack.Screen 
+    name = 'ConfirmOrder'
+    component = {ConfirmOrderScreen}
+    options={{
+      headerShown : false,
+    }}
+    />
+    <Stack.Screen 
+    name = 'OrderDetails' 
+    component ={OrderDetailScreen}
+    options={{
+      headerShown : false
+    }}
+    />
+    <Stack.Screen 
+    name = 'UPIPayment'
+    component ={UPIPaymentScreen}
     options={{
       headerShown : false
     }}

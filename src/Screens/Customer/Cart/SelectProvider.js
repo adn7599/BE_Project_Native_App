@@ -101,6 +101,7 @@ resp.expandedSupp = '';
 
 const SelectProviderScreen = ({navigation}) => {
   const [suppliers, setSuppliers] = useState(resp);
+  const [Range,setRange] = useState(100);
 
   const selectSupp = (supplierId) => {
     setSuppliers((prevSupp) => {
