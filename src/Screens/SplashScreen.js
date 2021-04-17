@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Image, Text, StyleSheet, SafeAreaView} from 'react-native';
 import colours from '../colours';
 import App from '../App';
@@ -6,30 +6,29 @@ import App from '../App';
 const logo = require('../Assets/Logo.png');
 
 const SplashScreen = ({navigation}) => {
-  const [timePassed,setTimePassed] = useState(false);
+  const [timePassed, setTimePassed] = useState(false);
 
-  useEffect(() =>{
-    setTimeout(() => {
-      setTimePassed({timePassed: true})},
+  useEffect(() => {
+    setTimeout(
+      () => {
+        setTimePassed({timePassed: true});
+      },
       //return (navigation.navigate('CustomerDashboard')) },
-       1000);
-  },[]);
+      2000,
+    );
+  }, []);
 
-    if (timePassed)
-    {
-      return <App />
-    }
-    else{
+  if (timePassed) {
+    return <App />;
+  } else {
     return (
       <SafeAreaView style={styles.container}>
         <Image source={logo} style={styles.logo} />
         <Text style={styles.title}>Commodity Distribution System</Text>
       </SafeAreaView>
     );
-    }
   }
-  
-
+};
 
 const styles = StyleSheet.create({
   container: {
