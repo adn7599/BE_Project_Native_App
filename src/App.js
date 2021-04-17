@@ -2,8 +2,10 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import SplashScreen from './Screens/SplashScreen';
-import LoginForm from './Screens/LoginForm';
-import TestScreen from './Screens/TestScreen';
+import IdentificationScreen from './Screens/IdentificationScreen';
+import OTPInputScreen from './Screens/OTPInputScreen';
+// import LoginForm from './Screens/LoginForm';
+// import TestScreen from './Screens/TestScreen';
 
 const Stack = createStackNavigator();
 
@@ -17,8 +19,13 @@ const App = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="LoginForm"
-          component={LoginForm}
+          name="IdentificationScreen"
+          component={IdentificationScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OTPInputScreen"
+          component={OTPInputScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
