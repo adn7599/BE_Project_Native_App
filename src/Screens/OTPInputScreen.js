@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import colours from '../colours';
+import SetPassword from './SetPassword';
 
 const OTPInputScreen = ({navigation}) => {
   let textInput = useRef(null);
@@ -42,6 +43,7 @@ const OTPInputScreen = ({navigation}) => {
 
   const onResendOTP = () => {
     if (enableResend) {
+      // eslint-disable-next-line no-alert
       alert('Resend OTP');
       setCountdown(defaultCountdown);
       setEnableResend(false);
@@ -60,9 +62,8 @@ const OTPInputScreen = ({navigation}) => {
   const onChangeText = (val) => {
     setInternalVal(val);
     if (val.length === lengthInput) {
-      // navigate to HOME screen
-      // eslint-disable-next-line no-alert
-      alert('Continue to Home screen');
+      // Check if OTP is correct, then go forward
+      navigation.navigate(SetPassword);
     }
   };
 

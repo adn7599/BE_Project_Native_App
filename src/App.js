@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import SplashScreen from './Screens/SplashScreen';
 import IdentificationScreen from './Screens/IdentificationScreen';
 import OTPInputScreen from './Screens/OTPInputScreen';
+import SetPassword from './Screens/SetPassword';
 // import LoginForm from './Screens/LoginForm';
 // import TestScreen from './Screens/TestScreen';
 
@@ -26,6 +27,11 @@ const App = () => {
         <Stack.Screen
           name="OTPInputScreen"
           component={OTPInputScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SetPassword"
+          component={SetPassword}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
