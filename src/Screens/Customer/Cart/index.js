@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {Dimensions, View, FlatList, StyleSheet} from 'react-native';
-import {Container, Body, Header, Right, Button, Text, Title} from 'native-base';
+import {Container, Body, Header, Right,Left,Icon, Button, Text, Title} from 'native-base';
 
 import common from '../../../Global/stylesheet';
 import Context from '../../../Global/context';
@@ -113,9 +113,9 @@ const CartScreen = ({navigation}) => {
           />
         </Left>
         <Body>
-          <Title style={common.headerText}>Profile</Title>
+          <Title style={common.headerText}>Cart</Title>
         </Body>
-        <Right />
+        
       </Header>
 
       <Header style={common.welcomeHeader}>

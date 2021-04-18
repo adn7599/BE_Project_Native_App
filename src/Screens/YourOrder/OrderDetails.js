@@ -16,7 +16,7 @@ const Data = [
         address : "XXXXX",
         items : "Item1, Item2, Item3",
         amount : "200",
-        status : "Reques"
+        status : "Request"
     },
 ];
 

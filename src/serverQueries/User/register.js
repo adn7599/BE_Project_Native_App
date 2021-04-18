@@ -19,7 +19,7 @@ export async function accountVerify(role, reg_id) {
     const response = await axios(config);
     return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    console.error(err.stack);
+    console.error('register ' ,err);
     return [err, null];
   }
 }

@@ -135,10 +135,16 @@ const CustomerDashboardScreen = ({navigation}) => {
             style={common.headerMenuBtn}
           />
         </Left>
-        <Body>
-          <Title style={common.headerText}>Profile</Title>
+        <Body style ={{alignItems:'center',paddingLeft:50}}>
+          <Title style={common.headerText}>Home</Title>
         </Body>
-        <Right />
+        <Right>
+          <Icon 
+          onPress = {() => navigation.navigate('Cart')}
+          name = 'md-cart'
+          style = {common.headerMenuBtn}
+          />
+        </Right>
       </Header>
       <Header searchBar rounded>
         <Item>

@@ -105,34 +105,6 @@ const ConfirmOrderScreen = ({navigation}) =>{
         renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
       />
-      <View style={{
-        flexDirection :'row',
-         height : 60,
-          backgroundColor : 'white',
-           }}>
-        <View style ={{flex : 1,}}>
-          <Button transparent 
-            style = {{height : 60,width:190,justifyContent :'center'}}
-            onPress = {() => navigation.navigate('PaymentOrder')}>
-          <Text style = {{color:'#c0c0c0'}}>
-            Payment
-          </Text>
-          </Button>
-        </View>
-        <View style ={{flex : 1}}>
-          <Button transparent style = {{
-            height : 60,
-            width:190,
-            justifyContent : 'center',
-            backgroundColor : '#dcdcdc',
-            borderTopColor : 'blue',
-            borderTopWidth : 5}}>
-          <Text>
-            Confirm
-          </Text>
-          </Button>
-        </View>
-      </View>
       </Container>
     );
 }

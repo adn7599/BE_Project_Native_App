@@ -51,7 +51,7 @@ async function loginRelay(role, reg_id, password) {
   }
 }
 
-export async function login(role, reg_id, password) {
+export default async function login(role, reg_id, password) {
   //Return value
   // [errMsg,ttpToken,relayToken]
   try {

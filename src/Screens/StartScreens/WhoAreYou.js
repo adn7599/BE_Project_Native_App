@@ -6,24 +6,30 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import Context from '../Global/context';
-
-import Customer from '../Assets/svgComponents/Customer';
-import Supplier from '../Assets/svgComponents/Supplier';
-import Distributor from '../Assets/svgComponents/Distributor';
-
-import colours from '../colours';
 
 
+import Customer from '../../Assets/svgComponents/Customer';
+import Supplier from '../../Assets/svgComponents/Supplier';
+import Distributor from '../../Assets/svgComponents/Distributor';
 
-const WhoAreYou = ({navigation}) => {
+import colours from '../../colours';
 
-  const MyButton = ({title, colour}) => {
-    const {setUser} = useContext(Context);
+
+
+
+const WhoAreYou = ({route ,navigation}) => {
+
+  const {action} = route.params;
+
+  const MyButton = ({title,role, colour}) => {
+    let nextScreen;
+    if(action === 'Login'){nextScreen = 'LoginForm'}
+    else{nextScreen = 'IdentificationScreen'}
     return (
       <TouchableOpacity style={[styles.button, {backgroundColor: colour}]} 
-      onPress={() => navigation.navigate('LoginForm',{
-        UserType : title
+      onPress={() =>  navigation.navigate(nextScreen,{
+        role : role,
+        roleTitle : title
       })}>
         <Text style={styles.btText}>{title}</Text>
       </TouchableOpacity>
@@ -43,17 +49,17 @@ const WhoAreYou = ({navigation}) => {
 
         <View style={[styles.innerContainer]}>
             <Customer style={{flex: 1}} width={140}/>
-            <MyButton style={{flex: 1}} title="Customer" colour={colours.yellow} />
+            <MyButton style={{flex: 1}} title="Customer" role = 'customer' colour={colours.yellow} />
         </View>
 
         <View style={styles.innerContainer}>
-            <MyButton style={{flex: 1}} title="Supplier" colour={colours.orange} />
+            <MyButton style={{flex: 1}} title="Supplier" role = 'SP' colour={colours.orange} />
             <Supplier style={{flex: 1}} width={130}/>
         </View> 
         
         <View style={styles.innerContainer}>
             <Distributor style={{flex: 1}} width={130}/>
-            <MyButton style={{flex: 1 }} title="Distributor" colour={colours.green} />
+            <MyButton style={{flex: 1 }} title="Distributor" role = 'DA' colour={colours.green} />
         </View> 
 
       </View>

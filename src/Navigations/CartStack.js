@@ -8,24 +8,22 @@ import RequestConfirmMsgScreen from '../Screens/Customer/Cart/RequestConfirmMsg'
 
 const Stack = createStackNavigator();
 
-const CartStack = () => {
+const HomeStack = () => {
   return (
-    <Stack.Navigator initialRouteName="CustomerDashboard">
+    <Stack.Navigator initialRouteName="CustomerDashboardScreen">
       <Stack.Screen
-        name="CustomerDashboard"
+        name="Home"
         component={CustomerDashboardScreen}
-        options={({navigation}) => ({
-          headerTitleAlign: 'center',
+        options={{
           headerShown: false,
-        })}
+        }}
       />
       <Stack.Screen
         name="Cart"
         component={CartScreen}
-        options={({navigation}) => ({
-          headerTitleAlign: 'center',
+        options={{
           headerShown: false,
-        })}
+        }}
       />
       <Stack.Screen
         name="SelectProvider"
@@ -45,4 +43,4 @@ const CartStack = () => {
   );
 };
 
-export default CartStack;
+export default HomeStack;

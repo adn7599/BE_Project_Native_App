@@ -1,4 +1,4 @@
-import React, {useContext,useEffect} from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   View,
@@ -6,64 +6,83 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Image,
   Dimensions,
-  BackHandler
+  BackHandler,
+  ToastAndroid,
 } from 'react-native';
 
-import colours from '../colours';
-import Context from '../Global/context';
+import colours from '../../../colours';
+import Logo from '../../../Assets/svgComponents/Logo';
+import {useState} from 'react/cjs/react.development';
+import Login from '../../../serverQueries/User/login';
+import useUserCred from '../../../UserCredentials';
 
 const windowHeight = Dimensions.get('screen').height;
 const windowWidth = Dimensions.get('screen').width;
-//import {windowHeight, windowWidth} from '../utils/Dimensions';
 
 const LoginForm = ({route, navigation}) => {
-  //   userType = 'Shopkeeper';
-  const {setUser} = useContext(Context);
-  const {UserType} = route.params;
+  const {role, roleTitle} = route.params;
+  const [password, setPassword] = useState('');
+  const [regId, setRegId] = useState('');
 
-  /*useEffect(() => {
-    const backAction = () => {
-      return true;
-    };
+  const {saveUserCred} = useUserCred();
 
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
+  const onLogin = async () => {
+    if (regId && password) {
+      const [respErr, ttpToken,relayToken] = await Login(
+        role,
+        regId,
+        password,
+      );
+      console.log('log resp', respErr, ttpToken,relayToken);
+      if (respErr == null) {
+        saveUserCred(role,regId,ttpToken,relayToken)
+      } else {
+        ToastAndroid.show(
+          respErr,
+          ToastAndroid.SHORT,
+        );
+      }
+    } else {
+      ToastAndroid.show(
+        `${numberType} or password is empty`,
+        ToastAndroid.SHORT,
+      );
+    }
+  };
 
-    return () => backHandler.remove();
-  }, []);*/
-
+  const numberType =
+    role === 'customer' ? 'Ration Card number' : 'Registration No.';
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.heading}>
           <Text style={styles.headingText}>
-            Welcome {UserType}! Login to start exploring.
+            Welcome {roleTitle}! Login to start exploring.
           </Text>
-          <Image source={require('../Assets/Logo.png')} />
+          <Logo />
         </View>
         <View style={styles.inputFields}>
           <TextInput
+            value={regId}
             style={styles.input}
-            keyboardType="numeric"
             maxLength={10}
-            placeholder="Identification number"
+            placeholder={numberType}
             placeholderTextColor={colours.brown}
+            onChangeText={(text) => setRegId(text)}
           />
           <TextInput
+            value={password}
             style={styles.input}
             secureTextEntry={true}
             keyboardType="visible-password"
             placeholder="Password"
             placeholderTextColor={colours.brown}
+            onChangeText={(text) => setPassword(text)}
           />
         </View>
-        <TouchableOpacity style={styles.button} 
-        onPress = {() => setUser(UserType)}>
+        <TouchableOpacity style={styles.button} onPress={() => onLogin()}>
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
       </View>

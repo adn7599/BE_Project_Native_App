@@ -1,8 +1,8 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 
-import Logo from '../Assets/svgComponents/Logo';
-import colours from '../colours';
+import Logo from '../../Assets/svgComponents/Logo';
+import colours from '../../colours';
 
 
 const LoginOrRegister = ({navigation}) => {
@@ -20,7 +20,7 @@ const LoginOrRegister = ({navigation}) => {
           </Text>
 
           <TouchableOpacity style={[styles.button,{backgroundColor: colours.green}]}
-          onPress ={() => navigation.navigate('WhoAreYou')}>
+          onPress ={() => navigation.navigate('WhoAreYou', {action : 'Login'})}>
             <Text style={styles.btText}>
               Log In
             </Text>
@@ -32,7 +32,7 @@ const LoginOrRegister = ({navigation}) => {
           </Text>
 
           <TouchableOpacity style={[styles.button,{backgroundColor: colours.orange}]}
-          onPress ={() => navigation.navigate('WhoAreYou')}>
+          onPress ={() => navigation.navigate('WhoAreYou', {action : 'Register'})}>
             <Text style={styles.btText}>
               Register 
             </Text>

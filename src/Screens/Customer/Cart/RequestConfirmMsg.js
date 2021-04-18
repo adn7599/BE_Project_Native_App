@@ -36,7 +36,7 @@ const RequestConfirmMsgScreen = ({navigation}) =>{
           <View style={common.topBottomSep}>
           <Button 
           onPress ={
-            () => [changeTotal(-(TotalAmount)),navigation.navigate('CustomerDashboard')]
+            () => [changeTotal(-(TotalAmount)),navigation.navigate('Home')]
             }>
             <Text>
               Home

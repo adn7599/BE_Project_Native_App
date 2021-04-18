@@ -229,8 +229,8 @@ const SelectProviderScreen = ({navigation}) => {
       </View>
       <View style={Styles.centerBtnView}>
         <Button
-          onPress={() => navigation.navigate('RequestConfirmMsg')}
-          disabled={suppliers.selectSupp === '' ? true : false}>
+          onPress={() => [navigation.navigate('RequestConfirmMsg'),console.log(suppliers.selectSupp)]}
+          disabled={suppliers.selectSupp === undefined}>
           <Text>Proceed To Order</Text>
         </Button>
       </View>

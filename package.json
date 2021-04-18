@@ -17,6 +17,7 @@
     "@react-navigation/material-bottom-tabs": "^5.3.15",
     "@react-navigation/native": "^5.9.3",
     "@react-navigation/stack": "^5.14.3",
+    "axios": "^0.21.1",
     "native-base": "^2.15.2",
     "react": "16.13.1",
     "react-native": "0.63.4",
@@ -27,6 +28,7 @@
     "react-native-reanimated": "^2.0.1",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.0.0",
+    "react-native-sha256": "^1.4.7",
     "react-native-svg": "^12.1.0",
     "react-native-upi-payment": "^1.0.2",
     "react-native-vector-icons": "^8.1.0"

@@ -1,12 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useState, createContext} from 'react';
+import React,{useState, createContext,useEffect} from 'react';
+import { useContext } from 'react/cjs/react.development';
+import {ActivityIndicator, SafeAreaView} from 'react-native';
+
+import common from './Global/stylesheet';
 
 const USER_CRED_KEY = 'userCredentails';
 
 const userCredContext = createContext();
 
-const UserCredentials = ({Children}) => {
+export const UserCredentials = ({children}) => {
   const [userCred, setUserCred] = useState(null);
+  const [isLoaded,setIsLoaded] = useState(false);
 
   const loadUserCred = async () => {
     try {
@@ -15,6 +20,7 @@ const UserCredentials = ({Children}) => {
         console.log('User credentials found');
         //converting data to JSON before loading state
         setUserCred(JSON.parse(storedUserCreds));
+        setIsLoaded(true);
         console.log('User logged in: ', userCred);
       } else {
         console.log('User credentials not found');
@@ -25,7 +31,7 @@ const UserCredentials = ({Children}) => {
     }
   };
 
-  const saveUserCred = async (role, reg_id, relayToken, ttpToken) => {
+  const saveUserCred = async (role, reg_id, ttpToken,relayToken,) => {
     try {
       const storedUserCreds = {
         role,
@@ -56,11 +62,28 @@ const UserCredentials = ({Children}) => {
   };
 
   useEffect(() => {
-    loadUserCreds();
+    loadUserCred();
   }, []);
 
-  return;
-  <userCredContext.Provider value={(userCred, saveUserCred, deleteUserCred)}>
-    <Children />
-  </userCredContext.Provider>;
+  if(isLoaded){
+  return(
+  <userCredContext.Provider value={{userCred, saveUserCred, deleteUserCred}}>
+    {children }
+  </userCredContext.Provider>
+  )
+  }
+  else{
+    return(
+      <SafeAreaView style ={[common.container,common.flexOne,{justifyContent : 'center'}]}>
+        <ActivityIndicator size ={'large'} color ={'#2F070D'} />
+      </SafeAreaView>
+    )
+  }
+
 };
+
+const useUserCred = () => {
+  return useContext(userCredContext);
+}
+
+export default useUserCred;

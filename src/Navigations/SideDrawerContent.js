@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native';
 import {DrawerContent, DrawerContentScrollView,DrawerItem} from '@react-navigation/drawer';
 import {Icon,Text, Title} from 'native-base';
-import {Avatar, Drawer} from 'react-native-paper';
-import common from './Global/stylesheet';
+import {Avatar, Drawer, List} from 'react-native-paper';
+import common from '../Global/stylesheet';
 
 const SideDrawerContent = (props) => {
+    const [expanded, setExpanded] = useState(false);
     return(
         <View style={common.flexOne}>
             <DrawerContentScrollView {...props}>
@@ -20,7 +21,8 @@ const SideDrawerContent = (props) => {
                     <Drawer.Section style ={{marginTop : 15}}>
                         <DrawerItem 
                         label = 'Home'
-                        onPress ={() => props.navigation.navigate('CustomerDashboard')}
+                        onPress ={() => props.navigation.navigate('Home')}
+                        
                         />
                         <DrawerItem 
                         label = 'Profile'
@@ -30,10 +32,15 @@ const SideDrawerContent = (props) => {
                         label = 'Quota'
                         onPress ={() => props.navigation.navigate('Quota')}
                         />
-                        <DrawerItem 
-                        label = 'Your Order'
-                        onPress ={() => props.navigation.navigate('YourOrder')}
-                        />
+                        
+                        <List.Accordion
+                            title = "Your Order"
+                            expanded ={expanded}
+                            onPress ={() => setExpanded(!expanded)}
+                        >
+                            <List.Item title = "Payment" onPress = {() => props.navigation.navigate('PaymentOrder')}/>
+                            <List.Item title = "Confirm" onPress = {() => props.navigation.navigate('ConfirmOrder')}/>
+                        </List.Accordion>
                         <DrawerItem 
                         label = 'Order History'
                         />
