@@ -1,17 +1,21 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React,{useState, createContext,useEffect} from 'react';
-import { useContext } from 'react/cjs/react.development';
-import {ActivityIndicator, SafeAreaView} from 'react-native';
+import React, {useState, createContext, useEffect} from 'react';
+import {useContext} from 'react/cjs/react.development';
+import {ActivityIndicator, SafeAreaView, TimePickerAndroid} from 'react-native';
 
 import common from './Global/stylesheet';
+import SplashScreen from './Screens/StartScreens/SplashScreen';
 
 const USER_CRED_KEY = 'userCredentails';
+
+const SPLASHSCREEN_TIME = 1000;
 
 const userCredContext = createContext();
 
 export const UserCredentials = ({children}) => {
   const [userCred, setUserCred] = useState(null);
-  const [isLoaded,setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [timePassed, setTimePassed] = useState(false);
 
   const loadUserCred = async () => {
     try {
@@ -20,10 +24,11 @@ export const UserCredentials = ({children}) => {
         console.log('User credentials found');
         //converting data to JSON before loading state
         setUserCred(JSON.parse(storedUserCreds));
-        setIsLoaded(true);
         console.log('User logged in: ', userCred);
+        setIsLoaded(true);
       } else {
         console.log('User credentials not found');
+        setIsLoaded(true);
       }
     } catch (err) {
       console.log('Error while loading stored user credentials');
@@ -31,7 +36,7 @@ export const UserCredentials = ({children}) => {
     }
   };
 
-  const saveUserCred = async (role, reg_id, ttpToken,relayToken,) => {
+  const saveUserCred = async (role, reg_id, ttpToken, relayToken) => {
     try {
       const storedUserCreds = {
         role,
@@ -39,11 +44,12 @@ export const UserCredentials = ({children}) => {
         relayToken,
         ttpToken,
       };
-      setUserCred(storedUserCreds);
       await AsyncStorage.setItem(
         USER_CRED_KEY,
         JSON.stringify(storedUserCreds),
       );
+      setUserCred(storedUserCreds);
+      console.log('Logged in as user : ', storedUserCreds);
     } catch (err) {
       console.log('Error while saving user credentials');
       console.error(err);
@@ -52,7 +58,6 @@ export const UserCredentials = ({children}) => {
 
   const deleteUserCred = async () => {
     try {
-      setUserCred(storedUserCreds);
       setUserCred(null);
       await AsyncStorage.removeItem(USER_CRED_KEY);
     } catch (err) {
@@ -63,27 +68,29 @@ export const UserCredentials = ({children}) => {
 
   useEffect(() => {
     loadUserCred();
+    setTimeout(
+      () => {
+        setTimePassed(true);
+      },
+      //return (navigation.navigate('CustomerDashboard')) },
+      SPLASHSCREEN_TIME,
+    );
   }, []);
 
-  if(isLoaded){
-  return(
-  <userCredContext.Provider value={{userCred, saveUserCred, deleteUserCred}}>
-    {children }
-  </userCredContext.Provider>
-  )
+  if (isLoaded && timePassed) {
+    return (
+      <userCredContext.Provider
+        value={{userCred, saveUserCred, deleteUserCred}}>
+        {children}
+      </userCredContext.Provider>
+    );
+  } else {
+    return <SplashScreen timePassed={timePassed} />;
   }
-  else{
-    return(
-      <SafeAreaView style ={[common.container,common.flexOne,{justifyContent : 'center'}]}>
-        <ActivityIndicator size ={'large'} color ={'#2F070D'} />
-      </SafeAreaView>
-    )
-  }
-
 };
 
 const useUserCred = () => {
   return useContext(userCredContext);
-}
+};
 
 export default useUserCred;

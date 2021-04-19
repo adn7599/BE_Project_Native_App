@@ -14,7 +14,7 @@ import {
 import colours from '../../../colours';
 import Logo from '../../../Assets/svgComponents/Logo';
 import {useState} from 'react/cjs/react.development';
-import Login from '../../../serverQueries/User/login';
+import login from '../../../serverQueries/User/login';
 import useUserCred from '../../../UserCredentials';
 
 const windowHeight = Dimensions.get('screen').height;
@@ -29,19 +29,16 @@ const LoginForm = ({route, navigation}) => {
 
   const onLogin = async () => {
     if (regId && password) {
-      const [respErr, ttpToken,relayToken] = await Login(
+      const [respErr, ttpToken, relayToken] = await login(
         role,
         regId,
         password,
       );
-      console.log('log resp', respErr, ttpToken,relayToken);
+      console.log('log resp', respErr, ttpToken, relayToken);
       if (respErr == null) {
-        saveUserCred(role,regId,ttpToken,relayToken)
+        saveUserCred(role, regId, ttpToken, relayToken);
       } else {
-        ToastAndroid.show(
-          respErr,
-          ToastAndroid.SHORT,
-        );
+        ToastAndroid.show((respErr instanceof Error ? respErr.message : respErr), ToastAndroid.SHORT);
       }
     } else {
       ToastAndroid.show(

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.timeout = 3000
+axios.defaults.timeout = 3000;
 
 export const ROLE = {
   CUSTOMER: 'customer',
@@ -9,6 +9,6 @@ export const ROLE = {
 };
 
 export const URL = {
-  TTP: 'http://192.168.0.105:5000',
-  RELAY: 'http://192.168.0.105:6000',
+  TTP: 'http://192.168.0.100:5000',
+  RELAY: 'http://192.168.0.100:6000',
 };

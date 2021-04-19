@@ -15,14 +15,14 @@ async function loginTTP(role, reg_id, password) {
         'Content-Type': 'application/json',
       },
       data: data,
-      validateStatus: status => {
+      validateStatus: (status) => {
         return [200, 400].includes(status);
       },
     };
     const response = await axios(config);
-    return {status: response.status, data: response.data};
+    return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    throw err;
+    return [err, null];
   }
 }
 
@@ -40,24 +40,23 @@ async function loginRelay(role, reg_id, password) {
         'Content-Type': 'application/json',
       },
       data: data,
-      validateStatus: status => {
+      validateStatus: (status) => {
         return [200, 400].includes(status);
       },
     };
     const response = await axios(config);
-    return null, {status: response.status, data: response.data};
+    return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    throw err;
+    return [err, null];
   }
 }
 
 export default async function login(role, reg_id, password) {
   //Return value
   // [errMsg,ttpToken,relayToken]
-  try {
-    //first logging in to TTP
-    const respTTP = await loginTTP(role, reg_id, password);
-
+  //first logging in to TTP
+  const [ttpError, respTTP] = await loginTTP(role, reg_id, password);
+  if (ttpError == null) {
     if (respTTP.status == 200) {
       //login successful, received token
       console.log('TTP Server => ', respTTP.data);
@@ -67,21 +66,25 @@ export default async function login(role, reg_id, password) {
       const relayPass = respTTP.data.relay_password;
 
       //Now logging in to Relay Server
-      const respRelay = await loginRelay(role, reg_id, relayPass);
+      const [relayErr, respRelay] = await loginRelay(role, reg_id, relayPass);
+      if (relayErr == null) {
+        if (respRelay.status == 200) {
+          //login successful received token
+          console.log('Relay Server => ', respRelay.data);
 
-      if (respRelay.status == 200) {
-        //login successful received token
-        console.log('Relay Server => ', respRelay.data);
+          //extracting relayToken
+          const relayToken = respRelay.data.token;
 
-        //extracting relayToken
-        const relayToken = respRelay.data.token;
-
-        return [null, ttpToken, relayToken];
+          return [null, ttpToken, relayToken];
+        } else {
+          //Relay 400
+          //status code 400, something wrong
+          console.error('Relay Server => ', respRelay.data);
+          return [respRelay.data.error, null, null];
+        }
       } else {
-        //Relay 400
-        //status code 400, something wrong
-        console.error('Relay Server => ', respRelay.data);
-        return [respRelay.data.error, null, null];
+        console.error('Relay Server =>', relayErr);
+        return [relayErr, null, null];
       }
     } else {
       //TTP 400
@@ -89,7 +92,8 @@ export default async function login(role, reg_id, password) {
       console.error('TTP Server => ', respTTP.data);
       return [respTTP.data.error, null, null];
     }
-  } catch (err) {
-    return ['Server Error', null, null];
+  } else {
+    console.error('TTP Server =>', ttpError);
+    return [ttpError, null, null];
   }
 }

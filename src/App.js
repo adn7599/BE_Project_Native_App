@@ -23,7 +23,6 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNavigation = () => {
   return (
-    
       <Drawer.Navigator
         initialRouteName="CustomerDashboard"
         drawerContent={(props) => <SideDrawerContent {...props} />}>
@@ -63,7 +62,6 @@ const DrawerNavigation = () => {
           }}
         />
       </Drawer.Navigator>
- 
   );
 };
 

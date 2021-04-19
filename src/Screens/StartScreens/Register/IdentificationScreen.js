@@ -43,43 +43,41 @@ const IdentificationScreen = ({route, navigation}) => {
     if (identityNumber) {
       // Goto input OTP screen
       const [respErr, resp] = await accountVerify(role, identityNumber);
-      console.log('log resp' ,  respErr,resp);
+      console.log('log resp', respErr, resp);
       if (respErr == null) {
-        if (resp.status == 200) {
+        if (resp.status == 200 && !resp.data.isRegistered) {
           const [otpErr, otpResp] = await sendOTP(role, identityNumber);
-          console.log('log otp',otpErr,otpResp)
+          console.log('log otp', otpErr, otpResp);
           if (otpErr == null) {
             if (otpResp.status == 200) {
               navigation.navigate('OTPInputScreen', {
                 role: role,
                 reg_id: identityNumber,
                 mobNo: resp.data.Mob_no,
-                otpToken : otpResp.data.token
+                otpToken: otpResp.data.token,
               });
-            } 
-            else {
+            } else {
               ToastAndroid.show(`${otpResp.data.error}`, ToastAndroid.SHORT);
             }
-          } 
-          else {
+          } else {
             ToastAndroid.show(
               `Server Error : ${otpErr.message}`,
               ToastAndroid.SHORT,
             );
           }
-        } 
-        else {
-          ToastAndroid.show(`${resp.data.error}`, ToastAndroid.SHORT);
+        } else {
+          ToastAndroid.show(
+            `${resp.data.error ? resp.data.error : 'User already registered'}`,
+            ToastAndroid.SHORT,
+          );
         }
-      } 
-      else {
+      } else {
         ToastAndroid.show(
           `Server Error : ${respErr.message}`,
           ToastAndroid.SHORT,
         );
       }
-    } 
-    else {
+    } else {
       ToastAndroid.show(`Empty ${numberType}!!`, ToastAndroid.SHORT);
     }
   };
@@ -105,7 +103,7 @@ const IdentificationScreen = ({route, navigation}) => {
             ref={(input) => (textInput = input)}
             style={styles.phoneInputStyle}
             placeholder={numberType}
-            keyboardType="numeric"
+            //keyboardType="numeric"
             maxLength={10}
             onChangeText={onChangePhone}
             secureTextEntry={false}
