@@ -97,3 +97,21 @@ export default async function login(role, reg_id, password) {
     return [ttpError, null, null];
   }
 }
+
+export async function getUserDetails(ttpToken) {
+  try {
+    const config = {
+      method: 'get',
+      url: `${URL.TTP}/user/details`,
+      headers: {Authorization: `Bearer ${ttpToken}`},
+      validateStatus: (status) => {
+        return [200, 400, 403].includes(status);
+      },
+    };
+    console.log('config: ', config);
+    const response = await axios(config);
+    return [null, {status: response.status, data: response.data}];
+  } catch (err) {
+    return [err, null];
+  }
+}

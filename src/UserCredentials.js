@@ -1,10 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState, createContext, useEffect} from 'react';
 import {useContext} from 'react/cjs/react.development';
-import {ActivityIndicator, SafeAreaView, TimePickerAndroid} from 'react-native';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  TimePickerAndroid,
+  ToastAndroid,
+} from 'react-native';
 
 import common from './Global/stylesheet';
 import SplashScreen from './Screens/StartScreens/SplashScreen';
+import {getUserDetails} from './serverQueries/User/login';
 
 const USER_CRED_KEY = 'userCredentails';
 
@@ -14,6 +20,8 @@ const userCredContext = createContext();
 
 export const UserCredentials = ({children}) => {
   const [userCred, setUserCred] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
+
   const [isLoaded, setIsLoaded] = useState(false);
   const [timePassed, setTimePassed] = useState(false);
 
@@ -21,11 +29,31 @@ export const UserCredentials = ({children}) => {
     try {
       const storedUserCreds = await AsyncStorage.getItem(USER_CRED_KEY);
       if (storedUserCreds !== null) {
-        console.log('User credentials found');
-        //converting data to JSON before loading state
-        setUserCred(JSON.parse(storedUserCreds));
-        console.log('User logged in: ', userCred);
-        setIsLoaded(true);
+        const parsedStoredUserCreds = JSON.parse(storedUserCreds);
+        console.log('User credentials found', parsedStoredUserCreds);
+        console.log('ttp token found: ', parsedStoredUserCreds.ttpToken);
+        //Need to fetch user details
+        const [detErr, detResp] = await getUserDetails(
+          parsedStoredUserCreds.ttpToken,
+        );
+
+        if (detErr === null) {
+          if (detResp.status == 200) {
+            setUserDetails(detResp.data);
+            //converting data to JSON before loading state
+            setUserCred(parsedStoredUserCreds);
+            setIsLoaded(true);
+          } else if (detResp.status == 403) {
+            //token is invalid
+            ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
+            await deleteUserCred();
+            setIsLoaded(true);
+          } else {
+            ToastAndroid.show(detResp.data.error, ToastAndroid.LONG);
+          }
+        } else {
+          ToastAndroid.show(detErr.message, ToastAndroid.LONG);
+        }
       } else {
         console.log('User credentials not found');
         setIsLoaded(true);
@@ -44,22 +72,37 @@ export const UserCredentials = ({children}) => {
         relayToken,
         ttpToken,
       };
-      await AsyncStorage.setItem(
-        USER_CRED_KEY,
-        JSON.stringify(storedUserCreds),
-      );
-      setUserCred(storedUserCreds);
+      //Need to fetch user details
+      const [detErr, detResp] = await getUserDetails(ttpToken);
+
+      if (detErr === null) {
+        if (detResp.status == 200) {
+          setUserDetails(detResp.data);
+          await AsyncStorage.setItem(
+            USER_CRED_KEY,
+            JSON.stringify(storedUserCreds),
+          );
+          setUserCred(storedUserCreds);
+        } else if (detResp.status == 403) {
+          //token is invalid
+          ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
+        } else {
+          ToastAndroid.show(detResp.data.error, ToastAndroid.LONG);
+        }
+      } else {
+        ToastAndroid.show(detErr.message, ToastAndroid.LONG);
+      }
       console.log('Logged in as user : ', storedUserCreds);
     } catch (err) {
       console.log('Error while saving user credentials');
-      console.error(err);
+      console.error(err, err.lineNumber, err.columnNumber);
     }
   };
 
   const deleteUserCred = async () => {
     try {
-      setUserCred(null);
       await AsyncStorage.removeItem(USER_CRED_KEY);
+      setUserCred(null);
     } catch (err) {
       console.log('Error while saving user credentials');
       console.error(err);
@@ -80,7 +123,7 @@ export const UserCredentials = ({children}) => {
   if (isLoaded && timePassed) {
     return (
       <userCredContext.Provider
-        value={{userCred, saveUserCred, deleteUserCred}}>
+        value={{userCred, userDetails, saveUserCred, deleteUserCred}}>
         {children}
       </userCredContext.Provider>
     );

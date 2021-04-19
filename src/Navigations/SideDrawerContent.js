@@ -11,9 +11,16 @@ import common from '../Global/stylesheet';
 
 import useUserCred from '../UserCredentials';
 
+const roleTitle = {
+  customer: 'Customer',
+  SP: 'Supplier',
+  DA: 'Distributor',
+};
+
 const SideDrawerContent = (props) => {
-  const {deleteUserCred} = useUserCred();
+  const {userCred, userDetails, deleteUserCred} = useUserCred();
   const [expanded, setExpanded] = useState(false);
+
   return (
     <View style={common.flexOne}>
       <DrawerContentScrollView {...props}>
@@ -21,8 +28,9 @@ const SideDrawerContent = (props) => {
           <View style={{paddingLeft: 20, flexDirection: 'row', marginTop: 20}}>
             <Avatar.Text size={70} label={'AP'} />
             <View style={{margin: 15}}>
-              <Text>Ajay Pandit</Text>
-              <Text note>1111111111</Text>
+              <Text>{`${userDetails.fName} ${userDetails.lName}`}</Text>
+              <Text note>{userDetails._id}</Text>
+              <Text note>{roleTitle[userCred.role]}</Text>
             </View>
           </View>
           <Drawer.Section style={{marginTop: 15}}>

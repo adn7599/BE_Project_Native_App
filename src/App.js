@@ -23,70 +23,68 @@ const Drawer = createDrawerNavigator();
 
 const DrawerNavigation = () => {
   return (
-      <Drawer.Navigator
-        initialRouteName="CustomerDashboard"
-        drawerContent={(props) => <SideDrawerContent {...props} />}>
-        <Drawer.Screen
-          name="CustomerDashboard"
-          component={HomeStack}
-          options={{
-            swipeEnabled: false,
-          }}
-        />
-        <Drawer.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{
-            swipeEnabled: false,
-          }}
-        />
-        <Drawer.Screen
-          name="Quota"
-          component={QuotaScreen}
-          options={{
-            swipeEnabled: false,
-          }}
-        />
-        <Drawer.Screen
-          name="PaymentOrder"
-          component={YourPaymentStack}
-          options={{
-            swipeEnabled: false,
-          }}
-        />
-        <Drawer.Screen
-          name="ConfirmOrder"
-          component={YourConfirmStack}
-          options={{
-            swipeEnabled: false,
-          }}
-        />
-      </Drawer.Navigator>
+    <Drawer.Navigator
+      initialRouteName="CustomerDashboard"
+      drawerContent={(props) => <SideDrawerContent {...props} />}>
+      <Drawer.Screen
+        name="CustomerDashboard"
+        component={HomeStack}
+        options={{
+          swipeEnabled: false,
+        }}
+      />
+      <Drawer.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          swipeEnabled: false,
+        }}
+      />
+      <Drawer.Screen
+        name="Quota"
+        component={QuotaScreen}
+        options={{
+          swipeEnabled: false,
+        }}
+      />
+      <Drawer.Screen
+        name="PaymentOrder"
+        component={YourPaymentStack}
+        options={{
+          swipeEnabled: false,
+        }}
+      />
+      <Drawer.Screen
+        name="ConfirmOrder"
+        component={YourConfirmStack}
+        options={{
+          swipeEnabled: false,
+        }}
+      />
+    </Drawer.Navigator>
   );
 };
 
 const WhichStack = () => {
   //const {UserType} = useContext(Context);
-  const {userCred} = useUserCred()
-  //console.log('WhichStack  ',Context)
+  const {userCred, userDetails} = useUserCred();
+
+  console.log('{which}User logged in: ', userCred);
+  console.log('{which}User Details : ', userDetails);
   if (userCred === null) {
     return <StartStack />;
   } else {
-    console.log('user cred',userCred)
     return <DrawerNavigation />;
   }
-  
 };
 
 const App = () => {
-
-
   return (
     <UserCredentials>
       <PaperProvider>
-      <NavigationContainer>
-        <WhichStack />
-      </NavigationContainer>
+        <NavigationContainer>
+          <WhichStack />
+        </NavigationContainer>
       </PaperProvider>
     </UserCredentials>
   );
