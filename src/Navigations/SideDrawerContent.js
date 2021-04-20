@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View} from 'react-native';
 import {
   DrawerContent,
@@ -21,7 +21,7 @@ const SideDrawerContent = (props) => {
   const {userCred, userDetails, deleteUserCred} = useUserCred();
   const [expanded, setExpanded] = useState(null);
   const avatarText = userDetails.fName[0] + userDetails.lName[0];
-/*
+  /*
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('blur', () => {
       console.log('Drawer screen focused');
@@ -29,7 +29,6 @@ const SideDrawerContent = (props) => {
     });
     return unsubscribe;
   }, []);*/
-
 
   return (
     <View style={common.flexOne}>
@@ -63,11 +62,17 @@ const SideDrawerContent = (props) => {
               onPress={() => setExpanded('yourorder')}>
               <List.Item
                 title="Payment"
-                onPress={() => props.navigation.navigate('PaymentOrder')}
+                onPress={() => {
+                  setExpanded(null);
+                  props.navigation.navigate('PaymentOrder');
+                }}
               />
               <List.Item
                 title="Confirm"
-                onPress={() => props.navigation.navigate('ConfirmOrder')}
+                onPress={() => {
+                  setExpanded(null);
+                  props.navigation.navigate('ConfirmOrder');
+                }}
               />
             </List.Accordion>
             <List.Accordion
