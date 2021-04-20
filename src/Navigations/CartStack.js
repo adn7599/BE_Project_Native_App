@@ -5,12 +5,20 @@ import CustomerDashboardScreen from '../Screens/Customer';
 import CartScreen from '../Screens/Customer/Cart';
 import SelectProviderScreen from '../Screens/Customer/Cart/SelectProvider';
 import RequestConfirmMsgScreen from '../Screens/Customer/Cart/RequestConfirmMsg';
+import ProviderDashboardScreen from '../Screens/Provider';
 
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
   return (
     <Stack.Navigator initialRouteName="CustomerDashboardScreen">
+      <Stack.Screen
+        name="ProviderDashboard"
+        component={ProviderDashboardScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="Home"
         component={CustomerDashboardScreen}

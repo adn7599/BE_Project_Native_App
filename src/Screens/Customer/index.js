@@ -32,9 +32,7 @@ import common from '../../Global/stylesheet';
 import {useState} from 'react/cjs/react.development';
 import Loading from '../../Component/Loading';
 import MyFastImage from '../../Component/FastImage';
-//import Context from '../../global/context';
 import {List} from 'react-native-paper';
-import {useFocusEffect} from '@react-navigation/native';
 
 const CustomerDashboardScreen = ({navigation}) => {
   const [prodList, setProdList] = useState(null);
@@ -167,7 +165,7 @@ const ListItem = ({item, toggleAddToCart}) => {
       <Content style={Sytles.cardContainer}>
         <Card style={Sytles.card}>
           <CardItem>
-            <View>
+            <Body>
               <MyFastImage
                 imageId={item.product._id}
                 imageLoaded={imageLoaded}
@@ -183,17 +181,17 @@ const ListItem = ({item, toggleAddToCart}) => {
                   </Body>
                 </Left>
               </CardItem>
-              <CardItem>
+              
                 <Body>
                   <List.Accordion
                     title="Product Info"
                     style={{width: Dimensions.get('screen').width - 80}}>
-                    <Text>{item.product.description}</Text>
-                    <Text>Alloted Quantity: {item.allotedQuantity}</Text>
-                    <Text>Available Quantity:{item.availableQuantity}</Text>
+                    <Text style ={{paddingTop : 10, paddingLeft : 15}}>{item.product.description}</Text>
+                    <Text style ={{paddingTop : 10, paddingLeft : 15}}>Alloted Quantity : {item.allotedQuantity}</Text>
+                    <Text style ={{paddingTop : 10, paddingLeft : 15}}>Available Quantity : {item.availableQuantity}</Text>
                   </List.Accordion>
                 </Body>
-              </CardItem>
+              <View style ={common.topBottomSep}></View>
               <Button
                 textStyle={{color: '#87838B'}}
                 style={[
@@ -204,7 +202,7 @@ const ListItem = ({item, toggleAddToCart}) => {
                 <Icon name="cart" />
                 <Text>{item.addedToCart ? 'REMOVE' : 'ADD'}</Text>
               </Button>
-            </View>
+            </Body>
           </CardItem>
         </Card>
       </Content>

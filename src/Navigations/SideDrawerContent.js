@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {View} from 'react-native';
 import {
   DrawerContent,
@@ -19,8 +19,18 @@ const roleTitle = {
 
 const SideDrawerContent = (props) => {
   const {userCred, userDetails, deleteUserCred} = useUserCred();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(null);
   const avatarText = userDetails.fName[0] + userDetails.lName[0];
+/*
+  useEffect(() => {
+    const unsubscribe = props.navigation.addListener('blur', () => {
+      console.log('Drawer screen focused');
+      setExpanded(null)
+    });
+    return unsubscribe;
+  }, []);*/
+
+
   return (
     <View style={common.flexOne}>
       <DrawerContentScrollView {...props}>
@@ -49,8 +59,8 @@ const SideDrawerContent = (props) => {
 
             <List.Accordion
               title="Your Order"
-              expanded={expanded}
-              onPress={() => setExpanded(!expanded)}>
+              expanded={expanded === 'yourorder'}
+              onPress={() => setExpanded('yourorder')}>
               <List.Item
                 title="Payment"
                 onPress={() => props.navigation.navigate('PaymentOrder')}
@@ -60,7 +70,19 @@ const SideDrawerContent = (props) => {
                 onPress={() => props.navigation.navigate('ConfirmOrder')}
               />
             </List.Accordion>
-            <DrawerItem label="Order History" />
+            <List.Accordion
+              title="Order History"
+              expanded={expanded === 'orderhistory'}
+              onPress={() => setExpanded('orderhistory')}>
+              <List.Item
+                title="completed"
+                onPress={() => props.navigation.navigate('PaymentOrder')}
+              />
+              <List.Item
+                title="Cancel"
+                onPress={() => props.navigation.navigate('ConfirmOrder')}
+              />
+            </List.Accordion>
           </Drawer.Section>
         </View>
       </DrawerContentScrollView>
