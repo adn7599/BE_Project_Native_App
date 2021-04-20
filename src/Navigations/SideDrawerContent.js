@@ -20,13 +20,13 @@ const roleTitle = {
 const SideDrawerContent = (props) => {
   const {userCred, userDetails, deleteUserCred} = useUserCred();
   const [expanded, setExpanded] = useState(false);
-
+  const avatarText = userDetails.fName[0] + userDetails.lName[0];
   return (
     <View style={common.flexOne}>
       <DrawerContentScrollView {...props}>
         <View style={common.flexOne}>
           <View style={{paddingLeft: 20, flexDirection: 'row', marginTop: 20}}>
-            <Avatar.Text size={70} label={'AP'} />
+            <Avatar.Text size={70} label={avatarText} />
             <View style={{margin: 15}}>
               <Text>{`${userDetails.fName} ${userDetails.lName}`}</Text>
               <Text note>{userDetails._id}</Text>

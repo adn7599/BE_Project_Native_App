@@ -1,10 +1,30 @@
-import React, {useContext, useState} from 'react';
-import {Dimensions, View, FlatList, StyleSheet} from 'react-native';
-import {Container, Body, Header, Right,Left,Icon, Button, Text, Title} from 'native-base';
+import React, {useState, useEffect} from 'react';
+import {
+  Dimensions,
+  View,
+  FlatList,
+  StyleSheet,
+  ToastAndroid,
+} from 'react-native';
+import {
+  Container,
+  Body,
+  Header,
+  Right,
+  Left,
+  Icon,
+  Button,
+  Text,
+  Title,
+} from 'native-base';
 
 import common from '../../../Global/stylesheet';
 import Context from '../../../Global/context';
 import ShowCard from '../../../Component/ShowCard';
+import {custReqQueries} from '../../../serverQueries/Requester';
+import useUserCred from '../../../UserCredentials';
+
+import Loading from '../../../Component/Loading';
 
 const resp = {
   _id: '1111111111',
@@ -40,40 +60,97 @@ const resp = {
   totalCartCost: 150,
 };
 
-resp.orders.forEach((item) => (item.isSelected = false));
-resp.selectedItemsTotalAmount = 0;
-console.log(resp);
-
 const dimension = Dimensions.get('screen');
 
 const CartScreen = ({navigation}) => {
-  const [Cart, setCart] = useState(resp);
+  const [Cart, setCart] = useState(null);
+  const {userCred, userDetails, deleteUserCred} = useUserCred();
 
-  const updateCartQuantity = (productId, newQuantity) => {
-    setCart((prevCart) => {
-      const item = prevCart.orders.find(
-        (item) => item.product._id === productId,
-      );
-      item.cartQuantity = newQuantity;
-      prevCart.selectedItemsTotalAmount =
-        prevCart.selectedItemsTotalAmount - item.cartCost;
-      item.cartCost = item.cartQuantity * item.product.price;
-      prevCart.selectedItemsTotalAmount =
-        prevCart.selectedItemsTotalAmount + item.cartCost;
-      return {...prevCart};
-    });
+  const loadScreen = async () => {
+    const [respErr, resp] = await custReqQueries.getCart(userCred.relayToken);
+    console.log('loaded resp', respErr, resp);
+    if (respErr === null) {
+      if (resp.status == 200) {
+        respData = {...resp.data};
+
+        respData.orders.forEach((item) => (item.isSelected = false));
+        respData.selectedItemsTotalAmount = 0;
+
+        console.log(respData);
+        setCart(respData);
+      } else if (resp.status == 403) {
+        ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
+        await deleteUserCred();
+      } else {
+        ToastAndroid.show(resp.data.error, ToastAndroid.LONG);
+      }
+    } else {
+      ToastAndroid.show(respErr.message, ToastAndroid.LONG);
+    }
   };
 
-  const deleteCartItem = (productId) => {
-    setCart((prevCart) => {
-      const loc = prevCart.orders.findIndex(
-        (item) => item.product._id === productId,
-      );
-      prevCart.selectedItemsTotalAmount =
-        prevCart.selectedItemsTotalAmount - prevCart.orders[loc].cartCost;
-      prevCart.orders.splice(loc, 1);
-      return {...prevCart};
-    });
+  useEffect(() => {
+    loadScreen();
+  }, []);
+
+  const updateCartServer = async (prodId, newQuantity) => {
+    const [respErr, resp] = await custReqQueries.postCart(
+      userCred.relayToken,
+      prodId,
+      newQuantity,
+    );
+    console.log('loaded resp', respErr, resp);
+    if (respErr === null) {
+      if (resp.status == 200) {
+        return true;
+      } else if (resp.status == 403) {
+        ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
+        await deleteUserCred();
+        return false;
+      } else {
+        ToastAndroid.show(resp.data.error, ToastAndroid.LONG);
+        return false;
+      }
+    } else {
+      ToastAndroid.show(respErr.message, ToastAndroid.LONG);
+      return false;
+    }
+  };
+
+  const updateCartQuantity = async (productId, newQuantity) => {
+    const item = Cart.orders.find((item) => item.product._id === productId);
+
+    const succ = await updateCartServer(productId, newQuantity);
+
+    if (succ) {
+      item.cartQuantity = newQuantity;
+      //saving old cost
+      const oldCost = item.cartCost;
+      //new cost
+      item.cartCost = item.cartQuantity * item.product.price;
+
+      if (item.isSelected) {
+        Cart.selectedItemsTotalAmount =
+          Cart.selectedItemsTotalAmount - oldCost + item.cartCost;
+      }
+    }
+    setCart({...Cart});
+  };
+
+  const deleteCartItem = async (productId) => {
+    const loc = Cart.orders.findIndex((item) => item.product._id === productId);
+
+    const succ = await updateCartServer(productId, 0);
+
+    if (succ) {
+      if (Cart.orders[loc].isSelected) {
+        Cart.selectedItemsTotalAmount =
+          Cart.selectedItemsTotalAmount - Cart.orders[loc].cartCost;
+      }
+      Cart.orders.splice(loc, 1);
+    }
+
+    setCart({...Cart});
   };
 
   const toggleSelect = (productId) => {
@@ -115,37 +192,44 @@ const CartScreen = ({navigation}) => {
         <Body>
           <Title style={common.headerText}>Cart</Title>
         </Body>
-        
       </Header>
 
       <Header style={common.welcomeHeader}>
         <Body>
-          <Text style={common.welcomeHeaderText}>Welcome User</Text>
+          <Text style={Styles.welcomeHeaderText}>
+            Welcome {userDetails.fName} {userDetails.lName}
+          </Text>
         </Body>
         <Right />
       </Header>
       <View style={common.topBottomSep}></View>
-      <FlatList
-        data={Cart.orders}
-        initialNumToRender={6}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.product._id.toString()}
-      />
-      <View style={Styles.amountDisplayRow}>
-        <View style={Styles.amountView}>
-          <Text style={common.text}>Total Amount</Text>
-        </View>
-        <View style={Styles.totalAmount}>
-          <Text style={common.text}>{Cart.selectedItemsTotalAmount}</Text>
-        </View>
-      </View>
-      <View style={Styles.centerBtnView}>
-        <Button
-          onPress={() => navigation.navigate('SelectProvider')}
-          disabled={Cart.selectedItemsTotalAmount === 0 ? true : false}>
-          <Text>Proceed To Order</Text>
-        </Button>
-      </View>
+      {Cart !== null ? (
+        <>
+          <FlatList
+            data={Cart.orders}
+            initialNumToRender={6}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.product._id.toString()}
+          />
+          <View style={Styles.amountDisplayRow}>
+            <View style={Styles.amountView}>
+              <Text style={common.text}>Total Amount</Text>
+            </View>
+            <View style={Styles.totalAmount}>
+              <Text style={common.text}>{Cart.selectedItemsTotalAmount}</Text>
+            </View>
+          </View>
+          <View style={Styles.centerBtnView}>
+            <Button
+              onPress={() => navigation.navigate('SelectProvider')}
+              disabled={Cart.selectedItemsTotalAmount === 0 ? true : false}>
+              <Text>Proceed To Order</Text>
+            </Button>
+          </View>
+        </>
+      ) : (
+        <Loading />
+      )}
     </Container>
   );
 };
