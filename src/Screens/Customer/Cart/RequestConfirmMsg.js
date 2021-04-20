@@ -1,10 +1,45 @@
-import React, {useEffect} from 'react';
-import {View, BackHandler, StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, BackHandler, StyleSheet, ToastAndroid} from 'react-native';
 import {Button, Text} from 'native-base';
 
 import common from '../../../Global/stylesheet';
+import Loading from '../../../Component/Loading';
+import {custReqQueries} from '../../../serverQueries/Requester';
+import useUserCred from '../../../UserCredentials';
 
-const RequestConfirmMsgScreen = ({navigation}) => {
+const RequestConfirmMsgScreen = ({route, navigation}) => {
+  const {request} = route.params;
+  const {deleteUserCred} = useUserCred();
+  console.log(JSON.stringify(request, undefined, 4));
+
+  const [reqResp, setReqResp] = useState(null);
+
+  const makeRequest = async () => {
+    const [respErr, resp] = await custReqQueries.request(
+      request.ttpToken,
+      request.relayToken,
+      request.requester_id,
+      request.provider_id,
+      request.ordersArray,
+      request.payment_amount,
+    );
+    console.log('loaded resp', respErr, resp);
+    if (respErr === null) {
+      if (resp.status == 200) {
+        setReqResp(
+          `Your request is sent to provider, you can go and purchase your commodities.\n Transaction ID: ${resp.data._id}`,
+        );
+      } else if (resp.status == 403) {
+        ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
+        await deleteUserCred();
+      } else {
+        setReqResp(resp.data.error);
+      }
+    } else {
+      setReqResp(respErr.message);
+    }
+  };
+
   useEffect(() => {
     const backAction = () => {
       return true;
@@ -14,17 +49,20 @@ const RequestConfirmMsgScreen = ({navigation}) => {
       'hardwareBackPress',
       backAction,
     );
-
+    makeRequest();
     return () => backHandler.remove();
   }, []);
 
   return (
     <View style={[common.container, common.flexOne]}>
       <View style={Styles.textView}>
-        <Text style={Styles.text}>
-          Your request is sent to provider, you can go and purchase your
-          commodities
-        </Text>
+        {reqResp !== null ? (
+          <>
+            <Text style={Styles.text}>{reqResp}</Text>
+          </>
+        ) : (
+          <Loading />
+        )}
         <Text style={common.topBottomSep}>Goto home screen</Text>
         <View style={common.topBottomSep}>
           <Button onPress={() => navigation.navigate('Home')}>

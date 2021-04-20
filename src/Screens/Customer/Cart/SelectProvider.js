@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, FlatList, StyleSheet} from 'react-native';
+import {View, FlatList, StyleSheet, ToastAndroid} from 'react-native';
 import {List} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {
@@ -17,98 +17,76 @@ import {
 } from 'native-base';
 
 import common from '../../../Global/stylesheet';
+import {useEffect} from 'react';
+import useUserCred from '../../../UserCredentials';
+import {custReqQueries} from '../../../serverQueries/Requester';
+import Loading from '../../../Component/Loading';
 
-const resp = {
-  suppliersFound: [
-    {
-      _id: 'SP2222222222',
-      name: 'Shardul',
-      address: 'Dombivali',
-      region: 'RMH0001',
-      email: 'shardul@shardul.com',
-      satisfiedOrders: [
-        {
-          product: 1002,
-          satisfied: true,
-          keepsInStock: true,
-        },
-        {
-          product: 1001,
-          satisfied: false,
-          availableStock: 1,
-          keepsInStock: true,
-        },
-        {
-          product: 1003,
-          satisfied: false,
-          availableStock: 1,
-          keepsInStock: false,
-        },
-      ],
-      satisfiesNum: 1,
-    },
-    {
-      _id: 'SP1111111111',
-      name: 'Ajay',
-      address: 'Koparkhairne',
-      region: 'RMH0001',
-      mobNo: '9911991199',
-      email: 'ajay@ajay.com',
-      satisfiedOrders: [
-        {
-          product: 1002,
-          satisfied: true,
-          keepsInStock: true,
-        },
-        {
-          product: 1001,
-          satisfied: true,
-          keepsInStock: true,
-        },
-      ],
-      satisfiesNum: 2,
-    },
-  ],
-  cartInfo: {
-    1001: {
-      name: 'Wheat',
-      unit: 'Kg',
-      price: 20,
-      cartQuantity: 3,
-      cartCost: 60,
-    },
-    1002: {
-      name: 'Rice',
-      unit: 'Kg',
-      price: 30,
-      cartQuantity: 3,
-      cartCost: 90,
-    },
-    1003: {
-      name: 'Rice',
-      unit: 'Kg',
-      price: 30,
-      cartQuantity: 3,
-      cartCost: 90,
-    },
-    totalSelectedOrdersCost: 150,
-    numberOfItemsSelected: 2,
-  },
-};
+const SelectProviderScreen = ({route, navigation}) => {
+  const [locLong, locLat] = [72.9756461, 19.1869078];
+  const [suppliers, setSuppliers] = useState(null);
+  const [Range, setRange] = useState(100);
 
-resp.selectedSupp = '';
-resp.expandedSupp = '';
+  const {userCred, userDetails, deleteUserCred} = useUserCred();
 
-const SelectProviderScreen = ({navigation}) => {
-  const [suppliers, setSuppliers] = useState(resp);
-  const [Range,setRange] = useState(100);
+  const {orders} = route.params;
+  console.log('Orders selected: ', orders);
+
+  const loadScreen = async () => {
+    const [respErr, resp] = await custReqQueries.getSuppliers(
+      userCred.relayToken,
+      locLong,
+      locLat,
+      orders,
+      Range,
+    );
+    console.log('loaded resp', respErr, resp);
+    if (respErr === null) {
+      if (resp.status == 200) {
+        const respData = {...resp.data};
+        respData.selectedSupp = '';
+        respData.expandedSupp = '';
+        setSuppliers(respData);
+      } else if (resp.status == 403) {
+        ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
+
+        await deleteUserCred();
+      } else {
+        ToastAndroid.show(resp.data.error, ToastAndroid.LONG);
+      }
+    } else {
+      ToastAndroid.show(respErr.message, ToastAndroid.LONG);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('select provider screen focused');
+      loadScreen();
+    });
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    loadScreen();
+  }, [Range]);
 
   const selectSupp = (supplierId) => {
-    setSuppliers((prevSupp) => {
-      prevSupp.selectSupp = supplierId;
-      console.log(prevSupp);
-      return {...prevSupp};
-    });
+    const selectedSupp = suppliers.suppliersFound.find(
+      (supp) => supp._id === supplierId,
+    );
+    if (
+      selectedSupp.satisfiesNum === suppliers.cartInfo.numberOfItemsSelected
+    ) {
+      suppliers.selectedSupp = supplierId;
+      console.log(suppliers);
+      setSuppliers({...suppliers});
+    } else {
+      ToastAndroid.show(
+        'This does not satisfy your all orders',
+        ToastAndroid.SHORT,
+      );
+    }
   };
 
   const expandSupp = (supplierId) => {
@@ -116,6 +94,35 @@ const SelectProviderScreen = ({navigation}) => {
       prevSupp.expandedSupp = supplierId;
       return {...prevSupp};
     });
+  };
+
+  const getBuiltRequest = () => {
+    const ttpToken = userCred.ttpToken;
+    const relayToken = userCred.relayToken;
+    const requester_id = userCred.reg_id;
+    const provider_id = suppliers.selectedSupp;
+    console.log('selected supplier: ' + suppliers.selectedSupp);
+    const ordersArray = [];
+
+    orders.forEach((ord) => {
+      const constructedOrd = {
+        product: ord,
+        quantity: suppliers.cartInfo[ord].cartQuantity,
+        totalCost: suppliers.cartInfo[ord].cartCost,
+      };
+      ordersArray.push(constructedOrd);
+    });
+
+    const payment_amount = suppliers.cartInfo.totalSelectedOrdersCost;
+
+    return {
+      ttpToken,
+      relayToken,
+      requester_id,
+      provider_id,
+      ordersArray,
+      payment_amount,
+    };
   };
 
   const renderItem = ({item}) => {
@@ -151,7 +158,7 @@ const SelectProviderScreen = ({navigation}) => {
                   <Radio
                     color={'#f0ad4e'}
                     selectedColor={'#5cb85c'}
-                    selected={suppliers.selectSupp === item._id}
+                    selected={suppliers.selectedSupp === item._id}
                     onPress={() => selectSupp(item._id)}
                   />
                 </View>
@@ -189,7 +196,10 @@ const SelectProviderScreen = ({navigation}) => {
     <Container style={common.container}>
       <Header style={common.welcomeHeader}>
         <Body>
-          <Text style={common.welcomeHeaderText}>Welcome User</Text>
+          <Text style={common.welcomeHeaderText}>
+            {' '}
+            Welcome {userDetails.fName} {userDetails.lName}
+          </Text>
         </Body>
         <Right />
       </Header>
@@ -216,24 +226,40 @@ const SelectProviderScreen = ({navigation}) => {
           />
         </View>
       </View>
-      <FlatList
-        data={suppliers.suppliersFound}
-        initialNumToRender={6}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-      />
-      <View style={{flexDirection: 'row'}}>
-        <View style={Styles.amountView}>
-          <Text style={common.text}>Total Amount</Text>
-        </View>
-      </View>
-      <View style={Styles.centerBtnView}>
-        <Button
-          onPress={() => [navigation.navigate('RequestConfirmMsg'),console.log(suppliers.selectSupp)]}
-          disabled={suppliers.selectSupp === undefined}>
-          <Text>Proceed To Order</Text>
-        </Button>
-      </View>
+      {suppliers !== null ? (
+        <>
+          <FlatList
+            data={suppliers.suppliersFound}
+            initialNumToRender={6}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id}
+          />
+          <View style={{flexDirection: 'row'}}>
+            <View style={Styles.amountView}>
+              <Text style={common.text}>Total Amount</Text>
+            </View>
+            <View style={Styles.amountView}>
+              <Text style={common.text}>
+                {suppliers.cartInfo.totalSelectedOrdersCost}
+              </Text>
+            </View>
+          </View>
+          <View style={Styles.centerBtnView}>
+            <Button
+              onPress={() => [
+                navigation.navigate('RequestConfirmMsg', {
+                  request: getBuiltRequest(),
+                }),
+                console.log(suppliers.selectSupp),
+              ]}
+              disabled={suppliers.selectedSupp === ''}>
+              <Text>Proceed To Order</Text>
+            </Button>
+          </View>
+        </>
+      ) : (
+        <Loading />
+      )}
     </Container>
   );
 };

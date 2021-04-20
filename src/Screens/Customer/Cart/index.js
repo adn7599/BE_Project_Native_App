@@ -26,40 +26,6 @@ import useUserCred from '../../../UserCredentials';
 
 import Loading from '../../../Component/Loading';
 
-const resp = {
-  _id: '1111111111',
-  orders: [
-    {
-      product: {
-        _id: 1002,
-        name: 'Rice',
-        description: 'Rice Description',
-        unit: 'Kg',
-        price: 30,
-      },
-      allotedQuantity: 25,
-      availableQuantity: 5,
-      cartQuantity: 3,
-      cartCost: 90,
-    },
-    {
-      product: {
-        _id: 1001,
-        name: 'Wheat',
-        description: 'Wheat Description',
-        unit: 'Kg',
-        price: 20,
-      },
-      allotedQuantity: 20,
-      availableQuantity: 20,
-      cartQuantity: 3,
-      cartCost: 60,
-    },
-  ],
-  __v: 24,
-  totalCartCost: 150,
-};
-
 const dimension = Dimensions.get('screen');
 
 const CartScreen = ({navigation}) => {
@@ -179,6 +145,11 @@ const CartScreen = ({navigation}) => {
     );
   };
 
+  const getSelectedOrdersList = () => {
+    const selectedOrders = Cart.orders.filter((ord) => ord.isSelected === true);
+    return selectedOrders.map((ord) => ord.product._id)
+  }
+
   return (
     <Container style={common.container}>
       <Header style={common.headerColor}>
@@ -221,7 +192,7 @@ const CartScreen = ({navigation}) => {
           </View>
           <View style={Styles.centerBtnView}>
             <Button
-              onPress={() => navigation.navigate('SelectProvider')}
+              onPress={() => navigation.navigate('SelectProvider',{orders: getSelectedOrdersList()})}
               disabled={Cart.selectedItemsTotalAmount === 0 ? true : false}>
               <Text>Proceed To Order</Text>
             </Button>

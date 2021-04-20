@@ -13,13 +13,6 @@ const HomeStack = () => {
   return (
     <Stack.Navigator initialRouteName="CustomerDashboardScreen">
       <Stack.Screen
-        name="ProviderDashboard"
-        component={ProviderDashboardScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
         name="Home"
         component={CustomerDashboardScreen}
         options={{
