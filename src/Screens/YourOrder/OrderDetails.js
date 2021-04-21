@@ -23,11 +23,12 @@ const OrderDetailScreen = ({route, navigation}) => {
   const {item} = route.params;
   const {userDetails, userCred, deleteUserCred} = useUserCred();
   const [PaymentMode, setPaymentMode] = useState(null);
-  const [ModalVisible, setModalVisible] = useState(false);
+  const [cashModalVisible, setCashModalVisible] = useState(false);
+  const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [cashModalMsg, setCashModalMsg] = useState(null);
 
   const payByCash = async () => {
-    setModalVisible(true);
+    setCashModalVisible(true);
     const [respErr, resp] = await custReqQueries.payment(
       userCred.ttpToken,
       userCred.relayToken,
@@ -53,20 +54,43 @@ const OrderDetailScreen = ({route, navigation}) => {
     }
   };
 
+  const cancelReq = async () => {
+    setCancelModalVisible(false)
+    setCashModalVisible(true)
+    const [respErr, resp] = await custReqQueries.cancel(
+      userCred.ttpToken,
+      userCred.relayToken,
+      item._id,
+    );
+    console.log('loaded resp', respErr, resp);
+    if (respErr === null) {
+      if (resp.status == 200) {
+        setCashModalMsg(
+          'Your transaction has been cancelled successfully',
+        );
+      } else if (resp.status == 403) {
+        ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
+        await deleteUserCred();
+      } else {
+        setCashModalMsg(resp.data.error);
+      }
+    } else {
+      setCashModalMsg(respErr.message);
+    }
+  };
+
   const PaymentBtn = () => {
     return (
       <View style={Styles.centeredView}>
         <Modal
           animationType="slide"
           transparent={true}
-          visible={ModalVisible}
+          visible={cashModalVisible}
           onRequestClose={() => navigation.goBack()}>
           <View style={Styles.centeredView}>
             <View style={Styles.modalView}>
               {cashModalMsg !== null ? (
-                <Text style={Styles.modalText}>
-                  {cashModalMsg}
-                </Text>
+                <Text style={Styles.modalText}>{cashModalMsg}</Text>
               ) : (
                 <Loading />
               )}
@@ -189,8 +213,37 @@ const OrderDetailScreen = ({route, navigation}) => {
             <PaymentBtn />
           </View>
         </View>
+        <View style={Styles.centeredView}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={cancelModalVisible}
+            onRequestClose={() => setCancelModalVisible(false)}>
+            <View style={Styles.centeredView}>
+              <View style={Styles.modalView}>
+              <Text style={Styles.modalText}>Are you sure you want to cancel the request</Text>
+                <View style={{flexDirection : 'row'}}>
+                  <View style={Styles.btnView}>
+                    <Button
+                      style={[Styles.button, Styles.buttonClose]}
+                      onPress={() => cancelReq()}>
+                      <Text style={Styles.textStyle}>Yes</Text>
+                    </Button>
+                  </View>
+                  <View style={Styles.btnView}>
+                    <Button
+                      style={[Styles.button, Styles.buttonClose]}
+                      onPress={() => setCancelModalVisible(false)}>
+                      <Text style={Styles.textStyle}>No</Text>
+                    </Button>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </Modal>
+        </View>
         <View style={{alignSelf: 'center', padding: 20}}>
-          <Button>
+          <Button onPress={() => setCancelModalVisible(true)}>
             <Text>Cancel Request</Text>
           </Button>
         </View>
@@ -252,7 +305,7 @@ const Styles = StyleSheet.create({
   },
   btnView: {
     alignSelf: 'center',
-    paddingTop: 10,
+    padding: 10,
   },
 });
 

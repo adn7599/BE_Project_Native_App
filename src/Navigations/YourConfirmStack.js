@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import ConfirmOrderScreen from '../Screens/YourOrder/ConfirmTab';
 import OrderDetailScreen from '../Screens/YourOrder/OrderDetails';
 import ConfirmationQRScreen from '../Screens/YourOrder/ConfirmationQR';
+import ConfirmOrderDetailsScreen from '../Screens/YourOrder/ConfirmOrderDetails';
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,13 @@ const YourConfirmStack = () => {
         <Stack.Screen
           name="OrderDetails"
           component={OrderDetailScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="ConfirmOrderDetails"
+          component={ConfirmOrderDetailsScreen}
           options={{
             headerShown: false,
           }}
