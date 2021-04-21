@@ -12,15 +12,46 @@ import {
   Text,
 } from 'native-base';
 import DropDownPicker from 'react-native-dropdown-picker';
+import uuid from 'react-native-uuid';
 
 import common from '../../Global/stylesheet';
 import useUserCred from '../../UserCredentials';
+import {custReqQueries} from '../../serverQueries/Requester';
+import Loading from '../../Component/Loading';
 
 const OrderDetailScreen = ({route, navigation}) => {
   const {item} = route.params;
-  const {userDetails} = useUserCred();
-  const [PaymentMode, setPaymentMode] = useState('');
+  const {userDetails, userCred, deleteUserCred} = useUserCred();
+  const [PaymentMode, setPaymentMode] = useState(null);
   const [ModalVisible, setModalVisible] = useState(false);
+  const [cashModalMsg, setCashModalMsg] = useState(null);
+
+  const payByCash = async () => {
+    setModalVisible(true);
+    const [respErr, resp] = await custReqQueries.payment(
+      userCred.ttpToken,
+      userCred.relayToken,
+      item._id,
+      uuid.v4(),
+      'cash',
+      item.request.payment_amount,
+    );
+    console.log('loaded resp', respErr, resp);
+    if (respErr === null) {
+      if (resp.status == 200) {
+        setCashModalMsg(
+          `Please pay ${item.request.payment_amount} to Supplier`,
+        );
+      } else if (resp.status == 403) {
+        ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
+        await deleteUserCred();
+      } else {
+        setCashModalMsg(resp.data.error);
+      }
+    } else {
+      setCashModalMsg(respErr.message);
+    }
+  };
 
   const PaymentBtn = () => {
     return (
@@ -32,9 +63,13 @@ const OrderDetailScreen = ({route, navigation}) => {
           onRequestClose={() => navigation.goBack()}>
           <View style={Styles.centeredView}>
             <View style={Styles.modalView}>
-              <Text style={Styles.modalText}>
-                Please pay {item.amount} to Supplier
-              </Text>
+              {cashModalMsg !== null ? (
+                <Text style={Styles.modalText}>
+                  {cashModalMsg}
+                </Text>
+              ) : (
+                <Loading />
+              )}
               <View style={Styles.btnView}>
                 <Button
                   style={[Styles.button, Styles.buttonClose]}
@@ -50,8 +85,12 @@ const OrderDetailScreen = ({route, navigation}) => {
           disabled={PaymentMode === '' ? true : false}
           onPress={() =>
             PaymentMode === 'cash'
-              ? setModalVisible(true)
-              : navigation.navigate('UPIPayment')
+              ? payByCash()
+              : navigation.navigate('UPIPayment', {
+                  transaction_id: item._id,
+                  provider_info: item.request.provider_id,
+                  payment_amount: item.request.payment_amount,
+                })
           }>
           <Text style={Styles.textStyle}>Proceed To Pay</Text>
         </Button>

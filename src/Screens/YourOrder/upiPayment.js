@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import {View,TextInput,StyleSheet} from 'react-native';
 import { Container,Text,Button} from 'native-base';
-import RNUpiPayment from 'react-native-upi-payment';
+
 
 import common from '../../Global/stylesheet';
 
@@ -16,10 +16,7 @@ const Data =[
 const UPIPaymentScreen = ({navigation}) => {
 
     const [UPI_ID,setUPI_ID] = useState('');
-    const [Amount,setAmount] = useState();
-    const [Status,setStatus] = useState("");
-    const [txnId,settxnId] = useState("");
-    const item = Data[0];
+    const [password,setPassword] = useState('');
 
     /*const makeUPIPayment = () =>{
         RNUpiPayment.initializePayment({
