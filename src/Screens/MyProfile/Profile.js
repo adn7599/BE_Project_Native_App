@@ -12,14 +12,14 @@ import {
 } from 'native-base';
 import {View, StyleSheet} from 'react-native';
 import {Avatar} from 'react-native-paper';
+import {myProfileContext} from '../../Navigations/MyProfileStack';
+import common from '../../Global/stylesheet';
+import useUserCred from '../../UserCredentials';
+import {useContext} from 'react';
 
-import common from '../Global/stylesheet';
-import useUserCred from '../UserCredentials';
-
-const ProfileScreen = ({route, navigation}) => {
+const ProfileScreen = ({navigation}) => {
   const {userDetails, deleteUserCred, userCred} = useUserCred();
-  const {avatarText, name} = route.params;
-
+  const {avatarText, name} = useContext(myProfileContext);
   return (
     <Container style={common.container}>
       <Header style={common.headerColor}>
@@ -67,7 +67,10 @@ const ProfileScreen = ({route, navigation}) => {
           <Text style={common.text}>{userDetails.mobNo}</Text>
         </View>
         <View style={common.topBottomSep}>
-          <Button onPress={() => {}}>
+          <Button
+            onPress={() => {
+              navigation.navigate('ChangePassword');
+            }}>
             <Text>Change password</Text>
           </Button>
         </View>

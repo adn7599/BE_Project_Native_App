@@ -75,10 +75,12 @@ const SideDrawerContent = (props) => {
       <DrawerContentScrollView {...props}>
         <View style={common.flexOne}>
           <TouchableOpacity
-            onPress={() => props.navigation.navigate('Profile',{
-              avatarText : avatarText,
-              name : name
-            })}>
+            onPress={() =>
+              props.navigation.navigate('MyProfile', {
+                avatarText: avatarText,
+                name: name,
+              })
+            }>
             <View
               style={{paddingLeft: 20, flexDirection: 'row', marginTop: 20}}>
               <Avatar.Text size={70} label={avatarText} />

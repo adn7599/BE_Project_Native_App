@@ -6,9 +6,8 @@ import {Provider as PaperProvider} from 'react-native-paper';
 
 import useUserCred, {UserCredentials} from './UserCredentials';
 
-import ProfileScreen from './Screens/Profile';
-
 import StartStack from './Navigations/startStack';
+import MyProfileStack from './Navigations/MyProfileStack';
 import HomeStack from './Navigations/CartStack';
 import YourConfirmStack from './Navigations/YourConfirmStack';
 import YourPaymentStack from './Navigations/YourPaymentStack';
@@ -21,13 +20,13 @@ const Drawer = createDrawerNavigator();
 //const Tab = createMaterialBottomTabNavigator();
 
 const DrawerNavigation = () => {
-
   const {userCred} = useUserCred();
 
-  const initialRoute = userCred.role === 'customer' ? 'CustomerDashboard' : 'ProviderDashboard'
+  const initialRoute =
+    userCred.role === 'customer' ? 'CustomerDashboard' : 'ProviderDashboard';
   return (
     <Drawer.Navigator
-      initialRouteName= {initialRoute}
+      initialRouteName={initialRoute}
       drawerContent={(props) => <SideDrawerContent {...props} />}>
       <Drawer.Screen
         name="CustomerDashboard"
@@ -44,8 +43,8 @@ const DrawerNavigation = () => {
         }}
       />
       <Drawer.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="MyProfile"
+        component={MyProfileStack}
         options={{
           swipeEnabled: false,
         }}
