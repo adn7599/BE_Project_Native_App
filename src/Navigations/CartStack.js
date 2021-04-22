@@ -6,12 +6,26 @@ import CartScreen from '../Screens/Customer/Cart';
 import SelectProviderScreen from '../Screens/Customer/Cart/SelectProvider';
 import RequestConfirmMsgScreen from '../Screens/Customer/Cart/RequestConfirmMsg';
 import ProviderDashboardScreen from '../Screens/Provider';
+import useUserCred from '../UserCredentials';
 
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
+
+  const {userCred} = useUserCred();
+
+  const initialRoute = userCred.role === 'customer' ? 'Home' : 'ProviderDashboard'
+
+
   return (
-    <Stack.Navigator initialRouteName="CustomerDashboardScreen">
+    <Stack.Navigator initialRouteName = {initialRoute} >
+      <Stack.Screen 
+      name = 'ProviderDashboard'
+      component = {ProviderDashboardScreen}
+      options={{
+        headerShown: false,
+      }}
+      />
       <Stack.Screen
         name="Home"
         component={CustomerDashboardScreen}

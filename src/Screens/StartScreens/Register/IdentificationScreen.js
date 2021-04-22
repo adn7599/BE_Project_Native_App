@@ -104,7 +104,7 @@ const IdentificationScreen = ({route, navigation}) => {
             style={styles.phoneInputStyle}
             placeholder={numberType}
             //keyboardType="numeric"
-            maxLength={10}
+            maxLength={12}
             onChangeText={onChangePhone}
             secureTextEntry={false}
             onFocus={onChangeFocus}

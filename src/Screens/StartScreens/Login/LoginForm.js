@@ -64,7 +64,7 @@ const LoginForm = ({route, navigation}) => {
           <TextInput
             value={regId}
             style={styles.input}
-            maxLength={10}
+            maxLength={12}
             placeholder={numberType}
             placeholderTextColor={colours.brown}
             onChangeText={(text) => setRegId(text)}

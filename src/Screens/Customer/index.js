@@ -50,9 +50,11 @@ const CustomerDashboardScreen = ({navigation}) => {
         ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
         await deleteUserCred();
       } else {
+        setProdList(null)
         ToastAndroid.show(resp.data.error, ToastAndroid.LONG);
       }
     } else {
+      setProdList(null)
       ToastAndroid.show(respErr.message, ToastAndroid.LONG);
     }
   };

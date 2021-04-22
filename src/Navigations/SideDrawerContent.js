@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {
   DrawerContent,
   DrawerContentScrollView,
@@ -20,7 +20,6 @@ const roleTitle = {
 const SideDrawerContent = (props) => {
   const {userCred, userDetails, deleteUserCred} = useUserCred();
   const [expanded, setExpanded] = useState(null);
-  const avatarText = userDetails.fName[0] + userDetails.lName[0];
   /*
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('blur', () => {
@@ -30,32 +29,68 @@ const SideDrawerContent = (props) => {
     return unsubscribe;
   }, []);*/
 
+  const FirstSideBarTitle = () => {
+    if (userCred.role === 'customer') {
+      return (
+        <DrawerItem
+          label="Home"
+          onPress={() => props.navigation.navigate('Home')}
+        />
+      );
+    } else if (userCred.role === 'SP') {
+      return (
+        <>
+          <DrawerItem
+            label="Home"
+            onPress={() => props.navigation.navigate('Home')}
+          />
+          <DrawerItem
+            label="Request Commodities"
+            onPress={() => props.navigation.navigate('Home')}
+          />
+        </>
+      );
+    } else {
+      return (
+        <DrawerItem
+          label="Home"
+          onPress={() => props.navigation.navigate('Home')}
+        />
+      );
+    }
+  };
+
+  const avatarText =
+    userCred.role === 'customer'
+      ? userDetails.fName[0] + userDetails.lName[0]
+      : userDetails.name.subString(0, 2).toUpperCase();
+
+  const name =
+    userCred.role === 'customer'
+      ? userDetails.fName + ' ' + userDetails.lName
+      : userDetails.name;
+
   return (
     <View style={common.flexOne}>
       <DrawerContentScrollView {...props}>
         <View style={common.flexOne}>
-          <View style={{paddingLeft: 20, flexDirection: 'row', marginTop: 20}}>
-            <Avatar.Text size={70} label={avatarText} />
-            <View style={{margin: 15}}>
-              <Text>{`${userDetails.fName} ${userDetails.lName}`}</Text>
-              <Text note>{userDetails._id}</Text>
-              <Text note>{roleTitle[userCred.role]}</Text>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('Profile',{
+              avatarText : avatarText,
+              name : name
+            })}>
+            <View
+              style={{paddingLeft: 20, flexDirection: 'row', marginTop: 20}}>
+              <Avatar.Text size={70} label={avatarText} />
+              <View style={{margin: 15}}>
+                <Text>{name}</Text>
+                <Text note>{userDetails._id}</Text>
+                <Text note>{roleTitle[userCred.role]}</Text>
+              </View>
             </View>
-          </View>
+          </TouchableOpacity>
           <Drawer.Section style={{marginTop: 15}}>
-            <DrawerItem
-              label="Home"
-              onPress={() => props.navigation.navigate('Home')}
-            />
-            <DrawerItem
-              label="Profile"
-              onPress={() => props.navigation.navigate('Profile')}
-            />
-            <DrawerItem
-              label="Quota"
-              onPress={() => props.navigation.navigate('Quota')}
-            />
-
+            <FirstSideBarTitle />
             <List.Accordion
               title="Your Order"
               expanded={expanded === 'yourorder'}
@@ -81,11 +116,15 @@ const SideDrawerContent = (props) => {
               onPress={() => setExpanded('orderhistory')}>
               <List.Item
                 title="completed"
-                onPress={() => props.navigation.navigate('PaymentOrder')}
+                onPress={() =>
+                  props.navigation.navigate('ConfirmedOrderHistory')
+                }
               />
               <List.Item
                 title="Cancel"
-                onPress={() => props.navigation.navigate('ConfirmOrder')}
+                onPress={() =>
+                  props.navigation.navigate('CancelledOrderHistory')
+                }
               />
             </List.Accordion>
           </Drawer.Section>
