@@ -9,11 +9,13 @@ import useUserCred, {UserCredentials} from './UserCredentials';
 import StartStack from './Navigations/startStack';
 import MyProfileStack from './Navigations/MyProfileStack';
 import HomeStack from './Navigations/CartStack';
+import ProviderDashboardStack from './Navigations/ProviderDashboardStack';
 import YourConfirmStack from './Navigations/YourConfirmStack';
 import YourPaymentStack from './Navigations/YourPaymentStack';
 import ConfirmedOrderHistoryStack from './Navigations/ConfirmedOrderHistoryStack';
 import CancelledOrderHistoryStack from './Navigations/CancelledOrderHistoryStack';
 import SideDrawerContent from './Navigations/SideDrawerContent';
+//import ProviderDashboardScreen from './Screens/Provider';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -37,7 +39,7 @@ const DrawerNavigation = () => {
       />
       <Drawer.Screen
         name="ProviderDashboard"
-        component={HomeStack}
+        component={ProviderDashboardStack}
         options={{
           swipeEnabled: false,
         }}

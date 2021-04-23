@@ -68,11 +68,7 @@ const SideDrawerContent = (props) => {
     return (
       <>
         <List.AccordionGroup>
-          <List.Accordion title="Orders" id="Orders">
-            <List.Item title="Requests" onPress={() => {}} />
-            <List.Item title="Payments" onPress={() => {}} />
-          </List.Accordion>
-
+            <List.Item title="Home" onPress={() => props.navigation.navigate('ProviderDashboard')} />
           <List.Item title="Stock" onPress={() => {}} />
           <List.Accordion title="Order History" id="OrderHistory">
             <List.Item title="Completed" onPress={() => {}} />
