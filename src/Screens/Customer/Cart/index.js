@@ -19,9 +19,8 @@ import {
 } from 'native-base';
 
 import common from '../../../Global/stylesheet';
-import Context from '../../../Global/context';
 import ShowCard from '../../../Component/ShowCard';
-import {custReqQueries} from '../../../serverQueries/Requester';
+import {custReqQueries,suppReqQueries} from '../../../serverQueries/Requester';
 import useUserCred from '../../../UserCredentials';
 
 import Loading from '../../../Component/Loading';
@@ -31,9 +30,11 @@ const dimension = Dimensions.get('screen');
 const CartScreen = ({navigation}) => {
   const [Cart, setCart] = useState(null);
   const {userCred, userDetails, deleteUserCred} = useUserCred();
+  const selectedQueries =
+    userCred.role === 'customer' ? custReqQueries : suppReqQueries;
 
   const loadScreen = async () => {
-    const [respErr, resp] = await custReqQueries.getCart(userCred.relayToken);
+    const [respErr, resp] = await selectedQueries.getCart(userCred.relayToken);
     console.log('loaded resp', respErr, resp);
     if (respErr === null) {
       if (resp.status == 200) {
@@ -60,7 +61,7 @@ const CartScreen = ({navigation}) => {
   }, []);
 
   const updateCartServer = async (prodId, newQuantity) => {
-    const [respErr, resp] = await custReqQueries.postCart(
+    const [respErr, resp] = await selectedQueries.postCart(
       userCred.relayToken,
       prodId,
       newQuantity,

@@ -19,12 +19,12 @@ import {
 import common from '../../../Global/stylesheet';
 import {useEffect} from 'react';
 import useUserCred from '../../../UserCredentials';
-import {custReqQueries} from '../../../serverQueries/Requester';
+import {custReqQueries, suppReqQueries} from '../../../serverQueries/Requester';
 import Loading from '../../../Component/Loading';
 
 const SelectProviderScreen = ({route, navigation}) => {
   const [locLong, locLat] = [72.9756461, 19.1869078];
-  const [suppliers, setSuppliers] = useState(null);
+  const [providers, setProviders] = useState(null);
   const [Range, setRange] = useState(100);
 
   const {userCred, userDetails, deleteUserCred} = useUserCred();
@@ -33,20 +33,29 @@ const SelectProviderScreen = ({route, navigation}) => {
   console.log('Orders selected: ', orders);
 
   const loadScreen = async () => {
-    const [respErr, resp] = await custReqQueries.getSuppliers(
-      userCred.relayToken,
-      locLong,
-      locLat,
-      orders,
-      Range,
-    );
+    let respArr;
+    if (userCred.role === 'customer') {
+      respArr = await custReqQueries.getSuppliers(
+        userCred.relayToken,
+        locLong,
+        locLat,
+        orders,
+        Range,
+      );
+    } else {
+      respArr = await suppReqQueries.getDistributors(
+        userCred.relayToken,
+        orders,
+      );
+    }
+    const [respErr, resp] = respArr;
     console.log('loaded resp', respErr, resp);
     if (respErr === null) {
       if (resp.status == 200) {
         const respData = {...resp.data};
-        respData.selectedSupp = '';
-        respData.expandedSupp = '';
-        setSuppliers(respData);
+        respData.selectedProv = '';
+        respData.expandedProv = '';
+        setProviders(respData);
       } else if (resp.status == 403) {
         ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
 
@@ -71,16 +80,19 @@ const SelectProviderScreen = ({route, navigation}) => {
     loadScreen();
   }, [Range]);
 
-  const selectSupp = (supplierId) => {
-    const selectedSupp = suppliers.suppliersFound.find(
-      (supp) => supp._id === supplierId,
+  const selectProv = (providerId) => {
+    const providerFound =
+      userCred.role === 'customer' ? 'suppliersFound' : 'DistributorsFound';
+
+    const selectedProv = providers[providerFound].find(
+      (prov) => prov._id === providerId,
     );
     if (
-      selectedSupp.satisfiesNum === suppliers.cartInfo.numberOfItemsSelected
+      selectedProv.satisfiesNum === providers.cartInfo.numberOfItemsSelected
     ) {
-      suppliers.selectedSupp = supplierId;
-      console.log(suppliers);
-      setSuppliers({...suppliers});
+      providers.selectedProv = providerId;
+      console.log(providers);
+      setProviders({...providers});
     } else {
       ToastAndroid.show(
         'This does not satisfy your all orders',
@@ -89,10 +101,10 @@ const SelectProviderScreen = ({route, navigation}) => {
     }
   };
 
-  const expandSupp = (supplierId) => {
-    setSuppliers((prevSupp) => {
-      prevSupp.expandedSupp = supplierId;
-      return {...prevSupp};
+  const expandProv = (providerId) => {
+    setProviders((prevProv) => {
+      prevProv.expandedProv = providerId;
+      return {...prevProv};
     });
   };
 
@@ -100,20 +112,20 @@ const SelectProviderScreen = ({route, navigation}) => {
     const ttpToken = userCred.ttpToken;
     const relayToken = userCred.relayToken;
     const requester_id = userCred.reg_id;
-    const provider_id = suppliers.selectedSupp;
-    console.log('selected supplier: ' + suppliers.selectedSupp);
+    const provider_id = providers.selectedProv;
+    console.log('selected provider: ' + providers.selectedProv);
     const ordersArray = [];
 
     orders.forEach((ord) => {
       const constructedOrd = {
         product: ord,
-        quantity: suppliers.cartInfo[ord].cartQuantity,
-        totalCost: suppliers.cartInfo[ord].cartCost,
+        quantity: providers.cartInfo[ord].cartQuantity,
+        totalCost: providers.cartInfo[ord].cartCost,
       };
       ordersArray.push(constructedOrd);
     });
 
-    const payment_amount = suppliers.cartInfo.totalSelectedOrdersCost;
+    const payment_amount = providers.cartInfo.totalSelectedOrdersCost;
 
     return {
       ttpToken,
@@ -125,6 +137,43 @@ const SelectProviderScreen = ({route, navigation}) => {
     };
   };
 
+  const RangeSelector = () => {
+    if(userCred.role === 'customer'){
+      return(
+        <>
+        <View style={Styles.rangeView}>
+            <View style={common.flexOne}>
+              <Text style={common.text}>Range</Text>
+            </View>
+            <View style={common.flexOne}>
+              <DropDownPicker
+                items={[
+                  {label: '100 m', value: 100},
+                  {label: '200 m', value: 200},
+                  {label: '300 m', value: 300},
+                  {label: '400 m', value: 400},
+                  {label: '500 m', value: 500},
+                ]}
+                defaultValue={Range}
+                containerStyle={{height: 40}}
+                itemStyle={{
+                  justifyContent: 'flex-start',
+                }}
+                dropDownStyle={{backgroundColor: '#fafafa'}}
+                onChangeItem={(item) => setRange(item.value)}
+              />
+            </View>
+          </View>
+          </>
+      )
+    }
+    else{
+      return(
+        <View style = {{paddingTop : 20}}></View>
+      )
+    }
+  }
+
   const renderItem = ({item}) => {
     let satisfied = '';
     let partiallySat = '';
@@ -133,15 +182,15 @@ const SelectProviderScreen = ({route, navigation}) => {
     item.satisfiedOrders.forEach((ord) => {
       if (ord.keepsInStock) {
         if (ord.satisfied) {
-          satisfied += `${suppliers.cartInfo[ord.product].name} \n`;
+          satisfied += `${providers.cartInfo[ord.product].name} \n`;
         } else if (ord.availableStock) {
-          const myCartInfo = suppliers.cartInfo[ord.product];
+          const myCartInfo = providers.cartInfo[ord.product];
           partiallySat += `${myCartInfo.name}   ${ord.availableStock}/${myCartInfo.cartQuantity} \n`;
         } else {
-          notSatisfied += `${suppliers.cartInfo[ord.product].name} \n`;
+          notSatisfied += `${providers.cartInfo[ord.product].name} \n`;
         }
       } else {
-        notSatisfied += `${suppliers.cartInfo[ord.product].name}\n `;
+        notSatisfied += `${providers.cartInfo[ord.product].name}\n `;
       }
     });
 
@@ -158,8 +207,8 @@ const SelectProviderScreen = ({route, navigation}) => {
                   <Radio
                     color={'#f0ad4e'}
                     selectedColor={'#5cb85c'}
-                    selected={suppliers.selectedSupp === item._id}
-                    onPress={() => selectSupp(item._id)}
+                    selected={providers.selectedProv === item._id}
+                    onPress={() => selectProv(item._id)}
                   />
                 </View>
               </View>
@@ -168,9 +217,9 @@ const SelectProviderScreen = ({route, navigation}) => {
               </View>
               <View style={Styles.accordionView}>
                 <List.Accordion
-                  title={`Item Satisfied ${item.satisfiesNum}/${suppliers.cartInfo.numberOfItemsSelected}`}
-                  expanded={suppliers.expandedSupp === item._id}
-                  onPress={() => expandSupp(item._id)}>
+                  title={`Item Satisfied ${item.satisfiesNum}/${providers.cartInfo.numberOfItemsSelected}`}
+                  expanded={providers.expandedProv === item._id}
+                  onPress={() => expandProv(item._id)}>
                   <Text style={Styles.itemSatisfied}>
                     item Satisfied {'\n'}
                     {satisfied}
@@ -197,39 +246,22 @@ const SelectProviderScreen = ({route, navigation}) => {
       <Header style={common.welcomeHeader}>
         <Body>
           <Text style={common.welcomeHeaderText}>
-            {' '}
             Welcome {userDetails.fName} {userDetails.lName}
           </Text>
         </Body>
         <Right />
       </Header>
-      <View style={Styles.rangeView}>
-        <View style={common.flexOne}>
-          <Text style={common.text}>Range</Text>
-        </View>
-        <View style={common.flexOne}>
-          <DropDownPicker
-            items={[
-              {label: '100 m', value: 100},
-              {label: '200 m', value: 200},
-              {label: '300 m', value: 300},
-              {label: '400 m', value: 400},
-              {label: '500 m', value: 500},
-            ]}
-            defaultValue={Range}
-            containerStyle={{height: 40}}
-            itemStyle={{
-              justifyContent: 'flex-start',
-            }}
-            dropDownStyle={{backgroundColor: '#fafafa'}}
-            onChangeItem={(item) => setRange(item.value)}
-          />
-        </View>
-      </View>
-      {suppliers !== null ? (
+      <RangeSelector />
+      {providers !== null ? (
         <>
           <FlatList
-            data={suppliers.suppliersFound}
+            data={
+              providers[
+                userCred.role === 'customer'
+                  ? 'suppliersFound'
+                  : 'DistributorsFound'
+              ]
+            }
             initialNumToRender={6}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
@@ -240,7 +272,7 @@ const SelectProviderScreen = ({route, navigation}) => {
             </View>
             <View style={Styles.amountView}>
               <Text style={common.text}>
-                {suppliers.cartInfo.totalSelectedOrdersCost}
+                {providers.cartInfo.totalSelectedOrdersCost}
               </Text>
             </View>
           </View>
@@ -250,9 +282,9 @@ const SelectProviderScreen = ({route, navigation}) => {
                 navigation.navigate('RequestConfirmMsg', {
                   request: getBuiltRequest(),
                 }),
-                console.log(suppliers.selectSupp),
+                console.log(providers.selectedProv),
               ]}
-              disabled={suppliers.selectedSupp === ''}>
+              disabled={providers.selectedProv === ''}>
               <Text>Proceed To Order</Text>
             </Button>
           </View>

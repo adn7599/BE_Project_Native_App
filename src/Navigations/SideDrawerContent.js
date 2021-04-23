@@ -63,7 +63,7 @@ const SideDrawerContent = (props) => {
   const avatarText =
     userCred.role === 'customer'
       ? userDetails.fName[0] + userDetails.lName[0]
-      : userDetails.name.subString(0, 2).toUpperCase();
+      : userDetails.name.substring(0, 2).toUpperCase();
 
   const name =
     userCred.role === 'customer'

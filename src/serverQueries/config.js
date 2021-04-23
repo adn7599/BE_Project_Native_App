@@ -9,8 +9,8 @@ export const ROLE = {
 };
 
 export const URL = {
-  TTP: 'http://192.168.0.100:5000',
-  RELAY: 'http://192.168.0.100:6000',
+  TTP: 'http://192.168.0.102:5000',
+  RELAY: 'http://192.168.0.102:6000',
 };
 
 export const IMAGE_URL = `${URL.RELAY}/productImage`;

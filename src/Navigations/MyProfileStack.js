@@ -19,7 +19,6 @@ const MyProfileStack = ({route, navigation}) => {
           options={{
             headerShown: false,
           }}
-          initialParams={{avatarText, name}}
         />
         <Stack.Screen
           name="ChangePassword"

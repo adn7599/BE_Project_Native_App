@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState,useContext} from 'react';
 import {
   Container,
   Title,
@@ -15,7 +15,6 @@ import {Avatar} from 'react-native-paper';
 import {myProfileContext} from '../../Navigations/MyProfileStack';
 import common from '../../Global/stylesheet';
 import useUserCred from '../../UserCredentials';
-import {useContext} from 'react';
 
 const ProfileScreen = ({navigation}) => {
   const {userDetails, deleteUserCred, userCred} = useUserCred();

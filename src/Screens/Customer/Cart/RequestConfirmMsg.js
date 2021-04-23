@@ -4,18 +4,19 @@ import {Button, Text} from 'native-base';
 
 import common from '../../../Global/stylesheet';
 import Loading from '../../../Component/Loading';
-import {custReqQueries} from '../../../serverQueries/Requester';
+import {custReqQueries,suppReqQueries} from '../../../serverQueries/Requester';
 import useUserCred from '../../../UserCredentials';
 
 const RequestConfirmMsgScreen = ({route, navigation}) => {
   const {request} = route.params;
-  const {deleteUserCred} = useUserCred();
+  const {deleteUserCred,userCred} = useUserCred();
   console.log(JSON.stringify(request, undefined, 4));
-
   const [reqResp, setReqResp] = useState(null);
+  const selectedQueries =
+    userCred.role === 'customer' ? custReqQueries : suppReqQueries;
 
   const makeRequest = async () => {
-    const [respErr, resp] = await custReqQueries.request(
+    const [respErr, resp] = await selectedQueries.request(
       request.ttpToken,
       request.relayToken,
       request.requester_id,

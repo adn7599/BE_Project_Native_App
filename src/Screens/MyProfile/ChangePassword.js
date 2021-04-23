@@ -120,7 +120,11 @@ const ChangePasswordScreen = ({navigation}) => {
             <View style={Styles.btnView}>
               <Button
                 style={[Styles.button, Styles.buttonClose]}
-                onPress={() => setModalVisible(false)}>
+                onPress={() => {
+                  modalMsg === 'Changed Password Successfully'
+                    ? navigation.goBack()
+                    : setModalVisible(false);
+                }}>
                 <Text style={Styles.textStyle}>Ok</Text>
               </Button>
             </View>

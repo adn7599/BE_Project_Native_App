@@ -27,7 +27,7 @@ import {
 } from 'react-native';
 
 import useUserCred from '../../UserCredentials';
-import {custReqQueries} from '../../serverQueries/Requester';
+import {custReqQueries, suppReqQueries} from '../../serverQueries/Requester';
 import common from '../../Global/stylesheet';
 import {useState} from 'react/cjs/react.development';
 import Loading from '../../Component/Loading';
@@ -37,9 +37,11 @@ import {List} from 'react-native-paper';
 const CustomerDashboardScreen = ({navigation}) => {
   const [prodList, setProdList] = useState(null);
   const {userCred, userDetails, deleteUserCred} = useUserCred();
+  const selectedQueries =
+    userCred.role === 'customer' ? custReqQueries : suppReqQueries;
 
   const loadScreen = async () => {
-    const [respErr, resp] = await custReqQueries.getProducts(
+    const [respErr, resp] = await selectedQueries.getProducts(
       userCred.relayToken,
     );
     console.log('loaded resp', respErr, resp);
@@ -50,11 +52,11 @@ const CustomerDashboardScreen = ({navigation}) => {
         ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
         await deleteUserCred();
       } else {
-        setProdList(null)
+        setProdList(null);
         ToastAndroid.show(resp.data.error, ToastAndroid.LONG);
       }
     } else {
-      setProdList(null)
+      setProdList(null);
       ToastAndroid.show(respErr.message, ToastAndroid.LONG);
     }
   };
@@ -66,13 +68,8 @@ const CustomerDashboardScreen = ({navigation}) => {
     });
     return unsubscribe;
   }, []);
-  /*
-  useFocusEffect(() => {
-    loadScreen();
-  }, []);
-  */
   const addRemoveCart = async (prodId, add) => {
-    const [respErr, resp] = await custReqQueries.postCart(
+    const [respErr, resp] = await selectedQueries.postCart(
       userCred.relayToken,
       prodId,
       add ? 1 : 0,
@@ -105,7 +102,7 @@ const CustomerDashboardScreen = ({navigation}) => {
   };
 
   const renderItem = ({item}) => {
-    return <ListItem item={item} toggleAddToCart={toggleAddToCart} />;
+    return <ListItem item={item} toggleAddToCart={toggleAddToCart} userCred={userCred}/>;
   };
 
   return (
@@ -160,7 +157,7 @@ const CustomerDashboardScreen = ({navigation}) => {
   );
 };
 
-const ListItem = ({item, toggleAddToCart}) => {
+const ListItem = ({item, toggleAddToCart,userCred}) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   return (
     <>
@@ -183,17 +180,39 @@ const ListItem = ({item, toggleAddToCart}) => {
                   </Body>
                 </Left>
               </CardItem>
-              
-                <Body>
-                  <List.Accordion
-                    title="Product Info"
-                    style={{width: Dimensions.get('screen').width - 80}}>
-                    <Text style ={{paddingTop : 10, paddingLeft : 15}}>{item.product.description}</Text>
-                    <Text style ={{paddingTop : 10, paddingLeft : 15}}>Alloted Quantity : {item.allotedQuantity}</Text>
-                    <Text style ={{paddingTop : 10, paddingLeft : 15}}>Available Quantity : {item.availableQuantity}</Text>
-                  </List.Accordion>
-                </Body>
-              <View style ={common.topBottomSep}></View>
+
+              <Body>
+                <List.Accordion
+                  title="Product Info"
+                  style={{width: Dimensions.get('screen').width - 80}}>
+                  <Text style={{paddingTop: 10, paddingLeft: 15}}>
+                    {item.product.description}
+                  </Text>
+                  {userCred.role === 'customer' ? (
+                    <>
+                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
+                        Alloted Quantity : {item.allotedQuantity}
+                      </Text>
+                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
+                        Available Quantity : {item.availableQuantity}
+                      </Text>{' '}
+                    </>
+                  ) : (
+                    <>
+                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
+                        Max Quantity : {item.maxQuantity}
+                      </Text>
+                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
+                        Available Quantity : {item.availableQuantity}
+                      </Text>
+                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
+                        Ordered Quantity : {item.orderedQuantity}
+                      </Text>
+                    </>
+                  )}
+                </List.Accordion>
+              </Body>
+              <View style={common.topBottomSep}></View>
               <Button
                 textStyle={{color: '#87838B'}}
                 style={[
