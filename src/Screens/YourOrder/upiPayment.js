@@ -5,7 +5,7 @@ import uuid from 'react-native-uuid';
 
 import common from '../../Global/stylesheet';
 import useUserCred from '../../UserCredentials';
-import {custReqQueries} from '../../serverQueries/Requester';
+import {custReqQueries, suppReqQueries} from '../../serverQueries/Requester';
 import Loading from '../../Component/Loading';
 
 const Data = [
@@ -24,9 +24,12 @@ const UPIPaymentScreen = ({route, navigation}) => {
   const [ModalVisible, setModalVisible] = useState(false);
   const paymentId = useRef(uuid.v4());
 
+  const selectedQueries =
+    userCred.role === 'customer' ? custReqQueries : suppReqQueries;
+
   const payByUPI = async () => {
     setModalVisible(true);
-    const [respErr, resp] = await custReqQueries.payment(
+    const [respErr, resp] = await selectedQueries.payment(
       userCred.ttpToken,
       userCred.relayToken,
       transaction_id,
@@ -50,17 +53,22 @@ const UPIPaymentScreen = ({route, navigation}) => {
       setUPIModalMsg(respErr.message);
     }
   };
-
+  const providerType =
+    userCred.role === 'customer' ? 'Supplier' : 'Distributor';
   return (
     <Container style={[common.container, Styles.upiContainerView]}>
-        <View style={Styles.itemView}>
+      <View style={Styles.itemView}>
         <View>
-          <Text>Supplier ID : {provider_info._id}</Text>
+          <Text>
+            {providerType} ID : {provider_info._id}
+          </Text>
         </View>
       </View>
       <View style={Styles.itemView}>
         <View>
-          <Text>Supplier Name : {provider_info.name}</Text>
+          <Text>
+            {providerType} Name : {provider_info.name}
+          </Text>
         </View>
       </View>
       <View style={Styles.itemView}>
@@ -80,8 +88,8 @@ const UPIPaymentScreen = ({route, navigation}) => {
             style={Styles.upiTextField}
           />
         </View>
-        </View>
-        <View style={Styles.upiRowView}>
+      </View>
+      <View style={Styles.upiRowView}>
         <View>
           <Text>MPIN :</Text>
         </View>
@@ -89,12 +97,12 @@ const UPIPaymentScreen = ({route, navigation}) => {
           <TextInput
             value={mPin}
             placeholder="Enter Your UPI ID"
-            keyboardType = 'numeric'
+            keyboardType="numeric"
             onChangeText={(Text) => setMPin(Text)}
             style={Styles.upiTextField}
           />
         </View>
-        </View>
+      </View>
       <View style={common.topBottomSep}>
         <View style={Styles.centeredView}>
           <Modal
@@ -133,7 +141,6 @@ const UPIPaymentScreen = ({route, navigation}) => {
 
 const Styles = StyleSheet.create({
   centeredView: {
-   
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -174,13 +181,11 @@ const Styles = StyleSheet.create({
   },
   itemView: {
     alignSelf: 'flex-start',
-    paddingBottom : 10,
-    
+    paddingBottom: 10,
   },
   upiRowView: {
     flexDirection: 'row',
     alignItems: 'center',
-
   },
   upiTextField: {
     borderBottomWidth: 1,
@@ -204,9 +209,8 @@ const Styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    padding : 40
+    padding: 40,
   },
 });
 
 export default UPIPaymentScreen;
-

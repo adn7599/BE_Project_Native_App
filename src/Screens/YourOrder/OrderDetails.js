@@ -16,7 +16,7 @@ import uuid from 'react-native-uuid';
 
 import common from '../../Global/stylesheet';
 import useUserCred from '../../UserCredentials';
-import {custReqQueries} from '../../serverQueries/Requester';
+import {custReqQueries, suppReqQueries} from '../../serverQueries/Requester';
 import Loading from '../../Component/Loading';
 
 const OrderDetailScreen = ({route, navigation}) => {
@@ -27,9 +27,12 @@ const OrderDetailScreen = ({route, navigation}) => {
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [cashModalMsg, setCashModalMsg] = useState(null);
 
+  const selectedQueries =
+    userCred.role === 'customer' ? custReqQueries : suppReqQueries;
+
   const payByCash = async () => {
     setCashModalVisible(true);
-    const [respErr, resp] = await custReqQueries.payment(
+    const [respErr, resp] = await selectedQueries.payment(
       userCred.ttpToken,
       userCred.relayToken,
       item._id,
@@ -55,9 +58,9 @@ const OrderDetailScreen = ({route, navigation}) => {
   };
 
   const cancelReq = async () => {
-    setCancelModalVisible(false)
-    setCashModalVisible(true)
-    const [respErr, resp] = await custReqQueries.cancel(
+    setCancelModalVisible(false);
+    setCashModalVisible(true);
+    const [respErr, resp] = await selectedQueries.cancel(
       userCred.ttpToken,
       userCred.relayToken,
       item._id,
@@ -65,9 +68,7 @@ const OrderDetailScreen = ({route, navigation}) => {
     console.log('loaded resp', respErr, resp);
     if (respErr === null) {
       if (resp.status == 200) {
-        setCashModalMsg(
-          'Your transaction has been cancelled successfully',
-        );
+        setCashModalMsg('Your transaction has been cancelled successfully');
       } else if (resp.status == 403) {
         ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
         await deleteUserCred();
@@ -106,7 +107,7 @@ const OrderDetailScreen = ({route, navigation}) => {
         </Modal>
         <Button
           style={[Styles.button, Styles.buttonOpen]}
-          disabled={PaymentMode === '' ? true : false}
+          disabled={PaymentMode === null}
           onPress={() =>
             PaymentMode === 'cash'
               ? payByCash()
@@ -148,9 +149,15 @@ const OrderDetailScreen = ({route, navigation}) => {
       </Header>
       <Header style={common.welcomeHeader}>
         <Body>
-          <Text style={common.welcomeHeaderText}>
-            Welcome {userDetails.fName} {userDetails.lName}
-          </Text>
+          {userCred.role === 'customer' ? (
+            <Text style={common.welcomeHeaderText}>
+              Welcome {userDetails.fName} {userDetails.lName}
+            </Text>
+          ) : (
+            <Text style={common.welcomeHeaderText}>
+              Welcome {userDetails.name}
+            </Text>
+          )}
         </Body>
         <Right />
       </Header>
@@ -160,8 +167,11 @@ const OrderDetailScreen = ({route, navigation}) => {
         </View>
         <View style={common.leftTopIndent}>
           <Text style={[common.text, {paddingBottom: 10}]}>
-            Supplier Details
+            {userCred.role === 'customer'
+              ? 'Supplier Details'
+              : 'Distributor Details'}
           </Text>
+          <Text style={common.text}>ID : {item.request.provider_id._id}</Text>
           <Text style={common.text}>
             Name : {item.request.provider_id.name}
           </Text>
@@ -221,8 +231,10 @@ const OrderDetailScreen = ({route, navigation}) => {
             onRequestClose={() => setCancelModalVisible(false)}>
             <View style={Styles.centeredView}>
               <View style={Styles.modalView}>
-              <Text style={Styles.modalText}>Are you sure you want to cancel the request</Text>
-                <View style={{flexDirection : 'row'}}>
+                <Text style={Styles.modalText}>
+                  Are you sure you want to cancel the request
+                </Text>
+                <View style={{flexDirection: 'row'}}>
                   <View style={Styles.btnView}>
                     <Button
                       style={[Styles.button, Styles.buttonClose]}

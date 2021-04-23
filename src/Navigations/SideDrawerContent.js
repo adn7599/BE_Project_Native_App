@@ -20,45 +20,171 @@ const roleTitle = {
 const SideDrawerContent = (props) => {
   const {userCred, userDetails, deleteUserCred} = useUserCred();
   const [expanded, setExpanded] = useState(null);
-  /*
-  useEffect(() => {
-    const unsubscribe = props.navigation.addListener('blur', () => {
-      console.log('Drawer screen focused');
-      setExpanded(null)
-    });
-    return unsubscribe;
-  }, []);*/
 
-  const FirstSideBarTitle = () => {
-    if (userCred.role === 'customer') {
-      return (
+  const CustomerDrawerContent = () => {
+    return (
+      <>
         <DrawerItem
           label="Home"
           onPress={() => props.navigation.navigate('Home')}
         />
-      );
-    } else if (userCred.role === 'SP') {
-      return (
-        <>
-          <DrawerItem
-            label="Home"
-            onPress={() => props.navigation.navigate('Home')}
+        <List.Accordion
+          title="Your Order"
+          expanded={expanded === 'yourorder'}
+          onPress={() => setExpanded('yourorder')}>
+          <List.Item
+            title="Payment"
+            onPress={() => {
+              setExpanded(null);
+              props.navigation.navigate('PaymentOrder');
+            }}
           />
-          <DrawerItem
-            label="Request Commodities"
-            onPress={() => props.navigation.navigate('Home')}
+          <List.Item
+            title="Confirm"
+            onPress={() => {
+              setExpanded(null);
+              props.navigation.navigate('ConfirmOrder');
+            }}
           />
-        </>
-      );
-    } else {
-      return (
-        <DrawerItem
-          label="Home"
-          onPress={() => props.navigation.navigate('Home')}
-        />
-      );
-    }
+        </List.Accordion>
+        <List.Accordion
+          title="Order History"
+          expanded={expanded === 'orderhistory'}
+          onPress={() => setExpanded('orderhistory')}>
+          <List.Item
+            title="completed"
+            onPress={() => props.navigation.navigate('ConfirmedOrderHistory')}
+          />
+          <List.Item
+            title="Cancel"
+            onPress={() => props.navigation.navigate('CancelledOrderHistory')}
+          />
+        </List.Accordion>
+      </>
+    );
   };
+
+  const SupplierDrawerContent = () => {
+    return (
+      <>
+        <List.AccordionGroup>
+          <List.Accordion title="Orders" id="Orders">
+            <List.Item title="Requests" onPress={() => {}} />
+            <List.Item title="Payments" onPress={() => {}} />
+          </List.Accordion>
+
+          <List.Item title="Stock" onPress={() => {}} />
+          <List.Accordion title="Order History" id="OrderHistory">
+            <List.Item title="Completed" onPress={() => {}} />
+            <List.Item title="Cancelled" onPress={() => {}} />
+          </List.Accordion>
+
+          <List.Accordion
+            title="Request Commodities"
+            id="RequestCommodities"
+            style={{backgroundColor: 'grey'}}>
+            <List.AccordionGroup>
+              <List.Item
+                title="Make Request"
+                onPress={() => props.navigation.navigate('Home')}
+              />
+              <List.Accordion
+                title="Your Order"
+                expanded={expanded === 'yourorder'}
+                onPress={() => setExpanded('yourorder')}
+                id="YourOrders">
+                <List.Item
+                  title="Payment"
+                  onPress={() => {
+                    setExpanded(null);
+                    props.navigation.navigate('PaymentOrder');
+                  }}
+                />
+                <List.Item
+                  title="Confirm"
+                  onPress={() => {
+                    setExpanded(null);
+                    props.navigation.navigate('ConfirmOrder');
+                  }}
+                />
+              </List.Accordion>
+              <List.Accordion
+                title="Order History"
+                id="OrderHistory"
+                expanded={expanded === 'orderhistory'}
+                onPress={() => setExpanded('orderhistory')}>
+                <List.Item
+                  title="completed"
+                  onPress={() =>
+                    props.navigation.navigate('ConfirmedOrderHistory')
+                  }
+                />
+                <List.Item
+                  title="Cancel"
+                  onPress={() =>
+                    props.navigation.navigate('CancelledOrderHistory')
+                  }
+                />
+              </List.Accordion>
+            </List.AccordionGroup>
+          </List.Accordion>
+        </List.AccordionGroup>
+      </>
+    );
+  };
+
+  const DistributorDrawerContent = () => {
+    return (
+      <>
+        <DrawerItem
+          label="Home"
+          onPress={() => props.navigation.navigate('Home')}
+        />
+        <List.Accordion
+          title="Your Order"
+          expanded={expanded === 'yourorder'}
+          onPress={() => setExpanded('yourorder')}>
+          <List.Item
+            title="Payment"
+            onPress={() => {
+              setExpanded(null);
+              props.navigation.navigate('PaymentOrder');
+            }}
+          />
+          <List.Item
+            title="Confirm"
+            onPress={() => {
+              setExpanded(null);
+              props.navigation.navigate('ConfirmOrder');
+            }}
+          />
+        </List.Accordion>
+        <List.Accordion
+          title="Order History"
+          expanded={expanded === 'orderhistory'}
+          onPress={() => setExpanded('orderhistory')}>
+          <List.Item
+            title="completed"
+            onPress={() => props.navigation.navigate('ConfirmedOrderHistory')}
+          />
+          <List.Item
+            title="Cancel"
+            onPress={() => props.navigation.navigate('CancelledOrderHistory')}
+          />
+        </List.Accordion>
+      </>
+    );
+  };
+
+  let SelectedDrawerContent = CustomerDrawerContent;
+
+  if (userCred.role === 'customer') {
+    SelectedDrawerContent = CustomerDrawerContent;
+  } else if (userCred.role === 'SP') {
+    SelectedDrawerContent = SupplierDrawerContent;
+  } else {
+    SelectedDrawerContent = DistributorDrawerContent;
+  }
 
   const avatarText =
     userCred.role === 'customer'
@@ -92,43 +218,7 @@ const SideDrawerContent = (props) => {
             </View>
           </TouchableOpacity>
           <Drawer.Section style={{marginTop: 15}}>
-            <FirstSideBarTitle />
-            <List.Accordion
-              title="Your Order"
-              expanded={expanded === 'yourorder'}
-              onPress={() => setExpanded('yourorder')}>
-              <List.Item
-                title="Payment"
-                onPress={() => {
-                  setExpanded(null);
-                  props.navigation.navigate('PaymentOrder');
-                }}
-              />
-              <List.Item
-                title="Confirm"
-                onPress={() => {
-                  setExpanded(null);
-                  props.navigation.navigate('ConfirmOrder');
-                }}
-              />
-            </List.Accordion>
-            <List.Accordion
-              title="Order History"
-              expanded={expanded === 'orderhistory'}
-              onPress={() => setExpanded('orderhistory')}>
-              <List.Item
-                title="completed"
-                onPress={() =>
-                  props.navigation.navigate('ConfirmedOrderHistory')
-                }
-              />
-              <List.Item
-                title="Cancel"
-                onPress={() =>
-                  props.navigation.navigate('CancelledOrderHistory')
-                }
-              />
-            </List.Accordion>
+            <SelectedDrawerContent />
           </Drawer.Section>
         </View>
       </DrawerContentScrollView>

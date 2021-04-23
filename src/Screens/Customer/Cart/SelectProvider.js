@@ -138,10 +138,10 @@ const SelectProviderScreen = ({route, navigation}) => {
   };
 
   const RangeSelector = () => {
-    if(userCred.role === 'customer'){
-      return(
+    if (userCred.role === 'customer') {
+      return (
         <>
-        <View style={Styles.rangeView}>
+          <View style={Styles.rangeView}>
             <View style={common.flexOne}>
               <Text style={common.text}>Range</Text>
             </View>
@@ -164,15 +164,12 @@ const SelectProviderScreen = ({route, navigation}) => {
               />
             </View>
           </View>
-          </>
-      )
+        </>
+      );
+    } else {
+      return <View style={{paddingTop: 20}}></View>;
     }
-    else{
-      return(
-        <View style = {{paddingTop : 20}}></View>
-      )
-    }
-  }
+  };
 
   const renderItem = ({item}) => {
     let satisfied = '';
@@ -201,7 +198,7 @@ const SelectProviderScreen = ({route, navigation}) => {
             <Body>
               <View style={common.cardRow}>
                 <View style={common.flexOne}>
-                  <Text style={common.text}>{item.name}</Text>
+                  <Text style={common.text}>{item._id}</Text>
                 </View>
                 <View style={common.cardRowEnd}>
                   <Radio
@@ -211,6 +208,9 @@ const SelectProviderScreen = ({route, navigation}) => {
                     onPress={() => selectProv(item._id)}
                   />
                 </View>
+              </View>
+              <View style={common.flexOne}>
+                <Text style={common.text}>{item.name}</Text>
               </View>
               <View style={common.flexOne}>
                 <Text>Address : {item.address}</Text>
@@ -245,9 +245,15 @@ const SelectProviderScreen = ({route, navigation}) => {
     <Container style={common.container}>
       <Header style={common.welcomeHeader}>
         <Body>
-          <Text style={common.welcomeHeaderText}>
-            Welcome {userDetails.fName} {userDetails.lName}
-          </Text>
+          {userCred.role === 'customer' ? (
+            <Text style={common.welcomeHeaderText}>
+              Welcome {userDetails.fName} {userDetails.lName}
+            </Text>
+          ) : (
+            <Text style={common.welcomeHeaderText}>
+              Welcome {userDetails.name}
+            </Text>
+          )}
         </Body>
         <Right />
       </Header>

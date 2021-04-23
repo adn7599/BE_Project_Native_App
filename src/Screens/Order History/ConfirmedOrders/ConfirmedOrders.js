@@ -12,25 +12,23 @@ import {
   Icon,
   Text,
 } from 'native-base';
-import {
-  FlatList,
-  View,
-  TouchableOpacity,
-  ToastAndroid,
-} from 'react-native';
+import {FlatList, View, TouchableOpacity, ToastAndroid} from 'react-native';
 
 import common from '../../../Global/stylesheet';
 import Loading from '../../../Component/Loading';
 import useUserCred from '../../../UserCredentials';
-import {custReqQueries} from '../../../serverQueries/Requester';
+import {custReqQueries, suppReqQueries} from '../../../serverQueries/Requester';
 
 const ConfirmedOrdersScreen = ({navigation}) => {
   const [completeResp, setCompleteResp] = useState(null);
 
   const {userCred, userDetails, deleteUserCred} = useUserCred();
 
+  const selectedQueries =
+    userCred.role === 'customer' ? custReqQueries : suppReqQueries;
+
   const loadScreen = async () => {
-    const [respErr, resp] = await custReqQueries.getOrders(
+    const [respErr, resp] = await selectedQueries.getOrders(
       userCred.relayToken,
       'confirm',
     );
@@ -65,13 +63,18 @@ const ConfirmedOrdersScreen = ({navigation}) => {
 
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('ConfirmedOrderDetails', {item: item})}>
+        onPress={() =>
+          navigation.navigate('ConfirmedOrderDetails', {item: item})
+        }>
         <Content style={common.cardContainer}>
           <Card style={common.card}>
             <CardItem>
               <Body>
                 <Text>Transaction ID : {item._id}</Text>
-                <Text>Supplier : {item.request.provider_id.name}</Text>
+                <Text>
+                  {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} :{' '}
+                  {item.request.provider_id.name}
+                </Text>
                 <Text>Items: {ordersList.join(', ')}</Text>
                 <Text>Amount paid : {item.payment.amount}</Text>
                 <Text>Status : Transaction Completed</Text>
@@ -100,7 +103,10 @@ const ConfirmedOrdersScreen = ({navigation}) => {
       <Header style={common.welcomeHeader}>
         <Body>
           <Text style={common.welcomeHeaderText}>
-            Welcome {userDetails.fName} {userDetails.lName}
+            Welcome{' '}
+            {userCred.role === 'customer'
+              ? userDetails.fName + ' ' + userDetails.lName
+              : userDetails.name}
           </Text>
         </Body>
         <Right />

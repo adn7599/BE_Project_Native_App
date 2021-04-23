@@ -26,15 +26,18 @@ import {
 import common from '../../Global/stylesheet';
 import Loading from '../../Component/Loading';
 import useUserCred from '../../UserCredentials';
-import {custReqQueries} from '../../serverQueries/Requester';
+import {custReqQueries, suppReqQueries} from '../../serverQueries/Requester';
 
 const ConfirmOrderScreen = ({navigation}) => {
   const [payResp, setPayResp] = useState(null);
 
   const {userCred, userDetails, deleteUserCred} = useUserCred();
 
+  const selectedQueries =
+    userCred.role === 'customer' ? custReqQueries : suppReqQueries;
+
   const loadScreen = async () => {
-    const [respErr, resp] = await custReqQueries.getOrders(
+    const [respErr, resp] = await selectedQueries.getOrders(
       userCred.relayToken,
       'payment',
     );
@@ -69,17 +72,24 @@ const ConfirmOrderScreen = ({navigation}) => {
 
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('ConfirmOrderDetails', {item: item})}>
+        onPress={() =>
+          navigation.navigate('ConfirmOrderDetails', {item: item})
+        }>
         <Content style={common.cardContainer}>
           <Card style={common.card}>
             <CardItem>
               <Body>
                 <Text>Transaction ID : {item._id}</Text>
-                <Text>Supplier : {item.request.provider_id.name}</Text>
+                <Text>
+                  {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} :
+                  {item.request.provider_id.name}
+                </Text>
                 <Text>Items: {ordersList.join(', ')}</Text>
                 <Text>Amount paid : {item.payment.amount}</Text>
                 <Text>Payment Mode : {item.payment.mode}</Text>
-                <Text>Status : Payment completed {'\n'}Confirm action needed</Text>
+                <Text>
+                  Status : Payment completed {'\n'}Confirm action needed
+                </Text>
               </Body>
             </CardItem>
           </Card>
@@ -105,7 +115,10 @@ const ConfirmOrderScreen = ({navigation}) => {
       <Header style={common.welcomeHeader}>
         <Body>
           <Text style={common.welcomeHeaderText}>
-            Welcome {userDetails.fName} {userDetails.lName}
+            Welcome{' '}
+            {userCred.role === 'customer'
+              ? userDetails.fName + ' ' + userDetails.lName
+              : userDetails.name}
           </Text>
         </Body>
         <Right />

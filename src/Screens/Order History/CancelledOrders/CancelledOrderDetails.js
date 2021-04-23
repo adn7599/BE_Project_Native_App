@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Modal, ScrollView,ToastAndroid} from 'react-native';
+import {StyleSheet, View, Modal, ScrollView, ToastAndroid} from 'react-native';
 import {
   Container,
   Title,
@@ -27,7 +27,6 @@ const ConfirmedOrderDetailScreen = ({route, navigation}) => {
     );
   });
 
-
   return (
     <Container style={common.container}>
       <Header style={common.headerColor}>
@@ -45,7 +44,10 @@ const ConfirmedOrderDetailScreen = ({route, navigation}) => {
       <Header style={common.welcomeHeader}>
         <Body>
           <Text style={common.welcomeHeaderText}>
-            Welcome {userDetails.fName} {userDetails.lName}
+            Welcome{' '}
+            {userCred.role === 'customer'
+              ? userDetails.fName + ' ' + userDetails.lName
+              : userDetails.name}
           </Text>
         </Body>
         <Right />
@@ -56,8 +58,9 @@ const ConfirmedOrderDetailScreen = ({route, navigation}) => {
         </View>
         <View style={common.leftTopIndent}>
           <Text style={[common.text, {paddingBottom: 10}]}>
-            Supplier Details
+            {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} Details
           </Text>
+          <Text style={common.text}>Name : {item.request.provider_id._id}</Text>
           <Text style={common.text}>
             Name : {item.request.provider_id.name}
           </Text>

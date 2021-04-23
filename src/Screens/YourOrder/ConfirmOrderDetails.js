@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Modal, ScrollView,ToastAndroid} from 'react-native';
+import {StyleSheet, View, Modal, ScrollView, ToastAndroid} from 'react-native';
 import {
   Container,
   Title,
@@ -32,20 +32,18 @@ const OrderDetailScreen = ({route, navigation}) => {
   const generateQR = async () => {
     const token = item._id + '.' + item.payment.id;
     const hashToken = await sha256(token);
-    const [respErr, resp] = await sign(
-      userCred.ttpToken,
-      hashToken
-    );
+    const [respErr, resp] = await sign(userCred.ttpToken, hashToken);
     console.log('loaded resp', respErr, resp);
     if (respErr === null) {
       if (resp.status == 200) {
-        navigation.navigate('ConfirmationQR',{
-            transaction_id : item._id,
-            transaction_type : 'Cust_Supp',
-            requester_id : userCred.reg_id,
-            provider_id : item.request.provider_id._id,
-            requester_token : resp.data.sign
-        })
+        navigation.navigate('ConfirmationQR', {
+          transaction_id: item._id,
+          transaction_type:
+            userCred.role === 'customer' ? 'Cust_Supp' : 'Supp_Dist',
+          requester_id: userCred.reg_id,
+          provider_id: item.request.provider_id._id,
+          requester_token: resp.data.sign,
+        });
       } else if (resp.status == 403) {
         ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
         await deleteUserCred();
@@ -74,7 +72,10 @@ const OrderDetailScreen = ({route, navigation}) => {
       <Header style={common.welcomeHeader}>
         <Body>
           <Text style={common.welcomeHeaderText}>
-            Welcome {userDetails.fName} {userDetails.lName}
+            Welcome{' '}
+            {userCred.role === 'customer'
+              ? userDetails.fName + ' ' + userDetails.lName
+              : userDetails.name}
           </Text>
         </Body>
         <Right />
@@ -85,8 +86,9 @@ const OrderDetailScreen = ({route, navigation}) => {
         </View>
         <View style={common.leftTopIndent}>
           <Text style={[common.text, {paddingBottom: 10}]}>
-            Supplier Details
+            {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} Details
           </Text>
+          <Text style={common.text}>ID : {item.request.provider_id._id}</Text>
           <Text style={common.text}>
             Name : {item.request.provider_id.name}
           </Text>

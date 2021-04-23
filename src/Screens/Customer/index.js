@@ -102,7 +102,13 @@ const CustomerDashboardScreen = ({navigation}) => {
   };
 
   const renderItem = ({item}) => {
-    return <ListItem item={item} toggleAddToCart={toggleAddToCart} userCred={userCred}/>;
+    return (
+      <ListItem
+        item={item}
+        toggleAddToCart={toggleAddToCart}
+        userCred={userCred}
+      />
+    );
   };
 
   return (
@@ -157,7 +163,7 @@ const CustomerDashboardScreen = ({navigation}) => {
   );
 };
 
-const ListItem = ({item, toggleAddToCart,userCred}) => {
+const ListItem = ({item, toggleAddToCart, userCred}) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   return (
     <>
@@ -189,16 +195,16 @@ const ListItem = ({item, toggleAddToCart,userCred}) => {
                     {item.product.description}
                   </Text>
                   {userCred.role === 'customer' ? (
-                    <>
+                    <View>
                       <Text style={{paddingTop: 10, paddingLeft: 15}}>
                         Alloted Quantity : {item.allotedQuantity}
                       </Text>
                       <Text style={{paddingTop: 10, paddingLeft: 15}}>
                         Available Quantity : {item.availableQuantity}
-                      </Text>{' '}
-                    </>
+                      </Text>
+                    </View>
                   ) : (
-                    <>
+                    <View>
                       <Text style={{paddingTop: 10, paddingLeft: 15}}>
                         Max Quantity : {item.maxQuantity}
                       </Text>
@@ -208,7 +214,7 @@ const ListItem = ({item, toggleAddToCart,userCred}) => {
                       <Text style={{paddingTop: 10, paddingLeft: 15}}>
                         Ordered Quantity : {item.orderedQuantity}
                       </Text>
-                    </>
+                    </View>
                   )}
                 </List.Accordion>
               </Body>
