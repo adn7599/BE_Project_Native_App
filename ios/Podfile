@@ -10,6 +10,10 @@ target 'Commoditied_Distribution' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
+
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+
   target 'Commoditied_DistributionTests' do
     inherit! :complete
     # Pods for testing

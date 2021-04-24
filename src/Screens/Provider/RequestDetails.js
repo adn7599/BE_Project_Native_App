@@ -21,6 +21,12 @@ const RequestDetailScreen = ({route, navigation}) => {
   const {item} = route.params;
   const {userDetails, userCred, deleteUserCred} = useUserCred();
 
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const goToScanQR = () => {
+    navigation.navigate('QRScanner', {item: item});
+  };
+
   const listOrder = item.request.orders.map((ord) => {
     return (
       <Text style={common.text} key={ord.product._id.toString()}>
@@ -112,7 +118,11 @@ const RequestDetailScreen = ({route, navigation}) => {
               </Text>
             </View>
             <View style={{alignSelf: 'center', padding: 20}}>
-              <Button onPress={() => {}}>
+              <Button
+                onPress={() => {
+                  setModalVisible(true);
+                  console.log('pressed');
+                }}>
                 <Text>Confirm</Text>
               </Button>
             </View>
@@ -132,8 +142,99 @@ const RequestDetailScreen = ({route, navigation}) => {
           </>
         )}
       </ScrollView>
+      <View style={Styles.centeredView}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}>
+          <View style={Styles.centeredView}>
+            <View style={Styles.modalView}>
+              <Text style={Styles.modalText}>
+                {item.stageCompleted === 'payment' &&
+                item.payment.mode === 'cash'
+                  ? "The requester opted for cash payment. Make sure you've received the cash before confirming"
+                  : 'Do you really want to confirm'}
+              </Text>
+              <View style={{flexDirection: 'row'}}>
+                <View style={Styles.btnView}>
+                  <Button
+                    style={[Styles.button, Styles.buttonClose]}
+                    onPress={() => goToScanQR()}>
+                    <Text style={Styles.textStyle}>Yes</Text>
+                  </Button>
+                </View>
+                <View style={Styles.btnView}>
+                  <Button
+                    style={[Styles.button, Styles.buttonClose]}
+                    onPress={() => setModalVisible(false)}>
+                    <Text style={Styles.textStyle}>No</Text>
+                  </Button>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
     </Container>
   );
 };
+
+const Styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  rowView: {
+    flexDirection: 'row',
+    padding: 20,
+  },
+  dropdownView: {
+    flex: 5,
+  },
+  paymentBtnView: {
+    flex: 4,
+  },
+  btnView: {
+    alignSelf: 'center',
+    padding: 10,
+  },
+});
 
 export default RequestDetailScreen;
