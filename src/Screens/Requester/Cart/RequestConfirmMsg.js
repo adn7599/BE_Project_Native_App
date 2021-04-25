@@ -4,12 +4,12 @@ import {Button, Text} from 'native-base';
 
 import common from '../../../Global/stylesheet';
 import Loading from '../../../Component/Loading';
-import {custReqQueries,suppReqQueries} from '../../../serverQueries/Requester';
+import {custReqQueries, suppReqQueries} from '../../../serverQueries/Requester';
 import useUserCred from '../../../UserCredentials';
 
 const RequestConfirmMsgScreen = ({route, navigation}) => {
   const {request} = route.params;
-  const {deleteUserCred,userCred} = useUserCred();
+  const {deleteUserCred, userCred} = useUserCred();
   console.log(JSON.stringify(request, undefined, 4));
   const [reqResp, setReqResp] = useState(null);
   const selectedQueries =
@@ -66,7 +66,7 @@ const RequestConfirmMsgScreen = ({route, navigation}) => {
         )}
         <Text style={common.topBottomSep}>Goto home screen</Text>
         <View style={common.topBottomSep}>
-          <Button onPress={() => navigation.navigate('Home')}>
+          <Button onPress={() => navigation.navigate('RequesterDashboard')}>
             <Text>Home</Text>
           </Button>
         </View>

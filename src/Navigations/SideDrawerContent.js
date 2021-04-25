@@ -24,39 +24,37 @@ const SideDrawerContent = (props) => {
   const CustomerDrawerContent = () => {
     return (
       <>
-        <List.Item
-          label="Home"
-          onPress={() => props.navigation.navigate('RequesterDashboard')}
-        />
         <List.AccordionGroup>
-          <List.Accordion
-            title="Your Order"
-            id = 'YOurOrder' >
+          <List.Item
+            title="Home"
+            onPress={() => props.navigation.navigate('RequesterDashboard')}
+          />
+          <List.Accordion title="Your Order" id="YOurOrder">
             <List.Item
               title="Payment"
               onPress={() => {
-             
                 props.navigation.navigate('RequesterPayment');
               }}
             />
             <List.Item
               title="Confirm"
               onPress={() => {
-              
                 props.navigation.navigate('RequesterConfirm');
               }}
             />
           </List.Accordion>
-          <List.Accordion
-            title="Order History"
-            id = "OrderHistory" >
+          <List.Accordion title="Order History" id="OrderHistory">
             <List.Item
               title="completed"
-              onPress={() => props.navigation.navigate('RequesterConfirmedOrderHistory')}
+              onPress={() =>
+                props.navigation.navigate('RequesterConfirmedOrderHistory')
+              }
             />
             <List.Item
               title="Cancel"
-              onPress={() => props.navigation.navigate('RequesterCancelledOrderHistory')}
+              onPress={() =>
+                props.navigation.navigate('RequesterCancelledOrderHistory')
+              }
             />
           </List.Accordion>
         </List.AccordionGroup>
@@ -72,7 +70,12 @@ const SideDrawerContent = (props) => {
             title="Home"
             onPress={() => props.navigation.navigate('ProviderDashboard')}
           />
-          <List.Item title="Stock" onPress={() => {}} />
+          <List.Item
+            title="Stock"
+            onPress={() => {
+              props.navigation.navigate('ProviderStock');
+            }}
+          />
           <List.Accordion title="Order History" id="OrderHistory">
             <List.Item title="Completed" onPress={() => {}} />
             <List.Item title="Cancelled" onPress={() => {}} />
@@ -87,29 +90,21 @@ const SideDrawerContent = (props) => {
                 title="Make Request"
                 onPress={() => props.navigation.navigate('RequesterDashboard')}
               />
-              <List.Accordion
-                title="Your Order"
-                
-                id="YourOrders">
+              <List.Accordion title="Your Order" id="YourOrders">
                 <List.Item
                   title="Payment"
                   onPress={() => {
-                    
                     props.navigation.navigate('RequesterPayment');
                   }}
                 />
                 <List.Item
                   title="Confirm"
                   onPress={() => {
-                    
                     props.navigation.navigate('RequesterConfirm');
                   }}
                 />
               </List.Accordion>
-              <List.Accordion
-                title="Order History"
-                id="OrderHistory"
-                >
+              <List.Accordion title="Order History" id="OrderHistory">
                 <List.Item
                   title="completed"
                   onPress={() =>
@@ -130,7 +125,7 @@ const SideDrawerContent = (props) => {
     );
   };
 
- /* const DistributorDrawerContent = () => {
+  /* const DistributorDrawerContent = () => {
     return (
       <>
         <DrawerItem

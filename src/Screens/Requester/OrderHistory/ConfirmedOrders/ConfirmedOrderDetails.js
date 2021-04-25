@@ -12,8 +12,8 @@ import {
   Text,
 } from 'native-base';
 
-import common from '../../../Global/stylesheet';
-import useUserCred from '../../../UserCredentials';
+import common from '../../../../Global/stylesheet';
+import useUserCred from '../../../../UserCredentials';
 
 const ConfirmedOrderDetailScreen = ({route, navigation}) => {
   const {item} = route.params;

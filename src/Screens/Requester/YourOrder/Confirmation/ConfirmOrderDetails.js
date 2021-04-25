@@ -13,9 +13,9 @@ import {
 } from 'native-base';
 import {sha256} from 'react-native-sha256';
 
-import common from '../../Global/stylesheet';
-import useUserCred from '../../UserCredentials';
-import {sign} from '../../serverQueries/User/sign';
+import common from '../../../../Global/stylesheet';
+import useUserCred from '../../../../UserCredentials';
+import {sign} from '../../../../serverQueries/User/sign';
 
 const OrderDetailScreen = ({route, navigation}) => {
   const {item} = route.params;

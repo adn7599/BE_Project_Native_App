@@ -13,9 +13,9 @@ import {
 import {sha256} from 'react-native-sha256';
 
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import useUserCred from '../../UserCredentials';
-import {sign} from '../../serverQueries/User/sign';
-import {suppProvQueries, distProvQueries} from '../../serverQueries/Provider/';
+import useUserCred from '../../../UserCredentials';
+import {sign} from '../../../serverQueries/User/sign';
+import {suppProvQueries, distProvQueries} from '../../../serverQueries/Provider/';
 
 const ScanScreen = ({route, navigation}) => {
   const {userCred, deleteUserCred} = useUserCred();

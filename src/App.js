@@ -15,6 +15,7 @@ import RequesterPaymentStack from './Navigations/Requester/YourOrders/YourPaymen
 import RequesterConfirmedOrderHistoryStack from './Navigations/Requester/OrderHistory/ConfirmedOrderHistoryStack';
 import RequesterCancelledOrderHistoryStack from './Navigations/Requester/OrderHistory/CancelledOrderHistoryStack';
 import SideDrawerContent from './Navigations/SideDrawerContent';
+import ProviderStockScreen from './Screens/Provider/stock';
 
 
 const Stack = createStackNavigator();
@@ -30,40 +31,34 @@ const DrawerNavigation = () => {
     <Drawer.Navigator
       initialRouteName={initialRoute}
       drawerContent={(props) => <SideDrawerContent {...props} />}>
-        <Drawer.Screen
-        name="MyProfile"
-        component={MyProfileStack}
-        
-      />
+      <Drawer.Screen name="MyProfile" component={MyProfileStack} />
       <Drawer.Screen
         name="RequesterDashboard"
         component={RequesterDashboardStack}
-        
       />
       <Drawer.Screen
         name="ProviderDashboard"
         component={ProviderDashboardStack}
-        
+      />
+      <Drawer.Screen
+        name="ProviderStock"
+        component={ProviderStockScreen}
       />
       <Drawer.Screen
         name="RequesterPayment"
         component={RequesterPaymentStack}
-        
       />
       <Drawer.Screen
         name="RequesterConfirm"
         component={RequesterConfirmStack}
-        
       />
       <Drawer.Screen
         name="RequesterConfirmedOrderHistory"
         component={RequesterConfirmedOrderHistoryStack}
-        
       />
       <Drawer.Screen
         name="RequesterCancelledOrderHistory"
         component={RequesterCancelledOrderHistoryStack}
-        
       />
     </Drawer.Navigator>
   );

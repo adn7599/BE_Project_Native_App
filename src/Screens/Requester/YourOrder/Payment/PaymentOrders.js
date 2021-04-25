@@ -23,10 +23,13 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import common from '../../Global/stylesheet';
-import Loading from '../../Component/Loading';
-import useUserCred from '../../UserCredentials';
-import {custReqQueries, suppReqQueries} from '../../serverQueries/Requester';
+import common from '../../../../Global/stylesheet';
+import Loading from '../../../../Component/Loading';
+import useUserCred from '../../../../UserCredentials';
+import {
+  custReqQueries,
+  suppReqQueries,
+} from '../../../../serverQueries/Requester';
 
 const PaymentOrderScreen = ({navigation}) => {
   const [payResp, setPayResp] = useState(null);
@@ -72,7 +75,7 @@ const PaymentOrderScreen = ({navigation}) => {
 
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('OrderDetails', {item: item})}>
+        onPress={() => navigation.navigate('PaymentOrderDetail', {item: item})}>
         <Content style={common.cardContainer}>
           <Card style={common.card}>
             <CardItem>

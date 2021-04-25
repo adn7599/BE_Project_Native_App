@@ -14,10 +14,13 @@ import {
 import DropDownPicker from 'react-native-dropdown-picker';
 import uuid from 'react-native-uuid';
 
-import common from '../../Global/stylesheet';
-import useUserCred from '../../UserCredentials';
-import {custReqQueries, suppReqQueries} from '../../serverQueries/Requester';
-import Loading from '../../Component/Loading';
+import common from '../../../../Global/stylesheet';
+import useUserCred from '../../../../UserCredentials';
+import {
+  custReqQueries,
+  suppReqQueries,
+} from '../../../../serverQueries/Requester';
+import Loading from '../../../../Component/Loading';
 
 const OrderDetailScreen = ({route, navigation}) => {
   const {item} = route.params;

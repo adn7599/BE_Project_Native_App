@@ -23,10 +23,13 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import common from '../../Global/stylesheet';
-import Loading from '../../Component/Loading';
-import useUserCred from '../../UserCredentials';
-import {custReqQueries, suppReqQueries} from '../../serverQueries/Requester';
+import common from '../../../../Global/stylesheet';
+import Loading from '../../../../Component/Loading';
+import useUserCred from '../../../../UserCredentials';
+import {
+  custReqQueries,
+  suppReqQueries,
+} from '../../../../serverQueries/Requester';
 
 const ConfirmOrderScreen = ({navigation}) => {
   const [payResp, setPayResp] = useState(null);
