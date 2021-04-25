@@ -24,42 +24,42 @@ const SideDrawerContent = (props) => {
   const CustomerDrawerContent = () => {
     return (
       <>
-        <DrawerItem
+        <List.Item
           label="Home"
-          onPress={() => props.navigation.navigate('Home')}
+          onPress={() => props.navigation.navigate('RequesterDashboard')}
         />
-        <List.Accordion
-          title="Your Order"
-          expanded={expanded === 'yourorder'}
-          onPress={() => setExpanded('yourorder')}>
-          <List.Item
-            title="Payment"
-            onPress={() => {
-              setExpanded(null);
-              props.navigation.navigate('PaymentOrder');
-            }}
-          />
-          <List.Item
-            title="Confirm"
-            onPress={() => {
-              setExpanded(null);
-              props.navigation.navigate('ConfirmOrder');
-            }}
-          />
-        </List.Accordion>
-        <List.Accordion
-          title="Order History"
-          expanded={expanded === 'orderhistory'}
-          onPress={() => setExpanded('orderhistory')}>
-          <List.Item
-            title="completed"
-            onPress={() => props.navigation.navigate('ConfirmedOrderHistory')}
-          />
-          <List.Item
-            title="Cancel"
-            onPress={() => props.navigation.navigate('CancelledOrderHistory')}
-          />
-        </List.Accordion>
+        <List.AccordionGroup>
+          <List.Accordion
+            title="Your Order"
+            id = 'YOurOrder' >
+            <List.Item
+              title="Payment"
+              onPress={() => {
+             
+                props.navigation.navigate('RequesterPayment');
+              }}
+            />
+            <List.Item
+              title="Confirm"
+              onPress={() => {
+              
+                props.navigation.navigate('RequesterConfirm');
+              }}
+            />
+          </List.Accordion>
+          <List.Accordion
+            title="Order History"
+            id = "OrderHistory" >
+            <List.Item
+              title="completed"
+              onPress={() => props.navigation.navigate('RequesterConfirmedOrderHistory')}
+            />
+            <List.Item
+              title="Cancel"
+              onPress={() => props.navigation.navigate('RequesterCancelledOrderHistory')}
+            />
+          </List.Accordion>
+        </List.AccordionGroup>
       </>
     );
   };
@@ -68,7 +68,10 @@ const SideDrawerContent = (props) => {
     return (
       <>
         <List.AccordionGroup>
-            <List.Item title="Home" onPress={() => props.navigation.navigate('ProviderDashboard')} />
+          <List.Item
+            title="Home"
+            onPress={() => props.navigation.navigate('ProviderDashboard')}
+          />
           <List.Item title="Stock" onPress={() => {}} />
           <List.Accordion title="Order History" id="OrderHistory">
             <List.Item title="Completed" onPress={() => {}} />
@@ -82,43 +85,41 @@ const SideDrawerContent = (props) => {
             <List.AccordionGroup>
               <List.Item
                 title="Make Request"
-                onPress={() => props.navigation.navigate('Home')}
+                onPress={() => props.navigation.navigate('RequesterDashboard')}
               />
               <List.Accordion
                 title="Your Order"
-                expanded={expanded === 'yourorder'}
-                onPress={() => setExpanded('yourorder')}
+                
                 id="YourOrders">
                 <List.Item
                   title="Payment"
                   onPress={() => {
-                    setExpanded(null);
-                    props.navigation.navigate('PaymentOrder');
+                    
+                    props.navigation.navigate('RequesterPayment');
                   }}
                 />
                 <List.Item
                   title="Confirm"
                   onPress={() => {
-                    setExpanded(null);
-                    props.navigation.navigate('ConfirmOrder');
+                    
+                    props.navigation.navigate('RequesterConfirm');
                   }}
                 />
               </List.Accordion>
               <List.Accordion
                 title="Order History"
                 id="OrderHistory"
-                expanded={expanded === 'orderhistory'}
-                onPress={() => setExpanded('orderhistory')}>
+                >
                 <List.Item
                   title="completed"
                   onPress={() =>
-                    props.navigation.navigate('ConfirmedOrderHistory')
+                    props.navigation.navigate('RequesterConfirmedOrderHistory')
                   }
                 />
                 <List.Item
                   title="Cancel"
                   onPress={() =>
-                    props.navigation.navigate('CancelledOrderHistory')
+                    props.navigation.navigate('RequesterCancelledOrderHistory')
                   }
                 />
               </List.Accordion>
@@ -129,7 +130,7 @@ const SideDrawerContent = (props) => {
     );
   };
 
-  const DistributorDrawerContent = () => {
+ /* const DistributorDrawerContent = () => {
     return (
       <>
         <DrawerItem
@@ -170,16 +171,16 @@ const SideDrawerContent = (props) => {
         </List.Accordion>
       </>
     );
-  };
+  };*/
 
-  let SelectedDrawerContent = CustomerDrawerContent;
+  let SelectedDrawerContent;
 
   if (userCred.role === 'customer') {
     SelectedDrawerContent = CustomerDrawerContent;
   } else if (userCred.role === 'SP') {
     SelectedDrawerContent = SupplierDrawerContent;
   } else {
-    SelectedDrawerContent = DistributorDrawerContent;
+    //SelectedDrawerContent = DistributorDrawerContent;
   }
 
   const avatarText =

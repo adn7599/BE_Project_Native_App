@@ -1,25 +1,25 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import PaymentOrderScreen from '../Screens/YourOrder/PaymentTab';
-import OrderDetailScreen from '../Screens/YourOrder/OrderDetails';
-import UPIPaymentScreen from '../Screens/YourOrder/upiPayment';
+import PaymentOrderScreen from '../../../Screens/Requester/YourOrder/Payment/PaymentOrders';
+import PaymentOrderDetailScreen from '../../../Screens/Requester/YourOrder/Payment/PaymentOrderDetails';
+import UPIPaymentScreen from '../../../Screens/Requester/YourOrder/Payment/upiPayment';
 
 const Stack = createStackNavigator();
 
 const YourPaymentStack = () => {
     return (
-      <Stack.Navigator initialRouteName="YourOrder">
+      <Stack.Navigator initialRouteName="PaymentOrder">
         <Stack.Screen
-          name="YourOrder"
+          name="PaymentOrder"
           component={PaymentOrderScreen}
           options={{
             headerShown: false,
           }}
         />
         <Stack.Screen
-          name="OrderDetails"
-          component={OrderDetailScreen}
+          name="PaymentOrderDetail"
+          component={PaymentOrderDetailScreen}
           options={{
             headerShown: false,
           }}

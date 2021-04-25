@@ -8,14 +8,14 @@ import useUserCred, {UserCredentials} from './UserCredentials';
 
 import StartStack from './Navigations/startStack';
 import MyProfileStack from './Navigations/MyProfileStack';
-import HomeStack from './Navigations/CartStack';
-import ProviderDashboardStack from './Navigations/ProviderDashboardStack';
-import YourConfirmStack from './Navigations/YourConfirmStack';
-import YourPaymentStack from './Navigations/YourPaymentStack';
-import ConfirmedOrderHistoryStack from './Navigations/ConfirmedOrderHistoryStack';
-import CancelledOrderHistoryStack from './Navigations/CancelledOrderHistoryStack';
+import RequesterDashboardStack from './Navigations/Requester/RequesterDashboardStack';
+import ProviderDashboardStack from './Navigations/Provider/ProviderDashboardStack';
+import RequesterConfirmStack from './Navigations/Requester/YourOrders/YourConfirmStack';
+import RequesterPaymentStack from './Navigations/Requester/YourOrders/YourPaymentStack';
+import RequesterConfirmedOrderHistoryStack from './Navigations/Requester/OrderHistory/ConfirmedOrderHistoryStack';
+import RequesterCancelledOrderHistoryStack from './Navigations/Requester/OrderHistory/CancelledOrderHistoryStack';
 import SideDrawerContent from './Navigations/SideDrawerContent';
-//import ProviderDashboardScreen from './Screens/Provider';
+
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -25,59 +25,45 @@ const DrawerNavigation = () => {
   const {userCred} = useUserCred();
 
   const initialRoute =
-    userCred.role === 'customer' ? 'CustomerDashboard' : 'ProviderDashboard';
+    userCred.role === 'customer' ? 'RequesterDashboard' : 'ProviderDashboard';
   return (
     <Drawer.Navigator
       initialRouteName={initialRoute}
       drawerContent={(props) => <SideDrawerContent {...props} />}>
+        <Drawer.Screen
+        name="MyProfile"
+        component={MyProfileStack}
+        
+      />
       <Drawer.Screen
-        name="CustomerDashboard"
-        component={HomeStack}
-        options={{
-          swipeEnabled: false,
-        }}
+        name="RequesterDashboard"
+        component={RequesterDashboardStack}
+        
       />
       <Drawer.Screen
         name="ProviderDashboard"
         component={ProviderDashboardStack}
-        options={{
-          swipeEnabled: false,
-        }}
+        
       />
       <Drawer.Screen
-        name="MyProfile"
-        component={MyProfileStack}
-        options={{
-          swipeEnabled: false,
-        }}
+        name="RequesterPayment"
+        component={RequesterPaymentStack}
+        
       />
       <Drawer.Screen
-        name="PaymentOrder"
-        component={YourPaymentStack}
-        options={{
-          swipeEnabled: false,
-        }}
+        name="RequesterConfirm"
+        component={RequesterConfirmStack}
+        
       />
       <Drawer.Screen
-        name="ConfirmOrder"
-        component={YourConfirmStack}
-        options={{
-          swipeEnabled: false,
-        }}
+        name="RequesterConfirmedOrderHistory"
+        component={RequesterConfirmedOrderHistoryStack}
+        
       />
       <Drawer.Screen
-        name="ConfirmedOrderHistory"
-        component={ConfirmedOrderHistoryStack}
-        options={{
-          swipeEnabled: false,
-        }}
-      />
-      <Drawer.Screen
-        name="CancelledOrderHistory"
-        component={CancelledOrderHistoryStack}
-        options={{
-          swipeEnabled: false,
-        }}
+        name="RequesterCancelledOrderHistory"
+        component={RequesterCancelledOrderHistoryStack}
+        
       />
     </Drawer.Navigator>
   );

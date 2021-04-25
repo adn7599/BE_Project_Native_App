@@ -20,10 +20,10 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import common from '../../Global/stylesheet';
-import Loading from '../../Component/Loading';
-import useUserCred from '../../UserCredentials';
-import {suppProvQueries, distProvQueries} from '../../serverQueries/Provider';
+import common from '../../../Global/stylesheet';
+import Loading from '../../../Component/Loading';
+import useUserCred from '../../../UserCredentials';
+import {suppProvQueries, distProvQueries} from '../../../serverQueries/Provider';
 
 const ProviderDashboardScreen = ({navigation}) => {
   const [provResp, setProvResp] = useState(null);

@@ -1,9 +1,9 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import ProviderDashboardScreen from '../Screens/Provider';
-import RequestDetailScreen from '../Screens/Provider/RequestDetails';
-import QRScannerScreen from '../Screens/Provider/QRScanner';
+import ProviderDashboardScreen from '../../Screens/Provider/DashBoard';
+import RequestDetailScreen from '../../Screens/Provider/DashBoard/RequestDetails';
+import QRScannerScreen from '../../Screens/Provider/DashBoard/QRScanner';
 
 const Stack = createStackNavigator();
 

@@ -1,12 +1,11 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import CustomerDashboardScreen from '../Screens/Customer';
-import CartScreen from '../Screens/Customer/Cart';
-import SelectProviderScreen from '../Screens/Customer/Cart/SelectProvider';
-import RequestConfirmMsgScreen from '../Screens/Customer/Cart/RequestConfirmMsg';
-import ProviderDashboardScreen from '../Screens/Provider';
-import useUserCred from '../UserCredentials';
+import RequesterDashboardScreen from '../../Screens/Requester';
+import CartScreen from '../../Screens/Requester/Cart';
+import SelectProviderScreen from '../../Screens/Requester/Cart/SelectProvider';
+import RequestConfirmMsgScreen from '../../Screens/Requester/Cart/RequestConfirmMsg';
+import useUserCred from '../../UserCredentials';
 
 const Stack = createStackNavigator();
 
@@ -14,21 +13,12 @@ const HomeStack = () => {
 
   const {userCred} = useUserCred();
 
-  const initialRoute = userCred.role === 'customer' ? 'Home' : 'ProviderDashboard'
-
 
   return (
-    <Stack.Navigator initialRouteName = {initialRoute} >
-      <Stack.Screen 
-      name = 'ProviderDashboard'
-      component = {ProviderDashboardScreen}
-      options={{
-        headerShown: false,
-      }}
-      />
+    <Stack.Navigator initialRouteName = 'RequesterDashboard' >
       <Stack.Screen
-        name="Home"
-        component={CustomerDashboardScreen}
+        name="RequesterDashboard"
+        component={RequesterDashboardScreen}
         options={{
           headerShown: false,
         }}

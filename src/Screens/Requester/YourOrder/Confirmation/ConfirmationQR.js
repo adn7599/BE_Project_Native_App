@@ -4,8 +4,6 @@ import { Button, Container,Text, Title } from 'native-base';
 import QRCode from 'react-native-qrcode-svg';
 
 
-const qrcode = require('../../Assets/QRcode.png')
-
 /**
  * {
  * transaction_id : 'hiakshc5879d6scbsda'

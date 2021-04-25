@@ -1,10 +1,9 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import ConfirmOrderScreen from '../Screens/YourOrder/ConfirmTab';
-import OrderDetailScreen from '../Screens/YourOrder/OrderDetails';
-import ConfirmationQRScreen from '../Screens/YourOrder/ConfirmationQR';
-import ConfirmOrderDetailsScreen from '../Screens/YourOrder/ConfirmOrderDetails';
+import ConfirmOrderScreen from '../../../Screens/Requester/YourOrder/Confirmation/ConfirmOrders';
+import ConfirmationQRScreen from '../../../Screens/Requester/YourOrder/Confirmation/ConfirmationQR';
+import ConfirmOrderDetailsScreen from '../../../Screens/Requester/YourOrder/Confirmation/ConfirmOrderDetails';
 
 const Stack = createStackNavigator();
 
@@ -14,13 +13,6 @@ const YourConfirmStack = () => {
         <Stack.Screen
           name="YourOrder"
           component={ConfirmOrderScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="OrderDetails"
-          component={OrderDetailScreen}
           options={{
             headerShown: false,
           }}

@@ -3,10 +3,10 @@ import {View, TextInput, StyleSheet, Modal, ToastAndroid} from 'react-native';
 import {Container, Text, Button} from 'native-base';
 import uuid from 'react-native-uuid';
 
-import common from '../../Global/stylesheet';
-import useUserCred from '../../UserCredentials';
-import {custReqQueries, suppReqQueries} from '../../serverQueries/Requester';
-import Loading from '../../Component/Loading';
+import common from '../../../Global/stylesheet';
+import useUserCred from '../../../UserCredentials';
+import {custReqQueries, suppReqQueries} from '../../../serverQueries/Requester';
+import Loading from '../../../Component/Loading';
 
 const Data = [
   {

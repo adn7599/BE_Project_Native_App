@@ -14,13 +14,13 @@ import {
 } from 'native-base';
 import {FlatList, View, TouchableOpacity, ToastAndroid} from 'react-native';
 
-import common from '../../../Global/stylesheet';
-import Loading from '../../../Component/Loading';
-import useUserCred from '../../../UserCredentials';
-import {custReqQueries, suppReqQueries} from '../../../serverQueries/Requester';
+import common from '../../../../Global/stylesheet';
+import Loading from '../../../../Component/Loading';
+import useUserCred from '../../../../UserCredentials';
+import {custReqQueries, suppReqQueries} from '../../../../serverQueries/Requester';
 
-const CancelledOrdersScreen = ({navigation}) => {
-  const [cancelledResp, setCancelledResp] = useState(null);
+const ConfirmedOrdersScreen = ({navigation}) => {
+  const [completeResp, setCompleteResp] = useState(null);
 
   const {userCred, userDetails, deleteUserCred} = useUserCred();
 
@@ -30,23 +30,23 @@ const CancelledOrdersScreen = ({navigation}) => {
   const loadScreen = async () => {
     const [respErr, resp] = await selectedQueries.getOrders(
       userCred.relayToken,
-      'cancelled',
+      'confirm',
     );
     console.log('loaded resp', respErr, resp);
     if (respErr === null) {
       if (resp.status == 200) {
-        setCancelledResp(resp.data);
+        setCompleteResp(resp.data);
       } else if (resp.status == 403) {
         ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
         await deleteUserCred();
-        setCancelledResp(null);
+        setCompleteResp(null);
       } else {
         ToastAndroid.show(resp.data.error, ToastAndroid.LONG);
-        setCancelledResp(null);
+        setCompleteResp(null);
       }
     } else {
       ToastAndroid.show(respErr.message, ToastAndroid.LONG);
-      setCancelledResp(null);
+      setCompleteResp(null);
     }
   };
 
@@ -64,7 +64,7 @@ const CancelledOrdersScreen = ({navigation}) => {
     return (
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('CancelledOrderDetails', {item: item})
+          navigation.navigate('ConfirmedOrderDetails', {item: item})
         }>
         <Content style={common.cardContainer}>
           <Card style={common.card}>
@@ -76,7 +76,8 @@ const CancelledOrdersScreen = ({navigation}) => {
                   {item.request.provider_id.name}
                 </Text>
                 <Text>Items: {ordersList.join(', ')}</Text>
-                <Text>Status : Transaction Cancelled</Text>
+                <Text>Amount paid : {item.payment.amount}</Text>
+                <Text>Status : Transaction Completed</Text>
               </Body>
             </CardItem>
           </Card>
@@ -111,10 +112,10 @@ const CancelledOrdersScreen = ({navigation}) => {
         <Right />
       </Header>
       <View style={common.topBottomSep}></View>
-      {cancelledResp !== null ? (
+      {completeResp !== null ? (
         <>
           <FlatList
-            data={cancelledResp}
+            data={completeResp}
             initialNumToRender={7}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
@@ -127,4 +128,4 @@ const CancelledOrdersScreen = ({navigation}) => {
   );
 };
 
-export default CancelledOrdersScreen;
+export default ConfirmedOrdersScreen;
