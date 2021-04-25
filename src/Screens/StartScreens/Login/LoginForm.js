@@ -15,6 +15,8 @@ import colours from '../../../colours';
 import Logo from '../../../Assets/svgComponents/Logo';
 import {useState} from 'react/cjs/react.development';
 import login from '../../../serverQueries/User/login';
+import {accountVerify} from '../../../serverQueries/User/register';
+import {sendOTP} from '../../../serverQueries/User/forgotPassword';
 import useUserCred from '../../../UserCredentials';
 
 const windowHeight = Dimensions.get('screen').height;
@@ -38,13 +40,60 @@ const LoginForm = ({route, navigation}) => {
       if (respErr == null) {
         saveUserCred(role, regId, ttpToken, relayToken);
       } else {
-        ToastAndroid.show((respErr instanceof Error ? respErr.message : respErr), ToastAndroid.SHORT);
+        ToastAndroid.show(
+          respErr instanceof Error ? respErr.message : respErr,
+          ToastAndroid.SHORT,
+        );
       }
     } else {
       ToastAndroid.show(
         `${numberType} or password is empty`,
         ToastAndroid.SHORT,
       );
+    }
+  };
+
+  const onForgotPassword = async () => {
+    if (regId) {
+      // Goto input OTP screen
+      const [respErr, resp] = await accountVerify(role, regId);
+      console.log('log resp', respErr, resp);
+      if (respErr == null) {
+        if (resp.status == 200 && resp.data.isRegistered) {
+          const [otpErr, otpResp] = await sendOTP(role, regId);
+          console.log('log otp', otpErr, otpResp);
+          if (otpErr == null) {
+            if (otpResp.status == 200) {
+              navigation.navigate('OTPInputScreen', {
+                role: role,
+                reg_id: regId,
+                mobNo: resp.data.Mob_no,
+                otpToken: otpResp.data.token,
+                intent: 'forgotPassword',
+              });
+            } else {
+              ToastAndroid.show(`${otpResp.data.error}`, ToastAndroid.SHORT);
+            }
+          } else {
+            ToastAndroid.show(
+              `Server Error : ${otpErr.message}`,
+              ToastAndroid.SHORT,
+            );
+          }
+        } else {
+          ToastAndroid.show(
+            `${resp.data.error ? resp.data.error : 'User not registered'}`,
+            ToastAndroid.SHORT,
+          );
+        }
+      } else {
+        ToastAndroid.show(
+          `Server Error : ${respErr.message}`,
+          ToastAndroid.LONG,
+        );
+      }
+    } else {
+      ToastAndroid.show(`Empty ${numberType}!!`, ToastAndroid.SHORT);
     }
   };
 
@@ -78,6 +127,11 @@ const LoginForm = ({route, navigation}) => {
             placeholderTextColor={colours.brown}
             onChangeText={(text) => setPassword(text)}
           />
+          <Text
+            style={{color: 'blue', padding: 6}}
+            onPress={() => onForgotPassword()}>
+            forgot password?
+          </Text>
         </View>
         <TouchableOpacity style={styles.button} onPress={() => onLogin()}>
           <Text style={styles.buttonText}>Log In</Text>

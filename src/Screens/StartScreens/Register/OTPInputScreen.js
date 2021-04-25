@@ -10,10 +10,18 @@ import {
 } from 'react-native';
 import colours from '../../../colours';
 
-import {sendOTP, verifyOTP} from '../../../serverQueries/User/register';
+import * as regOTP from '../../../serverQueries/User/register';
+import * as forgotPassOTP from '../../../serverQueries/User/forgotPassword';
 
 const OTPInputScreen = ({route, navigation}) => {
-  const {role, reg_id, mobNo, otpToken} = route.params;
+  const {role, reg_id, mobNo, otpToken, intent} = route.params;
+  let selectedOTP;
+  if (intent === 'forgotPassword') {
+    selectedOTP = forgotPassOTP;
+  } else {
+    selectedOTP = regOTP;
+  }
+
   let textInput = useRef(null);
   let clockCall = null;
   const lengthInput = 6;
@@ -23,7 +31,7 @@ const OTPInputScreen = ({route, navigation}) => {
   const [focusInput, setFocusInput] = useState(true);
   const [countdown, setCountdown] = useState(defaultCountdown);
   const [enableResend, setEnableResend] = useState(false);
-  const [otpTokenState,setOtpTokenState] = useState(otpToken);
+  const [otpTokenState, setOtpTokenState] = useState(otpToken);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -48,7 +56,7 @@ const OTPInputScreen = ({route, navigation}) => {
   const onResendOTP = async () => {
     if (enableResend) {
       // eslint-disable-next-line no-alert
-      const [otpErr, otpResp] = await sendOTP(role, reg_id);
+      const [otpErr, otpResp] = await selectedOTP.sendOTP(role, reg_id);
       console.log('log otp', otpErr, otpResp);
       if (otpErr == null) {
         if (otpResp.status == 200) {
@@ -80,7 +88,12 @@ const OTPInputScreen = ({route, navigation}) => {
     setInternalVal(val);
     //console.log(val)
     if (val.length === lengthInput) {
-      const [respErr, resp] = await verifyOTP(role, reg_id, val, otpTokenState);
+      const [respErr, resp] = await selectedOTP.verifyOTP(
+        role,
+        reg_id,
+        val,
+        otpTokenState,
+      );
       console.log('log resp', respErr, resp);
       if (respErr == null) {
         if (resp.status == 200) {
@@ -88,6 +101,7 @@ const OTPInputScreen = ({route, navigation}) => {
             role: role,
             reg_id: reg_id,
             regToken: resp.data.token,
+            intent: intent,
           });
         } else {
           ToastAndroid.show(`${resp.data.error}`, ToastAndroid.SHORT);

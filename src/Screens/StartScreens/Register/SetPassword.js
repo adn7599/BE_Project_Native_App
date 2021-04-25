@@ -7,22 +7,30 @@ import {
   View,
   TouchableOpacity,
   ToastAndroid,
-  Modal
+  Modal,
 } from 'react-native';
 import {Button} from 'native-base';
 import colours from '../../../colours';
 
 import {accountRegister} from '../../../serverQueries/User/register';
+import {resetPassword} from '../../../serverQueries/User/forgotPassword';
 
 const SetPassword = ({route, navigation}) => {
-  const {role, reg_id, regToken} = route.params;
+  const {role, reg_id, regToken, intent} = route.params;
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [ModalVisible, setModalVisible] = useState(false);
 
+  let selectedQuery;
+  if (intent === 'forgotPassword') {
+    selectedQuery = resetPassword;
+  } else {
+    selectedQuery = accountRegister;
+  }
+
   const onPressContinue = async () => {
     if (password === rePassword) {
-      const [respErr, resp] = await accountRegister(
+      const [respErr, resp] = await selectedQuery(
         role,
         reg_id,
         password,
@@ -48,7 +56,11 @@ const SetPassword = ({route, navigation}) => {
 
   return (
     <SafeAreaView style={Styles.container}>
-      <Text style={Styles.title}>Set your password</Text>
+      <Text style={Styles.title}>
+        {intent === 'forgotPassword'
+          ? 'Reset your password'
+          : 'Set your password'}
+      </Text>
       <View style={{flex: 1, justifyContent: 'center'}}>
         <Text style={Styles.infoText}>
           Password must be at least 8 characters long, must contain at least one
@@ -82,11 +94,11 @@ const SetPassword = ({route, navigation}) => {
           <View style={Styles.centeredView}>
             <View style={Styles.modalView}>
               <Text style={Styles.modalText}>
-                User successfully registered
+                {intent === 'forgotPassword'
+                  ? 'Password reset successfully'
+                  : 'User successfully registered'}
               </Text>
-              <Text style={Styles.modalText}>
-                You can login now
-              </Text>
+              <Text style={Styles.modalText}>You can login now</Text>
               <View style={Styles.btnView}>
                 <Button
                   style={[Styles.button, Styles.buttonClose]}
@@ -184,8 +196,8 @@ const Styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    width : 80,
-    justifyContent : 'center'
+    width: 80,
+    justifyContent: 'center',
   },
   buttonOpen: {
     backgroundColor: '#F194FF',

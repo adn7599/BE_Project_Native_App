@@ -55,6 +55,7 @@ const IdentificationScreen = ({route, navigation}) => {
                 reg_id: identityNumber,
                 mobNo: resp.data.Mob_no,
                 otpToken: otpResp.data.token,
+                intent: 'register',
               });
             } else {
               ToastAndroid.show(`${otpResp.data.error}`, ToastAndroid.SHORT);
