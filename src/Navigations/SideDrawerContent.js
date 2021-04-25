@@ -77,8 +77,18 @@ const SideDrawerContent = (props) => {
             }}
           />
           <List.Accordion title="Order History" id="OrderHistory">
-            <List.Item title="Completed" onPress={() => {}} />
-            <List.Item title="Cancelled" onPress={() => {}} />
+            <List.Item
+              title="Completed"
+              onPress={() => {
+                props.navigation.navigate('ProviderConfirmedOrderHistory');
+              }}
+            />
+            <List.Item
+              title="Cancelled"
+              onPress={() => {
+                props.navigation.navigate('ProviderCancelledOrderHistory');
+              }}
+            />
           </List.Accordion>
 
           <List.Accordion
@@ -125,48 +135,34 @@ const SideDrawerContent = (props) => {
     );
   };
 
-  /* const DistributorDrawerContent = () => {
+  const DistributorDrawerContent = () => {
     return (
       <>
-        <DrawerItem
-          label="Home"
-          onPress={() => props.navigation.navigate('Home')}
+        <List.Item
+          title="Home"
+          onPress={() => props.navigation.navigate('ProviderDashboard')}
         />
-        <List.Accordion
-          title="Your Order"
-          expanded={expanded === 'yourorder'}
-          onPress={() => setExpanded('yourorder')}>
-          <List.Item
-            title="Payment"
-            onPress={() => {
-              setExpanded(null);
-              props.navigation.navigate('PaymentOrder');
-            }}
-          />
-          <List.Item
-            title="Confirm"
-            onPress={() => {
-              setExpanded(null);
-              props.navigation.navigate('ConfirmOrder');
-            }}
-          />
-        </List.Accordion>
-        <List.Accordion
-          title="Order History"
-          expanded={expanded === 'orderhistory'}
-          onPress={() => setExpanded('orderhistory')}>
-          <List.Item
-            title="completed"
-            onPress={() => props.navigation.navigate('ConfirmedOrderHistory')}
-          />
-          <List.Item
-            title="Cancel"
-            onPress={() => props.navigation.navigate('CancelledOrderHistory')}
-          />
-        </List.Accordion>
+        <List.Item
+          title="Stock"
+          onPress={() => {
+            props.navigation.navigate('ProviderStock');
+          }}
+        />
+        <List.Item
+          title="Complete History"
+          onPress={() => {
+            props.navigation.navigate('ProviderConfirmedOrderHistory');
+          }}
+        />
+        <List.Item
+          title="Cancel History"
+          onPress={() => {
+            props.navigation.navigate('ProviderCancelledOrderHistory');
+          }}
+        />
       </>
     );
-  };*/
+  };
 
   let SelectedDrawerContent;
 
@@ -175,7 +171,7 @@ const SideDrawerContent = (props) => {
   } else if (userCred.role === 'SP') {
     SelectedDrawerContent = SupplierDrawerContent;
   } else {
-    //SelectedDrawerContent = DistributorDrawerContent;
+    SelectedDrawerContent = DistributorDrawerContent;
   }
 
   const avatarText =

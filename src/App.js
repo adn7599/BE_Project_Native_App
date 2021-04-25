@@ -16,7 +16,8 @@ import RequesterConfirmedOrderHistoryStack from './Navigations/Requester/OrderHi
 import RequesterCancelledOrderHistoryStack from './Navigations/Requester/OrderHistory/CancelledOrderHistoryStack';
 import SideDrawerContent from './Navigations/SideDrawerContent';
 import ProviderStockScreen from './Screens/Provider/stock';
-
+import ProviderConfirmedHistoryStack from './Navigations/Provider/OrderHistory/ConfirmedOrderHistoryStack';
+import ProviderCancelledOrderHistoryStack from './Navigations/Provider/OrderHistory/CancelledOrderHistoryStack';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -40,9 +41,15 @@ const DrawerNavigation = () => {
         name="ProviderDashboard"
         component={ProviderDashboardStack}
       />
+      <Drawer.Screen name="ProviderStock" component={ProviderStockScreen} />
+
       <Drawer.Screen
-        name="ProviderStock"
-        component={ProviderStockScreen}
+        name="ProviderConfirmedOrderHistory"
+        component={ProviderConfirmedHistoryStack}
+      />
+      <Drawer.Screen
+        name="ProviderCancelledOrderHistory"
+        component={ProviderCancelledOrderHistoryStack}
       />
       <Drawer.Screen
         name="RequesterPayment"

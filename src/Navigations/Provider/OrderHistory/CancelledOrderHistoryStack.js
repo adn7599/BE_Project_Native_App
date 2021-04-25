@@ -1,8 +1,8 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import CancelledOrdersScreen from '../Screens/Order History/CancelledOrders/CancelledOrders';
-import CancelledOrderDetailsScreen from '../Screens/Order History/CancelledOrders/CancelledOrderDetails';
+import CancelledOrdersScreen from '../../../Screens/Provider/OrderHistory/CancelledOrders/CancelledOrders';
+import CancelledOrderDetailsScreen from '../../../Screens/Provider/OrderHistory/CancelledOrders/CancelledOrderDetails';
 
 const Stack = createStackNavigator();
 
