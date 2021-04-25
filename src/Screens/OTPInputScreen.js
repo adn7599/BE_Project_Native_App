@@ -62,6 +62,7 @@ const OTPInputScreen = ({navigation}) => {
   const onChangeText = (val) => {
     setInternalVal(val);
     if (val.length === lengthInput) {
+    	console.log(val);
       // Check if OTP is correct, then go forward
       navigation.navigate(SetPassword);
     }
