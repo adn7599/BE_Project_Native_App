@@ -59,7 +59,7 @@ const LoginForm = ({route, navigation}) => {
       const [respErr, resp] = await accountVerify(role, regId);
       console.log('log resp', respErr, resp);
       if (respErr == null) {
-        if (resp.status == 200 && resp.data.isRegistered) {
+        if (resp.status === 200 && resp.data.isRegistered) {
           const [otpErr, otpResp] = await sendOTP(role, regId);
           console.log('log otp', otpErr, otpResp);
           if (otpErr == null) {
@@ -103,11 +103,12 @@ const LoginForm = ({route, navigation}) => {
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        <View style={styles.heading}>
-          <Text style={styles.headingText}>
-            Welcome {roleTitle}! Login to start exploring.
-          </Text>
-          <Logo />
+        <View style={styles.header}>
+          <View style={styles.headings}>
+            <Text style={styles.headingMain}>Welcome {roleTitle}!</Text>
+            <Text style={styles.headingSub}>Login now to start exploring.</Text>
+          </View>
+          <Logo width={120} height={120} />
         </View>
         <View style={styles.inputFields}>
           <TextInput
@@ -122,7 +123,6 @@ const LoginForm = ({route, navigation}) => {
             value={password}
             style={styles.input}
             secureTextEntry={true}
-            keyboardType="visible-password"
             placeholder="Password"
             placeholderTextColor={colours.brown}
             onChangeText={(text) => setPassword(text)}
@@ -149,24 +149,37 @@ const styles = StyleSheet.create({
     backgroundColor: colours.light,
     paddingHorizontal: 25,
   },
-  heading: {
+  header: {
     flexDirection: 'row',
-    width: windowWidth / 2,
+    // width: windowWidth / 2,
   },
-  headingText: {
+  headings: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  logo: {
+    flex: 1,
+  },
+  headingMain: {
+    flex: 1,
     color: colours.brown,
     fontWeight: 'bold',
     fontSize: 25,
-    marginBottom: 30,
+  },
+  headingSub: {
+    flex: 1,
+    color: colours.brown,
+    fontSize: 22,
   },
   inputFields: {
     marginBottom: 10,
   },
   input: {
-    borderRadius: 3,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: colours.brown,
-    marginBottom: 5,
+    backgroundColor: '#fff',
+    marginVertical: 5,
     paddingHorizontal: 10,
   },
   button: {
