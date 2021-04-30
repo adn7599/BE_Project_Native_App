@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Container,
-  Card,
-  CardItem,
+  // Card,
+  // CardItem,
   Left,
   Right,
   Thumbnail,
@@ -12,10 +12,21 @@ import {
   Item,
   Input,
   Icon,
-  Button,
   Text,
-  Title,
 } from 'native-base';
+
+import {
+  Appbar,
+  Title,
+  Paragraph,
+  List,
+  Button,
+  Searchbar,
+  Card,
+  Provider as PaperProvider,
+  useTheme,
+} from 'react-native-paper';
+
 import {
   Dimensions,
   FlatList,
@@ -24,19 +35,22 @@ import {
   Image,
   BackHandler,
   ToastAndroid,
+  ScrollView,
 } from 'react-native';
 
 import useUserCred from '../../UserCredentials';
 import {custReqQueries, suppReqQueries} from '../../serverQueries/Requester';
 import common from '../../Global/stylesheet';
-import {useState} from 'react/cjs/react.development';
 import Loading from '../../Component/Loading';
 import MyFastImage from '../../Component/FastImage';
-import {List} from 'react-native-paper';
 
 const CustomerDashboardScreen = ({navigation}) => {
   const [prodList, setProdList] = useState(null);
   const {userCred, userDetails, deleteUserCred} = useUserCred();
+  const [showSearch, setShowSearch] = useState(false);
+
+  const theme = useTheme();
+
   const selectedQueries =
     userCred.role === 'customer' ? custReqQueries : suppReqQueries;
 
@@ -113,48 +127,61 @@ const CustomerDashboardScreen = ({navigation}) => {
 
   return (
     <Container style={Sytles.container}>
-      <Header style={common.headerColor}>
-        <Left>
-          <Icon
-            onPress={() => navigation.openDrawer()}
-            name="md-menu"
-            style={common.headerMenuBtn}
+      <Appbar.Header>
+        <Appbar.Action
+          size={33}
+          icon="menu"
+          onPress={() => navigation.openDrawer()}
+        />
+        <Appbar.Content title="Home" />
+        <Appbar.Action
+          size={33}
+          icon="magnify"
+          onPress={() => setShowSearch(!showSearch)}
+        />
+        <Appbar.Action
+          size={33}
+          icon="cart"
+          onPress={() => navigation.navigate('Cart')}
+        />
+      </Appbar.Header>
+      {showSearch ? (
+        <View
+          style={{backgroundColor: theme.colors.primary, paddingBottom: 10}}>
+          <Searchbar
+            placeholder="Search"
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{
+              alignSelf: 'center',
+              width: Dimensions.get('screen').width - 20,
+              borderRadius: 5,
+            }}
           />
-        </Left>
-        <Body style={{alignItems: 'center', paddingLeft: 50}}>
-          <Title style={common.headerText}>Home</Title>
-        </Body>
-        <Right>
-          <Icon
-            onPress={() => navigation.navigate('Cart')}
-            name="md-cart"
-            style={common.headerMenuBtn}
-          />
-        </Right>
-      </Header>
-      <Header searchBar rounded>
-        <Item>
-          <Icon name="ios-search" />
-          <Input placeholder="Search" />
-        </Item>
-        <Button transparent>
-          <Text>Search</Text>
-        </Button>
-      </Header>
-      <Header style={Sytles.welcomeHeader}>
-        <Body>
-          <Text style={Sytles.welcomeHeaderText}>
-            Welcome {userDetails.fName} {userDetails.lName}
-          </Text>
-        </Body>
-        <Right />
-      </Header>
+        </View>
+      ) : (
+        <View />
+      )}
+
+      {/* PRODUCTS */}
       {prodList !== null ? (
         <FlatList
           data={prodList}
           initialNumToRender={4}
           renderItem={renderItem}
           keyExtractor={(item) => item.product._id.toString()}
+          ListHeaderComponent={
+            <Header style={Sytles.welcomeHeader}>
+              <Body>
+                <Text style={Sytles.welcomeHeaderText}>
+                  Welcome,{' '}
+                  {userCred.role === 'customer'
+                    ? userDetails.fName
+                    : userDetails.name}
+                  !
+                </Text>
+              </Body>
+            </Header>
+          }
         />
       ) : (
         <Loading />
@@ -167,72 +194,66 @@ const ListItem = ({item, toggleAddToCart, userCred}) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   return (
     <>
-      <Content style={Sytles.cardContainer}>
-        <Card style={Sytles.card}>
-          <CardItem>
-            <Body>
-              <MyFastImage
-                imageId={item.product._id}
-                imageLoaded={imageLoaded}
-                setImageLoaded={setImageLoaded}
-              />
-              <CardItem>
-                <Left>
-                  <Body>
-                    <Text>{item.product.name}</Text>
-                    <Text note>
-                      {item.product.price} Rs/{item.product.unit}
-                    </Text>
-                  </Body>
-                </Left>
-              </CardItem>
-
-              <Body>
-                <List.Accordion
-                  title="Product Info"
-                  style={{width: Dimensions.get('screen').width - 80}}>
-                  <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                    {item.product.description}
-                  </Text>
-                  {userCred.role === 'customer' ? (
-                    <View>
-                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                        Alloted Quantity : {item.allotedQuantity}
-                      </Text>
-                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                        Available Quantity : {item.availableQuantity}
-                      </Text>
-                    </View>
-                  ) : (
-                    <View>
-                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                        Max Quantity : {item.maxQuantity}
-                      </Text>
-                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                        Available Quantity : {item.availableQuantity}
-                      </Text>
-                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                        Ordered Quantity : {item.orderedQuantity}
-                      </Text>
-                    </View>
-                  )}
-                </List.Accordion>
-              </Body>
-              <View style={common.topBottomSep}></View>
-              <Button
-                textStyle={{color: '#87838B'}}
-                style={[
-                  Sytles.cartButton,
-                  {backgroundColor: item.addedToCart ? 'red' : 'green'},
-                ]}
-                onPress={() => toggleAddToCart(item.product._id)}>
-                <Icon name="cart" />
-                <Text>{item.addedToCart ? 'REMOVE' : 'ADD'}</Text>
-              </Button>
-            </Body>
-          </CardItem>
-        </Card>
-      </Content>
+      <Card elevation={5} style={Sytles.card}>
+        <Card.Content>
+          <MyFastImage
+            imageId={item.product._id}
+            imageLoaded={imageLoaded}
+            setImageLoaded={setImageLoaded}
+          />
+          <Title>{item.product.name}</Title>
+          <Paragraph>
+            {item.product.price} Rs/{item.product.unit}
+          </Paragraph>
+        </Card.Content>
+        <Card.Content>
+          <List.Accordion
+            title="Product Info"
+            style={{
+              width: Dimensions.get('screen').width - 80,
+            }}>
+            <Text style={{paddingTop: 10, paddingLeft: 15}}>
+              {item.product.description}
+            </Text>
+            {userCred.role === 'customer' ? (
+              <View>
+                <Text style={{paddingTop: 10, paddingLeft: 15}}>
+                  Alloted Quantity : {item.allotedQuantity}
+                </Text>
+                <Text
+                  style={{paddingTop: 10, paddingLeft: 15, marginBottom: 25}}>
+                  Available Quantity : {item.availableQuantity}
+                </Text>
+              </View>
+            ) : (
+              <View>
+                <Text style={{paddingTop: 10, paddingLeft: 15}}>
+                  Max Quantity : {item.maxQuantity}
+                </Text>
+                <Text style={{paddingTop: 10, paddingLeft: 15}}>
+                  Available Quantity : {item.availableQuantity}
+                </Text>
+                <Text
+                  style={{paddingTop: 10, paddingLeft: 15, marginBottom: 25}}>
+                  Ordered Quantity : {item.orderedQuantity}
+                </Text>
+              </View>
+            )}
+          </List.Accordion>
+        </Card.Content>
+        <Card.Content>
+          <Button
+            style={[
+              Sytles.cartButton,
+              {backgroundColor: item.addedToCart ? 'red' : 'green'},
+            ]}
+            icon="cart"
+            mode="contained"
+            onPress={() => toggleAddToCart(item.product._id)}>
+            {item.addedToCart ? 'REMOVE' : 'ADD'}
+          </Button>
+        </Card.Content>
+      </Card>
     </>
   );
 };
@@ -240,21 +261,28 @@ const ListItem = ({item, toggleAddToCart, userCred}) => {
 const Sytles = StyleSheet.create({
   container: {
     backgroundColor: '#F9D1A3',
+    // backgroundColor: '#fff',
   },
   welcomeHeader: {
-    backgroundColor: '#E4B884',
+    backgroundColor: '#E4E',
+    height: 40,
   },
   welcomeHeaderText: {
     fontSize: 20,
     paddingLeft: 20,
+    color: '#fff',
   },
   cardContainer: {
-    paddingHorizontal: 20,
+    marginHorizontal: 20,
+    paddingVertical: 10,
   },
   card: {
     flex: 0,
+    marginHorizontal: 20,
+    marginVertical: 10,
   },
   cartButton: {
+    width: 120,
     alignSelf: 'flex-end',
   },
 });

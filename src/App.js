@@ -2,7 +2,7 @@ import React, {useRef, useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {Provider as PaperProvider} from 'react-native-paper';
+import {Provider as PaperProvider, DefaultTheme} from 'react-native-paper';
 
 import useUserCred, {UserCredentials} from './UserCredentials';
 
@@ -22,6 +22,16 @@ import ProviderCancelledOrderHistoryStack from './Navigations/Provider/OrderHist
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 //const Tab = createMaterialBottomTabNavigator();
+
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    //   primary: '#3498db',
+    //   accent: '#f1c40f',
+  },
+};
 
 const DrawerNavigation = () => {
   const {userCred} = useUserCred();
@@ -87,7 +97,7 @@ const WhichStack = () => {
 const App = () => {
   return (
     <UserCredentials>
-      <PaperProvider>
+      <PaperProvider theme={theme}>
         <NavigationContainer>
           <WhichStack />
         </NavigationContainer>
