@@ -5,22 +5,15 @@ import {
   FlatList,
   StyleSheet,
   ToastAndroid,
+  SafeAreaView,
 } from 'react-native';
-import {
-  Container,
-  Body,
-  Header,
-  Right,
-  Left,
-  Icon,
-  Button,
-  Text,
-  Title,
-} from 'native-base';
+import {Container} from 'native-base';
+
+import {Appbar, Text, Button} from 'react-native-paper';
 
 import common from '../../../Global/stylesheet';
 import ShowCard from '../../../Component/ShowCard';
-import {custReqQueries,suppReqQueries} from '../../../serverQueries/Requester';
+import {custReqQueries, suppReqQueries} from '../../../serverQueries/Requester';
 import useUserCred from '../../../UserCredentials';
 
 import Loading from '../../../Component/Loading';
@@ -148,33 +141,19 @@ const CartScreen = ({navigation}) => {
 
   const getSelectedOrdersList = () => {
     const selectedOrders = Cart.orders.filter((ord) => ord.isSelected === true);
-    return selectedOrders.map((ord) => ord.product._id)
-  }
+    return selectedOrders.map((ord) => ord.product._id);
+  };
 
   return (
-    <Container style={common.container}>
-      <Header style={common.headerColor}>
-        <Left>
-          <Icon
-            onPress={() => navigation.openDrawer()}
-            name="md-menu"
-            style={common.headerMenuBtn}
-          />
-        </Left>
-        <Body>
-          <Title style={common.headerText}>Cart</Title>
-        </Body>
-      </Header>
-
-      <Header style={common.welcomeHeader}>
-        <Body>
-          <Text style={Styles.welcomeHeaderText}>
-            Welcome {userDetails.fName} {userDetails.lName}
-          </Text>
-        </Body>
-        <Right />
-      </Header>
-      <View style={common.topBottomSep}></View>
+    <Container>
+      <Appbar.Header>
+        <Appbar.Action
+          size={33}
+          icon="menu"
+          onPress={() => navigation.openDrawer()}
+        />
+        <Appbar.Content title="Cart" />
+      </Appbar.Header>
       {Cart !== null ? (
         <>
           <FlatList
@@ -182,21 +161,36 @@ const CartScreen = ({navigation}) => {
             initialNumToRender={6}
             renderItem={renderItem}
             keyExtractor={(item) => item.product._id.toString()}
+            ListHeaderComponent={<View></View>}
+            ListHeaderComponentStyle={{paddingBottom: 20}}
           />
-          <View style={Styles.amountDisplayRow}>
-            <View style={Styles.amountView}>
-              <Text style={common.text}>Total Amount</Text>
+          <View
+            style={{
+              backgroundColor: '#3498db',
+              
+            }}>
+            <View style={Styles.amountDisplayRow}>
+              <Text style={{fontWeight: 'bold', fontSize: 23}}>Total Cost</Text>
+              <Text style={{fontWeight: 'bold', fontSize: 23}}>
+                {'₹ '}
+                {Cart.selectedItemsTotalAmount}
+              </Text>
             </View>
-            <View style={Styles.totalAmount}>
-              <Text style={common.text}>{Cart.selectedItemsTotalAmount}</Text>
+            <View style={Styles.centerBtnView}>
+              <Button
+                onPress={() =>
+                  navigation.navigate('SelectProvider', {
+                    orders: getSelectedOrdersList(),
+                  })
+                }
+                disabled={Cart.selectedItemsTotalAmount === 0 ? true : false}
+                uppercase={false}
+                mode="contained"
+                labelStyle={{fontSize: 18}}
+                style={{borderRadius: 10}}>
+                Proceed To Order
+              </Button>
             </View>
-          </View>
-          <View style={Styles.centerBtnView}>
-            <Button
-              onPress={() => navigation.navigate('SelectProvider',{orders: getSelectedOrdersList()})}
-              disabled={Cart.selectedItemsTotalAmount === 0 ? true : false}>
-              <Text>Proceed To Order</Text>
-            </Button>
           </View>
         </>
       ) : (
@@ -209,6 +203,8 @@ const CartScreen = ({navigation}) => {
 const Styles = StyleSheet.create({
   amountDisplayRow: {
     flexDirection: 'row',
+    margin: 20,
+    justifyContent: 'space-between',
   },
   amountView: {
     flex: 1,

@@ -129,11 +129,11 @@ const CustomerDashboardScreen = ({navigation}) => {
   };
 
   return (
-    <Container>
+    <>
       <Appbar.Header>
         <Appbar.Action
           size={33}
-          style={{width: 20}}
+       
           icon="menu"
           onPress={() => navigation.openDrawer()}
         />
@@ -191,7 +191,7 @@ const CustomerDashboardScreen = ({navigation}) => {
       ) : (
         <Loading />
       )}
-    </Container>
+    </>
   );
 };
 
