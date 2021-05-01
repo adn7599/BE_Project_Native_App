@@ -166,8 +166,7 @@ const CartScreen = ({navigation}) => {
           />
           <View
             style={{
-              backgroundColor: '#3498db',
-              
+              backgroundColor: '#3498db', 
             }}>
             <View style={Styles.amountDisplayRow}>
               <Text style={{fontWeight: 'bold', fontSize: 23}}>Total Cost</Text>

@@ -1,20 +1,24 @@
 import React, {useState} from 'react';
-import {View, FlatList, StyleSheet, ToastAndroid} from 'react-native';
-import {List} from 'react-native-paper';
-import DropDownPicker from 'react-native-dropdown-picker';
 import {
-  Container,
-  Body,
-  Content,
-  Header,
-  Card,
-  CardItem,
-  Radio,
-  Left,
-  Right,
+  View,
+  FlatList,
+  StyleSheet,
+  ToastAndroid,
+  TouchableOpacity,
+} from 'react-native';
+import DropDownPicker from 'react-native-dropdown-picker';
+import {Container} from 'native-base';
+
+import {
   Button,
+  Card,
   Text,
-} from 'native-base';
+  RadioButton,
+  useTheme,
+  Appbar,
+  Chip,
+} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import common from '../../../Global/stylesheet';
 import {useEffect} from 'react';
@@ -28,6 +32,8 @@ const SelectProviderScreen = ({route, navigation}) => {
   const [Range, setRange] = useState(100);
 
   const {userCred, userDetails, deleteUserCred} = useUserCred();
+
+  const themes = useTheme();
 
   const {orders} = route.params;
   console.log('Orders selected: ', orders);
@@ -172,91 +178,142 @@ const SelectProviderScreen = ({route, navigation}) => {
   };
 
   const renderItem = ({item}) => {
-    let satisfied = '';
-    let partiallySat = '';
-    let notSatisfied = '';
+    let satisfied = [];
+    let partiallySat = [];
+    let notSatisfied = [];
+    let cartItems;
+    let itemSatColor;
+    let itemSatMsg;
 
     item.satisfiedOrders.forEach((ord) => {
       if (ord.keepsInStock) {
         if (ord.satisfied) {
-          satisfied += `${providers.cartInfo[ord.product].name} \n`;
+          satisfied.push(
+            <View key={ord.product} style={{padding: 5}}>
+              <Chip
+                mode="flat"
+                style={{backgroundColor: 'green'}}
+                textStyle={{color: 'white', fontSize: 13}}>
+                {providers.cartInfo[ord.product].name}
+              </Chip>
+            </View>,
+          );
         } else if (ord.availableStock) {
           const myCartInfo = providers.cartInfo[ord.product];
-          partiallySat += `${myCartInfo.name}   ${ord.availableStock}/${myCartInfo.cartQuantity} \n`;
+          partiallySat.push(
+            <View key={ord.product} style={{padding: 5}}>
+              <Chip
+                mode="flat"
+                style={{backgroundColor: 'orange'}}
+                textStyle={{color: 'white', fontSize: 13}}>
+                {`${myCartInfo.name}   ${ord.availableStock}/${myCartInfo.cartQuantity}`}
+              </Chip>
+            </View>,
+          );
         } else {
-          notSatisfied += `${providers.cartInfo[ord.product].name} \n`;
+          notSatisfied.push(
+            <View key={ord.product} style={{padding: 5}}>
+              <Chip
+                mode="flat"
+                style={{backgroundColor: 'red'}}
+                textStyle={{color: 'white', fontSize: 13}}>
+                {providers.cartInfo[ord.product].name}
+              </Chip>
+            </View>,
+          );
         }
       } else {
-        notSatisfied += `${providers.cartInfo[ord.product].name}\n `;
+        notSatisfied.push(
+          <View key={ord.product} style={{padding: 5}}>
+            <Chip
+              mode="flat"
+              style={{backgroundColor: 'red'}}
+              textStyle={{color: 'white', fontSize: 13}}>
+              {providers.cartInfo[ord.product].name}
+            </Chip>
+          </View>,
+        );
       }
+      cartItems = [...satisfied, ...partiallySat, ...notSatisfied];
     });
 
+    if (item.satisfiesNum === providers.cartInfo.numberOfItemsSelected) {
+      itemSatColor = 'green';
+      itemSatMsg = 'All items available!';
+    } else if (item.satisfiesNum === 0) {
+      itemSatColor = 'red';
+      itemSatMsg = 'No items available';
+    } else {
+      itemSatColor = 'orange';
+      itemSatMsg = `Some items unavailable (${item.satisfiesNum}/${providers.cartInfo.numberOfItemsSelected})`;
+    }
+
     return (
-      <Content style={common.cardContainer}>
-        <Card style={common.card}>
-          <CardItem>
-            <Body>
-              <View style={common.cardRow}>
-                <View style={common.flexOne}>
-                  <Text style={common.text}>{item._id}</Text>
-                </View>
-                <View style={common.cardRowEnd}>
-                  <Radio
-                    color={'#f0ad4e'}
-                    selectedColor={'#5cb85c'}
-                    selected={providers.selectedProv === item._id}
-                    onPress={() => selectProv(item._id)}
-                  />
-                </View>
-              </View>
-              <View style={common.flexOne}>
-                <Text style={common.text}>{item.name}</Text>
-              </View>
-              <View style={common.flexOne}>
-                <Text>Address : {item.address}</Text>
-              </View>
-              <View style={Styles.accordionView}>
-                <List.Accordion
-                  title={`Item Satisfied ${item.satisfiesNum}/${providers.cartInfo.numberOfItemsSelected}`}
-                  expanded={providers.expandedProv === item._id}
-                  onPress={() => expandProv(item._id)}>
-                  <Text style={Styles.itemSatisfied}>
-                    item Satisfied {'\n'}
-                    {satisfied}
-                  </Text>
-                  <Text style={Styles.itemPartSatisfied}>
-                    item Partially Satisfied {'\n'}
-                    {partiallySat}
-                  </Text>
-                  <Text style={Styles.itemNotSatisfied}>
-                    item Not Satisfied {'\n'}
-                    {notSatisfied}
-                  </Text>
-                </List.Accordion>
-              </View>
-            </Body>
-          </CardItem>
-        </Card>
-      </Content>
+      <Card style={{marginHorizontal: 20, marginBottom: 20, elevation: 12}}>
+        <Card.Content
+          style={{
+            flexDirection: 'row',
+            paddingBottom: 10,
+            justifyContent: 'space-between',
+          }}>
+          <Text style={{fontWeight: 'bold', fontSize: 20}}>{item.name}</Text>
+          <RadioButton
+            color={themes.colors.primary}
+            uncheckedColor="red"
+            status={
+              providers.selectedProv === item._id ? 'checked' : 'unchecked'
+            }
+            onPress={() => selectProv(item._id)}
+          />
+        </Card.Content>
+        <Card.Content>
+          <View style={common.flexOne}>
+            <Text style={{fontSize: 16, fontStyle: 'italic'}}>Address </Text>
+            <Text>{item.address}</Text>
+          </View>
+        </Card.Content>
+        <Card.Content>
+          <TouchableOpacity
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingTop: 15,
+              paddingBottom: 5,
+            }}
+            onPress={() => expandProv(item._id)}>
+            <Text
+              style={{fontWeight: 'bold', fontSize: 16, color: itemSatColor}}>
+              {itemSatMsg}
+            </Text>
+            <Icon
+              name={
+                providers.expandedProv === item._id
+                  ? 'chevron-up'
+                  : 'chevron-down'
+              }
+              size={15}
+              color="lightgrey"
+              style={{paddingLeft: 10}}
+            />
+          </TouchableOpacity>
+          {providers.expandedProv === item._id ? (
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+              {cartItems}
+            </View>
+          ) : (
+            <View></View>
+          )}
+        </Card.Content>
+      </Card>
     );
   };
 
   return (
-    <Container style={common.container}>
-      <Header style={common.welcomeHeader}>
-        <Body>
-          {userCred.role === 'customer' ? (
-            <Text style={common.welcomeHeaderText}>
-              Welcome {userDetails.fName} {userDetails.lName}
-            </Text>
-          ) : (
-            <Text style={common.welcomeHeaderText}>
-              Welcome {userDetails.name}
-            </Text>
-          )}
-        </Body>
-        <Right />
-      </Header>
+    <Container>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.pop()} />
+        <Appbar.Content title="Select Provider" />
+      </Appbar.Header>
       <RangeSelector />
       {providers !== null ? (
         <>
@@ -272,27 +329,50 @@ const SelectProviderScreen = ({route, navigation}) => {
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
           />
-          <View style={{flexDirection: 'row'}}>
-            <View style={Styles.amountView}>
-              <Text style={common.text}>Total Amount</Text>
-            </View>
-            <View style={Styles.amountView}>
-              <Text style={common.text}>
+
+          <View
+            style={{
+              backgroundColor: '#3498db',
+              borderTopStartRadius: 30,
+              borderTopEndRadius: 30,
+              shadowRadius: 10,
+              shadowOffset: {
+                width: 0,
+                height: 3,
+              },
+              shadowColor: '#000000',
+              shadowOpacity : 0.9            
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginHorizontal: 20,
+                marginBottom: 20,
+                marginTop: 30,
+                justifyContent: 'space-between',
+              }}>
+              <Text style={{fontWeight: 'bold', fontSize: 23}}>Total Cost</Text>
+              <Text style={{fontWeight: 'bold', fontSize: 23}}>
+                {'₹ '}
                 {providers.cartInfo.totalSelectedOrdersCost}
               </Text>
             </View>
-          </View>
-          <View style={Styles.centerBtnView}>
-            <Button
-              onPress={() => [
-                navigation.navigate('RequestConfirmMsg', {
-                  request: getBuiltRequest(),
-                }),
-                console.log(providers.selectedProv),
-              ]}
-              disabled={providers.selectedProv === ''}>
-              <Text>Proceed To Order</Text>
-            </Button>
+            <View style={Styles.centerBtnView}>
+              <Button
+                onPress={() => [
+                  navigation.navigate('RequestConfirmMsg', {
+                    request: getBuiltRequest(),
+                  }),
+                  console.log(providers.selectedProv),
+                ]}
+                disabled={providers.selectedProv === ''}
+                uppercase={false}
+                mode="contained"
+                labelStyle={{fontSize: 18}}
+                style={{borderRadius: 10}}>
+                Proceed To Order
+              </Button>
+            </View>
           </View>
         </>
       ) : (
@@ -308,15 +388,12 @@ const Styles = StyleSheet.create({
     width: 330,
   },
   itemSatisfied: {
-    paddingLeft: 20,
     color: 'green',
   },
   itemPartSatisfied: {
-    paddingLeft: 20,
     color: 'orange',
   },
   itemNotSatisfied: {
-    paddingLeft: 20,
     color: 'red',
   },
   rangeView: {

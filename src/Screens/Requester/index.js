@@ -196,15 +196,16 @@ const CustomerDashboardScreen = ({navigation}) => {
 };
 
 const ListItem = ({item, toggleAddToCart, userCred}) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
+  
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <Card elevation={12} style={Sytles.card}>
       <Card.Content>
         <MyFastImage
           imageId={item.product._id}
-          imageLoaded={imageLoaded}
-          setImageLoaded={setImageLoaded}
+          width = {Dimensions.get('screen').width - 75}
+          height = {200}
+          borderRadius = {10}
         />
       </Card.Content>
       <Card.Content

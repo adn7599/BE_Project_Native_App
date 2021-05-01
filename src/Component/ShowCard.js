@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@react-navigation/native';
+import {ThemeProvider} from '@react-navigation/native';
 import React, {useState, useContext} from 'react';
 import {
   View,
@@ -11,6 +11,7 @@ import {Card, Checkbox, Text, Button, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import common from '../Global/stylesheet';
+import MyFastImage from './FastImage';
 
 const ShowCard = ({item, updateCartQuantity, deleteCartItem, toggleSelect}) => {
   const theme = useTheme();
@@ -37,33 +38,44 @@ const ShowCard = ({item, updateCartQuantity, deleteCartItem, toggleSelect}) => {
 
   return (
     <Card style={Styles.card}>
-      <Card.Content style={common.cardRow}>
-        <View style={common.flexOne}>
-          <Text style={common.text}>{item.product.name}</Text>
+      <Card.Content style={{flexDirection : 'row'}}>
+        <View style ={{flex : 3}}>
+        <MyFastImage 
+        imageId = {item.product._id}
+        width = {120}
+        height = {100}
+        borderRadius = {5}
+        />
         </View>
-        <View style={common.cardRowEnd}>
+        <View style ={{flexDirection : 'row',flex : 4,justifyContent : 'space-between'}}>
+        <View >
+          <Text style={common.text}>{item.product.name}</Text>
+          <Text note style={{fontSize: 16,marginTop : 10}}>
+            {'₹ '}{item.product.price}/{item.product.unit}
+          </Text>
+        </View>
+        <View >
           <Checkbox
             status={item.isSelected ? 'checked' : 'unchecked'}
             onPress={() => toggleSelect(item.product._id)}
-            uncheckedColor = 'red'
-            color = {theme.colors.primary}
+            uncheckedColor="red"
+            color={theme.colors.primary}
           />
+        </View>
         </View>
       </Card.Content>
       <Card.Content
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          paddingVertical: 10,
-          justifyContent: 'space-between',
-        }}>
-        <View >
-          <Text note style={{fontSize: 16}}>
-            {item.product.price} Rs/{item.product.unit}
-          </Text>
-          <Text style={{fontSize: 16}}>Item Cost : {'₹ '}{item.cartCost}</Text>
-        </View>
-        <View style={{flexDirection: 'row',}}>
+        style={{flexDirection: 'row', justifyContent: 'space-between',marginTop : 10}}>
+        <Button
+          icon="delete"
+          mode="contained"
+          onPress={() => deleteCartItem(item.product._id)}
+          style={{ width: 120, borderRadius: 8}}
+          uppercase={false}
+          color="red">
+          Delete
+        </Button>
+        <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() => decrement()}
             style={{
@@ -102,17 +114,6 @@ const ShowCard = ({item, updateCartQuantity, deleteCartItem, toggleSelect}) => {
           </TouchableOpacity>
         </View>
       </Card.Content>
-      <Card.Content>
-        <Button
-          icon="delete"
-          mode="contained"
-          onPress={() => deleteCartItem(item.product._id)}
-          style={{marginTop: 10, width: 120,borderRadius : 8}}
-          uppercase={false}
-          color="red">
-          Delete
-        </Button>
-      </Card.Content>
     </Card>
   );
 };
@@ -143,7 +144,7 @@ const Styles = StyleSheet.create({
   card: {
     marginBottom: 20,
     marginHorizontal: 20,
-    elevation : 12,
+    elevation: 12,
   },
 });
 

@@ -34,14 +34,14 @@ const HomeStack = () => {
         name="SelectProvider"
         component={SelectProviderScreen}
         options={{
-          headerLeft: null,
+          headerShown: false,
         }}
       />
       <Stack.Screen
         name="RequestConfirmMsg"
         component={RequestConfirmMsgScreen}
         options={{
-          headerLeft: null,
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
