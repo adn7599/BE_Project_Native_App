@@ -1,8 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {
   Container,
-  // Card,
-  // CardItem,
   Left,
   Right,
   Thumbnail,
@@ -11,7 +9,6 @@ import {
   Header,
   Item,
   Input,
-  Icon,
   Text,
 } from 'native-base';
 
@@ -25,6 +22,8 @@ import {
   Card,
   Provider as PaperProvider,
   useTheme,
+  Surface,
+  Divider,
 } from 'react-native-paper';
 
 import {
@@ -36,7 +35,11 @@ import {
   BackHandler,
   ToastAndroid,
   ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
 } from 'react-native';
+
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import useUserCred from '../../UserCredentials';
 import {custReqQueries, suppReqQueries} from '../../serverQueries/Requester';
@@ -126,10 +129,11 @@ const CustomerDashboardScreen = ({navigation}) => {
   };
 
   return (
-    <Container style={Sytles.container}>
+    <Container>
       <Appbar.Header>
         <Appbar.Action
           size={33}
+          style={{width: 20}}
           icon="menu"
           onPress={() => navigation.openDrawer()}
         />
@@ -182,6 +186,7 @@ const CustomerDashboardScreen = ({navigation}) => {
               </Body>
             </Header>
           }
+          ListHeaderComponentStyle = {{paddingBottom : 20}}
         />
       ) : (
         <Loading />
@@ -192,56 +197,29 @@ const CustomerDashboardScreen = ({navigation}) => {
 
 const ListItem = ({item, toggleAddToCart, userCred}) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   return (
-    <>
-      <Card elevation={5} style={Sytles.card}>
-        <Card.Content>
-          <MyFastImage
-            imageId={item.product._id}
-            imageLoaded={imageLoaded}
-            setImageLoaded={setImageLoaded}
-          />
+    <Card elevation={12} style={Sytles.card}>
+      <Card.Content>
+        <MyFastImage
+          imageId={item.product._id}
+          imageLoaded={imageLoaded}
+          setImageLoaded={setImageLoaded}
+        />
+      </Card.Content>
+      <Card.Content
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingTop: 10,
+        }}>
+        <View style={{}}>
           <Title>{item.product.name}</Title>
           <Paragraph>
             {item.product.price} Rs/{item.product.unit}
           </Paragraph>
-        </Card.Content>
-        <Card.Content>
-          <List.Accordion
-            title="Product Info"
-            style={{
-              width: Dimensions.get('screen').width - 80,
-            }}>
-            <Text style={{paddingTop: 10, paddingLeft: 15}}>
-              {item.product.description}
-            </Text>
-            {userCred.role === 'customer' ? (
-              <View>
-                <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                  Alloted Quantity : {item.allotedQuantity}
-                </Text>
-                <Text
-                  style={{paddingTop: 10, paddingLeft: 15, marginBottom: 25}}>
-                  Available Quantity : {item.availableQuantity}
-                </Text>
-              </View>
-            ) : (
-              <View>
-                <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                  Max Quantity : {item.maxQuantity}
-                </Text>
-                <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                  Available Quantity : {item.availableQuantity}
-                </Text>
-                <Text
-                  style={{paddingTop: 10, paddingLeft: 15, marginBottom: 25}}>
-                  Ordered Quantity : {item.orderedQuantity}
-                </Text>
-              </View>
-            )}
-          </List.Accordion>
-        </Card.Content>
-        <Card.Content>
+        </View>
+        <View style={{paddingTop: 5}}>
           <Button
             style={[
               Sytles.cartButton,
@@ -252,16 +230,74 @@ const ListItem = ({item, toggleAddToCart, userCred}) => {
             onPress={() => toggleAddToCart(item.product._id)}>
             {item.addedToCart ? 'REMOVE' : 'ADD'}
           </Button>
-        </Card.Content>
-      </Card>
-    </>
+        </View>
+      </Card.Content>
+
+      <Card.Content>
+        <Divider style={{borderBottomWidth: 0.5, marginVertical: 5}} />
+        <TouchableOpacity
+          style={{alignSelf: 'flex-end', flexDirection: 'row'}}
+          onPress={() => setIsExpanded(!isExpanded)}>
+          <Text note style={{fontWeight: '900', fontSize: 12}}>
+            MORE INFO
+          </Text>
+          <Icon
+            name={isExpanded ? 'chevron-up' : 'chevron-down'}
+            size={15}
+            color="lightgrey"
+            style={{paddingLeft: 10}}
+          />
+        </TouchableOpacity>
+        {isExpanded ? (
+          <>
+            <Text style={{paddingVertical: 10}}>
+              {item.product.description}
+            </Text>
+            {userCred.role === 'customer' ? (
+              <View>
+                <Text style={{paddingTop: 10, fontStyle: 'italic'}}>
+                  Alloted Quantity : {item.allotedQuantity}
+                </Text>
+                <Text
+                  style={{
+                    paddingTop: 3,
+                    fontStyle: 'italic',
+                    marginBottom: 10,
+                  }}>
+                  Available Quantity : {item.availableQuantity}
+                </Text>
+              </View>
+            ) : (
+              <View>
+                <Text style={{paddingTop: 10, fontStyle: 'italic'}}>
+                  Max Quantity : {item.maxQuantity}
+                </Text>
+                <Text style={{paddingTop: 3, fontStyle: 'italic'}}>
+                  Available Quantity : {item.availableQuantity}
+                </Text>
+                <Text
+                  style={{
+                    paddingTop: 3,
+                    fontStyle: 'italic',
+                    marginBottom: 10,
+                  }}>
+                  Ordered Quantity : {item.orderedQuantity}
+                </Text>
+              </View>
+            )}
+          </>
+        ) : (
+          <View></View>
+        )}
+      </Card.Content>
+    </Card>
   );
 };
 
 const Sytles = StyleSheet.create({
   container: {
-    backgroundColor: '#F9D1A3',
-    // backgroundColor: '#fff',
+    //backgroundColor: '#F9D1A3',
+    elevation: 4,
   },
   welcomeHeader: {
     backgroundColor: '#E4E',
@@ -279,11 +315,13 @@ const Sytles = StyleSheet.create({
   card: {
     flex: 0,
     marginHorizontal: 20,
-    marginVertical: 10,
+    marginBottom: 20,
+    borderRadius: 15,
   },
   cartButton: {
     width: 120,
     alignSelf: 'flex-end',
+    borderRadius: 5,
   },
 });
 

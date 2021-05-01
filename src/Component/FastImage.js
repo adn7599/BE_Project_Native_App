@@ -12,15 +12,16 @@ export default function MyFastImage({imageId, imageLoaded, setImageLoaded}) {
     <>
       <View
         style={{
-          width: imageLoaded ? dimension.width - 80 : 0,
+          width: imageLoaded ? dimension.width - 75 : 0,
           height: imageLoaded ? 200 : 0,
         }}>
         <FastImage
           style={{
-            width: dimension.width - 80,
+            width: dimension.width - 75,
             height: 200,
             alignContent: 'stretch',
             backgroundColor: '#c0c0c0',
+            borderRadius : 10
           }}
           source={{
             uri: `${IMAGE_URL}/${imageId}`,
