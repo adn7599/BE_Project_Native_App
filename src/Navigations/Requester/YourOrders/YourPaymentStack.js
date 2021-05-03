@@ -9,7 +9,7 @@ const Stack = createStackNavigator();
 
 const YourPaymentStack = () => {
     return (
-      <Stack.Navigator initialRouteName="PaymentOrder">
+      <Stack.Navigator initialRouteName='PaymentOrder'>
         <Stack.Screen
           name="PaymentOrder"
           component={PaymentOrderScreen}

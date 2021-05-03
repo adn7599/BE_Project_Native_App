@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ToastAndroid,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {Card, Checkbox, Text, Button, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -42,12 +43,12 @@ const ShowCard = ({item, updateCartQuantity, deleteCartItem, toggleSelect}) => {
         <View style ={{flex : 3}}>
         <MyFastImage 
         imageId = {item.product._id}
-        width = {120}
+        width = {(Dimensions.get('screen').width/100)*30}
         height = {100}
         borderRadius = {5}
         />
         </View>
-        <View style ={{flexDirection : 'row',flex : 4,justifyContent : 'space-between'}}>
+        <View style ={{flexDirection : 'row',flex : 4,justifyContent : 'space-between',marginLeft : 3}}>
         <View >
           <Text style={common.text}>{item.product.name}</Text>
           <Text note style={{fontSize: 16,marginTop : 10}}>
@@ -145,6 +146,7 @@ const Styles = StyleSheet.create({
     marginBottom: 20,
     marginHorizontal: 20,
     elevation: 12,
+    borderRadius : 15
   },
 });
 

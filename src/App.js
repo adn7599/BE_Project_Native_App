@@ -21,7 +21,6 @@ import ProviderCancelledOrderHistoryStack from './Navigations/Provider/OrderHist
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
-//const Tab = createMaterialBottomTabNavigator();
 
 const theme = {
   ...DefaultTheme,
@@ -37,14 +36,14 @@ const DrawerNavigation = () => {
   const {userCred} = useUserCred();
 
   const initialRoute =
-    userCred.role === 'customer' ? 'RequesterDashboard' : 'ProviderDashboard';
+    userCred.role === 'customer' ? 'RequesterDashboard1' : 'ProviderDashboard';
   return (
     <Drawer.Navigator
       initialRouteName={initialRoute}
       drawerContent={(props) => <SideDrawerContent {...props} />}>
       <Drawer.Screen name="MyProfile" component={MyProfileStack} />
       <Drawer.Screen
-        name="RequesterDashboard"
+        name="RequesterDashboard1"
         component={RequesterDashboardStack}
       />
       <Drawer.Screen

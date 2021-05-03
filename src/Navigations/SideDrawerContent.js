@@ -27,7 +27,7 @@ const SideDrawerContent = (props) => {
         <List.AccordionGroup>
           <List.Item
             title="Home"
-            onPress={() => props.navigation.navigate('RequesterDashboard')}
+            onPress={() => props.navigation.navigate('RequesterDashboard1')}
           />
           <List.Accordion title="Your Order" id="YOurOrder">
             <List.Item

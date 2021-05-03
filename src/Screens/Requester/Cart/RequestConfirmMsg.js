@@ -1,8 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {View, BackHandler, StyleSheet, ToastAndroid} from 'react-native';
-import {Button, Text} from 'native-base';
+import {
+  View,
+  BackHandler,
+  StyleSheet,
+  ToastAndroid,
+  SafeAreaView,
+} from 'react-native';
+import {Button, Text} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-import common from '../../../Global/stylesheet';
 import Loading from '../../../Component/Loading';
 import {custReqQueries, suppReqQueries} from '../../../serverQueries/Requester';
 import useUserCred from '../../../UserCredentials';
@@ -14,6 +20,8 @@ const RequestConfirmMsgScreen = ({route, navigation}) => {
   const [reqResp, setReqResp] = useState(null);
   const selectedQueries =
     userCred.role === 'customer' ? custReqQueries : suppReqQueries;
+
+  let [status,setStatus] = useState(null);
 
   const makeRequest = async () => {
     const [respErr, resp] = await selectedQueries.request(
@@ -28,16 +36,19 @@ const RequestConfirmMsgScreen = ({route, navigation}) => {
     if (respErr === null) {
       if (resp.status == 200) {
         setReqResp(
-          `Your request is sent to provider, you can go and purchase your commodities.\n Transaction ID: ${resp.data._id}`,
+          `Your request has been sent to the provider.\n\nYou can make payment in Your Orders section\n\n Transaction ID: ${resp.data._id}`,
         );
+        setStatus('success');
       } else if (resp.status == 403) {
         ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
         await deleteUserCred();
       } else {
         setReqResp(resp.data.error);
+        setStatus('unsuccess');
       }
     } else {
       setReqResp(respErr.message);
+      setStatus('unsuccess');
     }
   };
 
@@ -55,36 +66,41 @@ const RequestConfirmMsgScreen = ({route, navigation}) => {
   }, []);
 
   return (
-    <View style={[common.container, common.flexOne]}>
-      <View style={Styles.textView}>
+    <SafeAreaView
+      style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <View>
         {reqResp !== null ? (
           <>
+            <Icon
+              name={status === 'success' ? 'check-circle' : 'times-circle'}
+              size={120}
+              color={status === 'success' ? 'green' : 'red'}
+              style = {{alignSelf : 'center'}}
+            />
             <Text style={Styles.text}>{reqResp}</Text>
           </>
         ) : (
           <Loading />
         )}
-        <Text style={common.topBottomSep}>Goto home screen</Text>
-        <View style={common.topBottomSep}>
-          <Button onPress={() => navigation.navigate('RequesterDashboard')}>
-            <Text>Home</Text>
+        <Text style={Styles.text}>Go to home screen</Text>
+        <View style={{paddingTop: 20, alignSelf: 'center'}}>
+          <Button
+            mode="contained"
+            onPress={() => navigation.navigate('RequesterDashboard')}
+            style={{width: 100, borderRadius: 5}}>
+            Home
           </Button>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const Styles = StyleSheet.create({
-  textView: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   text: {
-    paddingHorizontal: 10,
+    padding: 10,
     textAlign: 'center',
-    fontSize: 20,
+    fontSize: 17,
   },
 });
 

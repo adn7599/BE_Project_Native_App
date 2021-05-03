@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import {View,} from 'react-native';
+import {ActivityIndicator} from 'react-native-paper';
 
 export default function Loading() {
   return (
     <View>
-      <ActivityIndicator size={'large'} color={'#2F070D'} />
+      <ActivityIndicator size={'large'} animating = {true}/>
     </View>
   );
 }

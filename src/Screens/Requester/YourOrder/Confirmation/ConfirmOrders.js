@@ -10,10 +10,6 @@ import {
   Content,
   Header,
   Icon,
-  Button,
-  Text,
-  Tabs,
-  Tab,
 } from 'native-base';
 import {
   FlatList,
@@ -22,6 +18,7 @@ import {
   StyleSheet,
   ToastAndroid,
 } from 'react-native';
+import {Appbar,Button,Text,} from 'react-native-paper';
 
 import common from '../../../../Global/stylesheet';
 import Loading from '../../../../Component/Loading';
@@ -78,55 +75,43 @@ const ConfirmOrderScreen = ({navigation}) => {
         onPress={() =>
           navigation.navigate('ConfirmOrderDetails', {item: item})
         }>
-        <Content style={common.cardContainer}>
-          <Card style={common.card}>
-            <CardItem>
-              <Body>
-                <Text>Transaction ID : {item._id}</Text>
-                <Text>
-                  {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} :
-                  {item.request.provider_id.name}
-                </Text>
-                <Text>Items: {ordersList.join(', ')}</Text>
-                <Text>Amount paid : {item.payment.amount}</Text>
-                <Text>Payment Mode : {item.payment.mode}</Text>
-                <Text>
-                  Status : Payment completed {'\n'}Confirm action needed
-                </Text>
-              </Body>
-            </CardItem>
-          </Card>
-        </Content>
+        <Card
+          style={{
+            marginHorizontal: 20,
+            marginBottom: 20,
+            elevation: 12,
+            borderRadius: 15,
+            
+          }}>
+          <Card.Content style={{flexDirection: 'row',justifyContent : 'space-between'}}>
+            <View>
+              <Text style ={{fontSize : 17,fontWeight : 'bold',paddingBottom : 10}}>{ordersList.join(', ')}</Text>
+              <Text style ={{fontSize : 17}}>
+                {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} :{' '}
+                {item.request.provider_id.name}
+              </Text>
+            </View>
+            <Text style = {{fontWeight : 'bold',fontSize : 20}}>{'₹ '} {item.request.payment_amount}</Text>
+          </Card.Content>
+          <Card.Content style={{paddingTop:5}}>
+            <Text style ={{fontSize : 17}}>Request Time : {new Date(item.request.time).toLocaleDateString()}
+            </Text>
+          </Card.Content>
+        </Card>
       </TouchableOpacity>
     );
   };
 
   return (
     <Container style={common.container}>
-      <Header style={common.headerColor}>
-        <Left>
-          <Icon
-            onPress={() => navigation.openDrawer()}
-            name="md-menu"
-            style={common.headerMenuBtn}
-          />
-        </Left>
-        <Body>
-          <Title style={common.headerText}>Your Order</Title>
-        </Body>
-      </Header>
-      <Header style={common.welcomeHeader}>
-        <Body>
-          <Text style={common.welcomeHeaderText}>
-            Welcome{' '}
-            {userCred.role === 'customer'
-              ? userDetails.fName + ' ' + userDetails.lName
-              : userDetails.name}
-          </Text>
-        </Body>
-        <Right />
-      </Header>
-      <View style={common.topBottomSep}></View>
+      <Appbar.Header>
+        <Appbar.Action
+          size={33}
+          icon="menu"
+          onPress={() => navigation.openDrawer()}
+        />
+        <Appbar.Content title="Your Order" />
+      </Appbar.Header>
       {payResp !== null ? (
         <>
           <FlatList
@@ -134,6 +119,14 @@ const ConfirmOrderScreen = ({navigation}) => {
             initialNumToRender={7}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
+            ListHeaderComponent={
+              <View style={{padding: 20}}>
+                <Text style={{fontWeight: 'bold', fontSize: 20}}>
+                  Pending payment
+                </Text>
+              </View>
+            }
+            ListHeaderComponentStyle={{paddingBottom: 20}}
           />
         </>
       ) : (

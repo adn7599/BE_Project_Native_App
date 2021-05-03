@@ -1,18 +1,11 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Modal, ScrollView} from 'react-native';
-import {
-  Container,
-  Title,
-  Left,
-  Right,
-  Body,
-  Header,
-  Icon,
-  Button,
-  Text,
-} from 'native-base';
+import {Container} from 'native-base';
+import {Appbar, Button, Text, DataTable} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import uuid from 'react-native-uuid';
+import moment from 'moment';
+import {Table, Col, Cols, TableWrapper} from 'react-native-table-component';
 
 import common from '../../../../Global/stylesheet';
 import useUserCred from '../../../../UserCredentials';
@@ -21,8 +14,9 @@ import {
   suppReqQueries,
 } from '../../../../serverQueries/Requester';
 import Loading from '../../../../Component/Loading';
+import colours from '../../../../colours';
 
-const OrderDetailScreen = ({route, navigation}) => {
+const PaymentOrderDetailScreen = ({route, navigation}) => {
   const {item} = route.params;
   const {userDetails, userCred, deleteUserCred} = useUserCred();
   const [PaymentMode, setPaymentMode] = useState(null);
@@ -100,16 +94,18 @@ const OrderDetailScreen = ({route, navigation}) => {
               )}
               <View style={Styles.btnView}>
                 <Button
-                  style={[Styles.button, Styles.buttonClose]}
-                  onPress={() => navigation.goBack()}>
-                  <Text style={Styles.textStyle}>Ok</Text>
+                  style={{borderRadius: 5}}
+                  onPress={() => navigation.goBack()}
+                  mode="contained">
+                  Ok
                 </Button>
               </View>
             </View>
           </View>
         </Modal>
         <Button
-          style={[Styles.button, Styles.buttonOpen]}
+          style={{borderRadius: 5, height: 45, justifyContent: 'center'}}
+          mode="contained"
           disabled={PaymentMode === null}
           onPress={() =>
             PaymentMode === 'cash'
@@ -120,7 +116,7 @@ const OrderDetailScreen = ({route, navigation}) => {
                   payment_amount: item.request.payment_amount,
                 })
           }>
-          <Text style={Styles.textStyle}>Proceed To Pay</Text>
+          Proceed To Pay
         </Button>
       </View>
     );
@@ -128,85 +124,119 @@ const OrderDetailScreen = ({route, navigation}) => {
 
   const listOrder = item.request.orders.map((ord) => {
     return (
-      <Text style={common.text} key={ord.product._id.toString()}>
-        {ord.product.name} {ord.quantity} {ord.totalCost}
-      </Text>
+      <DataTable.Row
+        key={ord.product._id.toString()}
+        style={{borderBottomWidth: 1}}>
+        <DataTable.Cell key={ord.product.name}>
+          {ord.product.name}
+        </DataTable.Cell>
+        <DataTable.Cell numeric key={ord.quantity.toString()}>
+          {ord.quantity}
+        </DataTable.Cell>
+        <DataTable.Cell numeric key={ord.totalCost.toString()}>
+          {ord.totalCost}
+        </DataTable.Cell>
+      </DataTable.Row>
     );
   });
 
   console.log(listOrder);
+  const requestTime = new Date(new Date(item.request.time).toLocaleString())
+  console.log('date ',requestTime.getHours());
 
   return (
-    <Container style={common.container}>
-      <Header style={common.headerColor}>
-        <Left>
-          <Icon
-            onPress={() => navigation.openDrawer()}
-            name="md-menu"
-            style={common.headerMenuBtn}
-          />
-        </Left>
-        <Body>
-          <Title style={common.headerText}>Your Order</Title>
-        </Body>
-      </Header>
-      <Header style={common.welcomeHeader}>
-        <Body>
-          {userCred.role === 'customer' ? (
-            <Text style={common.welcomeHeaderText}>
-              Welcome {userDetails.fName} {userDetails.lName}
-            </Text>
-          ) : (
-            <Text style={common.welcomeHeaderText}>
-              Welcome {userDetails.name}
-            </Text>
-          )}
-        </Body>
-        <Right />
-      </Header>
-      <ScrollView>
-        <View style={common.leftTopIndent}>
-          <Text style={common.text}>Transaction ID : {item._id}</Text>
+    <Container>
+      <Appbar.Header>
+        <Appbar.Action
+          size={33}
+          icon="menu"
+          onPress={() => navigation.openDrawer()}
+        />
+        <Appbar.Content title="Your Order" />
+      </Appbar.Header>
+      <ScrollView style={{marginHorizontal: 20}}>
+        <View style={{marginTop: 20}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>Transaction ID</Text>
+          <Text style={{fontSize: 18}}>{item._id}</Text>
         </View>
-        <View style={common.leftTopIndent}>
-          <Text style={[common.text, {paddingBottom: 10}]}>
+        <View style={{marginTop: 20}}>
+          <Text style={{paddingBottom: 10, fontSize: 20, fontWeight: 'bold'}}>
             {userCred.role === 'customer'
               ? 'Supplier Details'
               : 'Distributor Details'}
           </Text>
-          <Text style={common.text}>ID : {item.request.provider_id._id}</Text>
-          <Text style={common.text}>
-            Name : {item.request.provider_id.name}
+          <DataTable>
+            <DataTable.Row>
+              <DataTable.Cell style={{flex: 1}}>Id</DataTable.Cell>
+              <DataTable.Cell style={{flex: 3}}>
+                {item.request.provider_id._id}
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={{flex: 1}}>Name</DataTable.Cell>
+              <DataTable.Cell style={{flex: 3}}>
+                {item.request.provider_id.name}
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={{flex: 1}}>Address</DataTable.Cell>
+              <DataTable.Cell style={{flex: 3}}>
+                {item.request.provider_id.address}
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={{flex: 1}}>Mobile</DataTable.Cell>
+              <DataTable.Cell style={{flex: 3}}>
+                {item.request.provider_id.mobNo}
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={{flex: 1}}>E-mail</DataTable.Cell>
+              <DataTable.Cell style={{flex: 3}}>
+                {item.request.provider_id.email}
+              </DataTable.Cell>
+            </DataTable.Row>
+          </DataTable>
+        </View>
+        <View style={{marginTop: 20}}>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+            Items Requested{' '}
           </Text>
+          <DataTable style={{}}>
+            <DataTable.Header style={{borderBottomWidth: 1}}>
+              <DataTable.Title>
+                <Text style={{fontSize: 16, fontWeight: 'bold'}}>Items</Text>
+              </DataTable.Title>
+
+              <DataTable.Title numeric>
+                <Text style={{fontSize: 16, fontWeight: 'bold'}}>Quantity</Text>
+              </DataTable.Title>
+              <DataTable.Title numeric>
+                <Text style={{fontSize: 16, fontWeight: 'bold'}}>Amount</Text>
+              </DataTable.Title>
+            </DataTable.Header>
+            {listOrder}
+          </DataTable>
+        </View>
+        <View style={{marginTop: 20}}>
           <Text style={common.text}>
-            Address : {item.request.provider_id.address}
+            Request Time : {moment(new Date(item.request.time).toLocaleString()).format('lll')}
           </Text>
-          <Text style={common.text}>
-            MobNo : {item.request.provider_id.mobNo}
-          </Text>
-          <Text style={common.text}>
-            email : {item.request.provider_id.email}
+          <Text></Text>
+        </View>
+        <View style={{marginTop: 20}}>
+          <Text style={{fontWeight: 'bold', fontSize: 20}}>
+            Amount to be paid : {'₹ '}
+            {item.request.payment_amount}
           </Text>
         </View>
-        <View style={common.leftTopIndent}>
-          <Text style={common.text}>Items Requested: </Text>
-          {listOrder}
-        </View>
-        <View style={common.leftTopIndent}>
-          <Text style={common.text}>
-            request date : {new Date(item.request.time).toLocaleDateString()}
-          </Text>
-          <Text style={common.text}>
-            request time : {new Date(item.request.time).toLocaleTimeString()}
-          </Text>
-        </View>
-        <View style={common.leftTopIndent}>
-          <Text style={common.text}>
-            Ammount to be paid : {item.request.payment_amount}
-          </Text>
-        </View>
-        <View style={Styles.rowView}>
-          <View style={Styles.dropdownView}>
+        <View
+          style={{
+            marginTop: 20,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <View style ={{}}>
             <DropDownPicker
               items={[
                 {label: 'Cash', value: 'cash'},
@@ -214,15 +244,16 @@ const OrderDetailScreen = ({route, navigation}) => {
               ]}
               defaultValue={PaymentMode}
               placeholder="Payment Mode"
-              containerStyle={{height: 45, width: 180}}
+              containerStyle={{height: 45, width: 170}}
               itemStyle={{
                 justifyContent: 'flex-start',
+                
               }}
               dropDownStyle={{backgroundColor: '#fafafa'}}
               onChangeItem={(item) => setPaymentMode(item.value)}
             />
           </View>
-          <View style={Styles.paymentBtnView}>
+          <View>
             <PaymentBtn />
           </View>
         </View>
@@ -240,16 +271,16 @@ const OrderDetailScreen = ({route, navigation}) => {
                 <View style={{flexDirection: 'row'}}>
                   <View style={Styles.btnView}>
                     <Button
-                      style={[Styles.button, Styles.buttonClose]}
+                      style={{borderRadius: 5}}
                       onPress={() => cancelReq()}>
-                      <Text style={Styles.textStyle}>Yes</Text>
+                      Yes
                     </Button>
                   </View>
                   <View style={Styles.btnView}>
                     <Button
-                      style={[Styles.button, Styles.buttonClose]}
+                      style={{borderRadius: 5}}
                       onPress={() => setCancelModalVisible(false)}>
-                      <Text style={Styles.textStyle}>No</Text>
+                      No
                     </Button>
                   </View>
                 </View>
@@ -257,9 +288,12 @@ const OrderDetailScreen = ({route, navigation}) => {
             </View>
           </Modal>
         </View>
-        <View style={{alignSelf: 'center', padding: 20}}>
-          <Button onPress={() => setCancelModalVisible(true)}>
-            <Text>Cancel Request</Text>
+        <View style={{alignSelf: 'center', marginTop : 20,marginBottom : 30 , zIndex : 2}}>
+          <Button
+            onPress={() => setCancelModalVisible(true)}
+            mode="contained"
+            style={{borderRadius: 5, height: 45, justifyContent: 'center'}}>
+            Cancel Request
           </Button>
         </View>
       </ScrollView>
@@ -278,6 +312,8 @@ const Styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
+    borderColor: 'black',
+    borderWidth: 1,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -324,4 +360,4 @@ const Styles = StyleSheet.create({
   },
 });
 
-export default OrderDetailScreen;
+export default PaymentOrderDetailScreen;

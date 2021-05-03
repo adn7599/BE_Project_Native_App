@@ -249,7 +249,7 @@ const SelectProviderScreen = ({route, navigation}) => {
     }
 
     return (
-      <Card style={{marginHorizontal: 20, marginBottom: 20, elevation: 12}}>
+      <Card style={{marginHorizontal: 20, marginBottom: 20, elevation: 12,borderRadius : 15}}>
         <Card.Content
           style={{
             flexDirection: 'row',
