@@ -1,15 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
   Container,
-  Card,
-  Title,
-  CardItem,
-  Left,
-  Right,
-  Body,
-  Content,
-  Header,
-  Icon,
 } from 'native-base';
 import {
   FlatList,
@@ -18,7 +9,7 @@ import {
   StyleSheet,
   ToastAndroid,
 } from 'react-native';
-import {Appbar,Button,Text,} from 'react-native-paper';
+import {Appbar,Button,Text,Card} from 'react-native-paper';
 
 import common from '../../../../Global/stylesheet';
 import Loading from '../../../../Component/Loading';
@@ -94,7 +85,7 @@ const ConfirmOrderScreen = ({navigation}) => {
             <Text style = {{fontWeight : 'bold',fontSize : 20}}>{'₹ '} {item.request.payment_amount}</Text>
           </Card.Content>
           <Card.Content style={{paddingTop:5}}>
-            <Text style ={{fontSize : 17}}>Request Time : {new Date(item.request.time).toLocaleDateString()}
+            <Text style ={{fontSize : 17}}>Payment date : {new Date(item.payment.time).toLocaleDateString()}
             </Text>
           </Card.Content>
         </Card>
@@ -103,7 +94,7 @@ const ConfirmOrderScreen = ({navigation}) => {
   };
 
   return (
-    <Container style={common.container}>
+    <Container>
       <Appbar.Header>
         <Appbar.Action
           size={33}
@@ -122,7 +113,7 @@ const ConfirmOrderScreen = ({navigation}) => {
             ListHeaderComponent={
               <View style={{padding: 20}}>
                 <Text style={{fontWeight: 'bold', fontSize: 20}}>
-                  Pending payment
+                  Pending confirm
                 </Text>
               </View>
             }

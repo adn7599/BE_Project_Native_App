@@ -1,13 +1,10 @@
 import React, {useState} from 'react';
 import {
   View,
-  ActivityIndicator,
-  Modal,
   StyleSheet,
-  Alert,
-  Pressable,
+  SafeAreaView,
 } from 'react-native';
-import {Button, Container, Text, Title} from 'native-base';
+import {Text,} from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
 
 /**
@@ -28,22 +25,23 @@ const ConfirmationQRScreen = ({route, navigation}) => {
   const displayObj = route.params;
 
   return (
-    <Container style={Styles.container}>
-      <View style={Styles.qrcodeView}>
+    <SafeAreaView style={Styles.qrcodeView}>
+      <View>
         <QRCode
           value={JSON.stringify(displayObj)}
           size={250}
           logoBackgroundColor="transparent"
         />
       </View>
-    </Container>
+      <View style={{margin : 20}}>
+        <Text style ={{fontSize : 18,textAlign : 'center'}}>Show this QR code to the provider for confirmation</Text>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const Styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#DCDCDC',
-  },
+
   qrcodeView: {
     alignItems: 'center',
     justifyContent: 'center',

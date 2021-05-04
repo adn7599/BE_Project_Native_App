@@ -81,7 +81,7 @@ const PaymentOrderScreen = ({navigation}) => {
             <Text style = {{fontWeight : 'bold',fontSize : 20}}>{'₹ '} {item.request.payment_amount}</Text>
           </Card.Content>
           <Card.Content style={{paddingTop:5}}>
-            <Text style ={{fontSize : 17}}>Request Time : {new Date(item.request.time).toLocaleDateString()}
+            <Text style ={{fontSize : 17}}>Request date : {new Date(item.request.time).toLocaleDateString()}
             </Text>
           </Card.Content>
         </Card>

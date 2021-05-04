@@ -1,16 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {
   Container,
-  Card,
-  Title,
-  CardItem,
-  Left,
-  Right,
-  Body,
-  Content,
   Header,
-  Icon,
-  Text,
+  Body
 } from 'native-base';
 import {
   FlatList,
@@ -19,11 +11,18 @@ import {
   StyleSheet,
   ToastAndroid,
 } from 'react-native';
+import {
+  Appbar,
+  Card,
+  Text,
+} from 'react-native-paper';
 
-import common from '../../../Global/stylesheet';
 import Loading from '../../../Component/Loading';
 import useUserCred from '../../../UserCredentials';
-import {suppProvQueries, distProvQueries} from '../../../serverQueries/Provider';
+import {
+  suppProvQueries,
+  distProvQueries,
+} from '../../../serverQueries/Provider';
 
 const ProviderDashboardScreen = ({navigation}) => {
   const [provResp, setProvResp] = useState(null);
@@ -90,63 +89,65 @@ const ProviderDashboardScreen = ({navigation}) => {
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('RequestDetail', {item: item})}>
-        <Content style={common.cardContainer}>
-          <Card style={common.card}>
-            <CardItem>
-              <Body>
-                <Text>Transaction ID: {item._id}</Text>
-                <Text>
-                  {userCred.role === 'SP' ? 'Customer' : 'Supplier'} :{' '}
-                  {userCred.role === 'SP'
-                    ? item.request.requester_id.fName +
-                      ' ' +
-                      item.request.requester_id.lName
-                    : item.request.requester_id.name}
-                </Text>
-                <Text>Items: {ordersList.join(', ')}</Text>
-                <Text>
-                  {item.stageCompleted === 'request'
-                    ? 'Payable Amount'
-                    : 'Paid Amount'}{' '}
-                  : {item.request.payment_amount}
-                </Text>
-                <Text>
-                  Status :{' '}
-                  {item.stageCompleted === 'request'
-                    ? 'Payment Not done'
-                    : 'Confirm Action needed'}
-                </Text>
-              </Body>
-            </CardItem>
-          </Card>
-        </Content>
+        <Card
+          style={{
+            marginHorizontal: 20,
+            marginBottom: 20,
+            elevation: 12,
+            borderRadius: 15,
+          }}>
+          <Card.Content
+            style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View>
+              <Text
+                style={{fontSize: 17, fontWeight: 'bold', paddingBottom: 10}}>
+                {ordersList.join(', ')}
+              </Text>
+              <Text style={{fontSize: 17}}>
+                {userCred.role === 'SP' ? 'Customer' : 'Supplier'} :{' '}
+                {userCred.role === 'SP'
+                  ? item.request.requester_id.fName +
+                    ' ' +
+                    item.request.requester_id.lName
+                  : item.request.requester_id.name}
+              </Text>
+            </View>
+            <Text style={{fontWeight: 'bold', fontSize: 20}}>
+              {'₹ '} {item.request.payment_amount}
+            </Text>
+          </Card.Content>
+          <Card.Content>
+            <Text style={{fontSize: 17}}>
+              {item.stageCompleted === 'request'
+                ? `Request date : ${new Date(
+                    item.request.time,
+                  ).toLocaleDateString()}`
+                : `Payment date : ${new Date(
+                    item.payment.time,
+                  ).toLocaleDateString()}`}
+            </Text>
+            <Text style={{fontSize: 17}}>
+              Status :{' '}
+              {item.stageCompleted === 'request'
+                ? 'Payment Not done'
+                : 'Confirm Action needed'}
+            </Text>
+          </Card.Content>
+        </Card>
       </TouchableOpacity>
     );
   };
 
   return (
-    <Container style={common.container}>
-      <Header style={common.headerColor}>
-        <Left>
-          <Icon
-            onPress={() => navigation.openDrawer()}
-            name="md-menu"
-            style={common.headerMenuBtn}
-          />
-        </Left>
-        <Body>
-          <Title style={common.headerText}>Your Order</Title>
-        </Body>
-      </Header>
-      <Header style={common.welcomeHeader}>
-        <Body>
-          <Text style={common.welcomeHeaderText}>
-            Welcome {userDetails.name}
-          </Text>
-        </Body>
-        <Right />
-      </Header>
-      <View style={common.topBottomSep}></View>
+    <Container>
+      <Appbar.Header>
+        <Appbar.Action
+          size={33}
+          icon="menu"
+          onPress={() => navigation.openDrawer()}
+        />
+        <Appbar.Content title="Home" />
+      </Appbar.Header>
       {provResp !== null ? (
         <>
           <FlatList
@@ -154,6 +155,32 @@ const ProviderDashboardScreen = ({navigation}) => {
             initialNumToRender={7}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
+            ListHeaderComponent={
+              <>
+                <Header
+                  style={{
+                    backgroundColor: '#E4E',
+                    height: 40,
+                  }}>
+                  <Body>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        paddingLeft: 20,
+                        color: '#fff',
+                      }}>
+                      Welcome, {userDetails.name}!
+                    </Text>
+                  </Body>
+                </Header>
+                <View style={{padding: 20}}>
+                  <Text style={{fontWeight: 'bold', fontSize: 20}}>
+                    Orders for you
+                  </Text>
+                </View>
+              </>
+            }
+            ListHeaderComponentStyle={{paddingBottom: 10}}
           />
         </>
       ) : (

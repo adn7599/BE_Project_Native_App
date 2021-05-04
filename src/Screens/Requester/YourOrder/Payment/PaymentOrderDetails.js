@@ -1,13 +1,19 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Modal, ScrollView} from 'react-native';
 import {Container} from 'native-base';
-import {Appbar, Button, Text, DataTable} from 'react-native-paper';
+import {
+  Appbar,
+  Button,
+  Text,
+  DataTable,
+  Dialog,
+  Portal,
+  Paragraph,
+} from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import uuid from 'react-native-uuid';
 import moment from 'moment';
-import {Table, Col, Cols, TableWrapper} from 'react-native-table-component';
 
-import common from '../../../../Global/stylesheet';
 import useUserCred from '../../../../UserCredentials';
 import {
   custReqQueries,
@@ -80,29 +86,39 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
   const PaymentBtn = () => {
     return (
       <View style={Styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={cashModalVisible}
-          onRequestClose={() => navigation.goBack()}>
-          <View style={Styles.centeredView}>
-            <View style={Styles.modalView}>
-              {cashModalMsg !== null ? (
-                <Text style={Styles.modalText}>{cashModalMsg}</Text>
-              ) : (
+        <Portal>
+          <Dialog visible={cashModalVisible} dismissable={false}>
+            <Dialog.Title>
+              {PaymentMode === 'cash'
+                ? 'Payment Status'
+                : 'Cancellation Status'}
+            </Dialog.Title>
+            {cashModalMsg !== null ? (
+              <>
+                <Dialog.Content>
+                  <Paragraph>{cashModalMsg}</Paragraph>
+                </Dialog.Content>
+                <Dialog.Actions>
+                  <Button onPress={() => navigation.popToTop()}>Okay</Button>
+                </Dialog.Actions>
+              </>
+            ) : (
+              <Dialog.Content
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  padding: 10,
+                }}>
                 <Loading />
-              )}
-              <View style={Styles.btnView}>
-                <Button
-                  style={{borderRadius: 5}}
-                  onPress={() => navigation.goBack()}
-                  mode="contained">
-                  Ok
-                </Button>
-              </View>
-            </View>
-          </View>
-        </Modal>
+                <Text style={{marginLeft: 30, fontSize: 15}}>
+                  {PaymentMode === 'cash'
+                    ? 'Processing transaction...'
+                    : 'Cancelling transaction...'}
+                </Text>
+              </Dialog.Content>
+            )}
+          </Dialog>
+        </Portal>
         <Button
           style={{borderRadius: 5, height: 45, justifyContent: 'center'}}
           mode="contained"
@@ -141,8 +157,6 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
   });
 
   console.log(listOrder);
-  const requestTime = new Date(new Date(item.request.time).toLocaleString())
-  console.log('date ',requestTime.getHours());
 
   return (
     <Container>
@@ -154,7 +168,7 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
         />
         <Appbar.Content title="Your Order" />
       </Appbar.Header>
-      <ScrollView style={{marginHorizontal: 20}}>
+      <ScrollView style={{paddingHorizontal: 20}}>
         <View style={{marginTop: 20}}>
           <Text style={{fontSize: 18, fontWeight: 'bold'}}>Transaction ID</Text>
           <Text style={{fontSize: 18}}>{item._id}</Text>
@@ -200,7 +214,7 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
         </View>
         <View style={{marginTop: 20}}>
           <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-            Items Requested{' '}
+            Items Requested
           </Text>
           <DataTable style={{}}>
             <DataTable.Header style={{borderBottomWidth: 1}}>
@@ -218,11 +232,12 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
             {listOrder}
           </DataTable>
         </View>
-        <View style={{marginTop: 20}}>
-          <Text style={common.text}>
-            Request Time : {moment(new Date(item.request.time).toLocaleString()).format('lll')}
+        <View style={{marginTop: 20, flexDirection: 'row'}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>Request Time :</Text>
+          <Text style={{fontSize: 18}}>
+            {' '}
+            {moment(new Date(item.request.time)).format('lll')}
           </Text>
-          <Text></Text>
         </View>
         <View style={{marginTop: 20}}>
           <Text style={{fontWeight: 'bold', fontSize: 20}}>
@@ -236,7 +251,7 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <View style ={{}}>
+          <View style={{}}>
             <DropDownPicker
               items={[
                 {label: 'Cash', value: 'cash'},
@@ -247,7 +262,6 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
               containerStyle={{height: 45, width: 170}}
               itemStyle={{
                 justifyContent: 'flex-start',
-                
               }}
               dropDownStyle={{backgroundColor: '#fafafa'}}
               onChangeItem={(item) => setPaymentMode(item.value)}
@@ -258,37 +272,34 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
           </View>
         </View>
         <View style={Styles.centeredView}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={cancelModalVisible}
-            onRequestClose={() => setCancelModalVisible(false)}>
-            <View style={Styles.centeredView}>
-              <View style={Styles.modalView}>
-                <Text style={Styles.modalText}>
+          <Portal>
+            <Dialog visible={cancelModalVisible} dismissable={false}>
+              <Dialog.Title>Cancel</Dialog.Title>
+              <Dialog.Content>
+                <Paragraph>
                   Are you sure you want to cancel the request
-                </Text>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={Styles.btnView}>
-                    <Button
-                      style={{borderRadius: 5}}
-                      onPress={() => cancelReq()}>
-                      Yes
-                    </Button>
-                  </View>
-                  <View style={Styles.btnView}>
-                    <Button
-                      style={{borderRadius: 5}}
-                      onPress={() => setCancelModalVisible(false)}>
-                      No
-                    </Button>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </Modal>
+                </Paragraph>
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button
+                  style={{borderRadius: 5}}
+                  onPress={() => setCancelModalVisible(false)}>
+                  Disagree
+                </Button>
+                <Button style={{borderRadius: 5}} onPress={() => cancelReq()}>
+                  Agree
+                </Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
         </View>
-        <View style={{alignSelf: 'center', marginTop : 20,marginBottom : 30 , zIndex : 2}}>
+        <View
+          style={{
+            alignSelf: 'center',
+            marginTop: 20,
+            marginBottom: 30,
+            zIndex: 2,
+          }}>
           <Button
             onPress={() => setCancelModalVisible(true)}
             mode="contained"

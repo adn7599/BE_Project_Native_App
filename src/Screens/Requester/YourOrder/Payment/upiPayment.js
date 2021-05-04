@@ -1,9 +1,22 @@
 import React, {useState, useRef} from 'react';
-import {View, TextInput, StyleSheet, Modal, ToastAndroid} from 'react-native';
-import {Container, Text, Button} from 'native-base';
+import {
+  View,
+  StyleSheet,
+  Modal,
+  ToastAndroid,
+  SafeAreaView,
+} from 'react-native';
+import {
+  Text,
+  Button,
+  Appbar,
+  TextInput,
+  Portal,
+  Dialog,
+  Paragraph
+} from 'react-native-paper';
 import uuid from 'react-native-uuid';
 
-import common from '../../../../Global/stylesheet';
 import useUserCred from '../../../../UserCredentials';
 import {
   custReqQueries,
@@ -17,7 +30,8 @@ const UPIPaymentScreen = ({route, navigation}) => {
   const [UPI_ID, setUPI_ID] = useState('');
   const [mPin, setMPin] = useState('');
   const [upiModalMsg, setUPIModalMsg] = useState(null);
-  const [ModalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [togglePassVisible, setTogglePassvisible] = useState(true);
   const paymentId = useRef(uuid.v4());
 
   const selectedQueries =
@@ -52,86 +66,104 @@ const UPIPaymentScreen = ({route, navigation}) => {
   const providerType =
     userCred.role === 'customer' ? 'Supplier' : 'Distributor';
   return (
-    <Container style={[common.container, Styles.upiContainerView]}>
-      <View style={Styles.itemView}>
-        <View>
-          <Text>
-            {providerType} ID : {provider_info._id}
+    <SafeAreaView>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.pop()} />
+        <Appbar.Content title="UPI Payment" />
+      </Appbar.Header>
+      <View style={{margin: 20}}>
+        <View style={{marginTop: 20, flexDirection: 'row'}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            {providerType} Name :
+          </Text>
+          <Text style={{fontSize: 18}}> {provider_info.name}</Text>
+        </View>
+        <View style={{marginTop: 20, flexDirection: 'row'}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            {providerType} ID :
+          </Text>
+          <Text style={{fontSize: 18}}> {provider_info._id}</Text>
+        </View>
+        <View style={{marginTop: 20, flexDirection: 'row'}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>Order Total :</Text>
+          <Text style={{fontSize: 18}}>
+            {' '}
+            {'₹ '}
+            {payment_amount}
           </Text>
         </View>
-      </View>
-      <View style={Styles.itemView}>
-        <View>
-          <Text>
-            {providerType} Name : {provider_info.name}
-          </Text>
-        </View>
-      </View>
-      <View style={Styles.itemView}>
-        <View>
-          <Text>Amount to be Paid : {payment_amount}</Text>
-        </View>
-      </View>
-      <View style={Styles.upiRowView}>
-        <View>
-          <Text>UPI ID :</Text>
-        </View>
-        <View>
+        <View style={{marginTop: 40}}>
           <TextInput
             value={UPI_ID}
-            placeholder="Enter Your UPI ID"
             onChangeText={(Text) => setUPI_ID(Text)}
-            style={Styles.upiTextField}
+            mode="outlined"
+            label="UPI ID"
+            style={{height: 50}}
           />
         </View>
-      </View>
-      <View style={Styles.upiRowView}>
-        <View>
-          <Text>MPIN :</Text>
-        </View>
-        <View>
+        <View style={{marginTop: 20}}>
           <TextInput
             value={mPin}
-            placeholder="Enter Your UPI ID"
             keyboardType="numeric"
+            label="M-Pin"
+            mode="outlined"
+            maxLength={6}
+            secureTextEntry={togglePassVisible}
             onChangeText={(Text) => setMPin(Text)}
-            style={Styles.upiTextField}
-          />
+            right={
+              <TextInput.Icon
+                name={togglePassVisible ? 'eye-off-outline' : 'eye-outline'}
+                onPress={() => setTogglePassvisible(!togglePassVisible)}
+              />
+            }></TextInput>
         </View>
-      </View>
-      <View style={common.topBottomSep}>
-        <View style={Styles.centeredView}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={ModalVisible}
-            onRequestClose={() => navigation.popToTop()}>
-            <View style={Styles.centeredView}>
-              <View style={Styles.modalView}>
+        <View style={{marginTop: 20}}>
+          <View style={Styles.centeredView}>
+            <Portal>
+              <Dialog
+                visible={modalVisible}
+                dismissable = {false}
+                //onDismiss={() => {}}
+                >
+                <Dialog.Title>Payment Status</Dialog.Title>
                 {upiModalMsg !== null ? (
-                  <Text style={Styles.modalText}>{upiModalMsg}</Text>
+                  <>
+                    <Dialog.Content>
+                      <Paragraph >{upiModalMsg}</Paragraph>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                      <Button onPress={() => navigation.popToTop()}>
+                        Done
+                      </Button>
+                    </Dialog.Actions>
+                  </>
                 ) : (
-                  <Loading />
+                  <Dialog.Content
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      padding: 10,
+                    }}>
+                    <Loading />
+                    <Text style={{marginLeft: 30, fontSize: 15}}>
+                      Processing transaction...
+                    </Text>
+                  </Dialog.Content>
                 )}
-                <View style={Styles.btnView}>
-                  <Button
-                    style={[Styles.button, Styles.buttonClose]}
-                    onPress={() => navigation.popToTop()}>
-                    <Text style={Styles.textStyle}>Ok</Text>
-                  </Button>
-                </View>
-              </View>
-            </View>
-          </Modal>
-          <Button
-            style={[Styles.button, Styles.buttonOpen]}
-            disabled={UPI_ID.length < 4 && mPin.length < 4}
-            onPress={() => payByUPI()}>
-            <Text style={Styles.textStyle}>Make Payment</Text>
-          </Button>
+              </Dialog>
+            </Portal>
+            <Button
+              style={{borderRadius: 5, height: 40}}
+              disabled={UPI_ID.length < 4 || mPin.length < 4}
+              mode="contained"
+              uppercase={false}
+              onPress={() => payByUPI()}>
+              Make Payment
+            </Button>
+          </View>
         </View>
       </View>
-    </Container>
+    </SafeAreaView>
   );
 };
 
@@ -202,10 +234,9 @@ const Styles = StyleSheet.create({
     alignSelf: 'center',
   },
   upiContainerView: {
-    justifyContent: 'center',
+    margin: 40,
     alignItems: 'center',
     flex: 1,
-    padding: 40,
   },
 });
 

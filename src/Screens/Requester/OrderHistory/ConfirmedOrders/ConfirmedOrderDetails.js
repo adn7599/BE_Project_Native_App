@@ -1,16 +1,10 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Modal, ScrollView, ToastAndroid} from 'react-native';
+import { View,ScrollView,} from 'react-native';
 import {
   Container,
-  Title,
-  Left,
-  Right,
-  Body,
-  Header,
-  Icon,
-  Button,
-  Text,
 } from 'native-base';
+import { Button,Text,DataTable,Appbar} from 'react-native-paper';
+import moment from 'moment';
 
 import common from '../../../../Global/stylesheet';
 import useUserCred from '../../../../UserCredentials';
@@ -21,102 +15,133 @@ const ConfirmedOrderDetailScreen = ({route, navigation}) => {
 
   const listOrder = item.request.orders.map((ord) => {
     return (
-      <Text style={common.text} key={ord.product._id.toString()}>
-        {ord.product.name} {ord.quantity} {ord.totalCost}
-      </Text>
+      <DataTable.Row
+        key={ord.product._id.toString()}
+        style={{borderBottomWidth: 1}}>
+        <DataTable.Cell key={ord.product.name}>
+          {ord.product.name}
+        </DataTable.Cell>
+        <DataTable.Cell numeric key={ord.quantity.toString()}>
+          {ord.quantity}
+        </DataTable.Cell>
+        <DataTable.Cell numeric key={ord.totalCost.toString()}>
+          {ord.totalCost}
+        </DataTable.Cell>
+      </DataTable.Row>
     );
   });
 
   return (
-    <Container style={common.container}>
-      <Header style={common.headerColor}>
-        <Left>
-          <Icon
-            onPress={() => navigation.openDrawer()}
-            name="md-menu"
-            style={common.headerMenuBtn}
-          />
-        </Left>
-        <Body>
-          <Title style={common.headerText}>Your Order</Title>
-        </Body>
-      </Header>
-      <Header style={common.welcomeHeader}>
-        <Body>
-          <Text style={common.welcomeHeaderText}>
-            Welcome{' '}
+    <Container>
+      <Appbar.Header>
+        <Appbar.Action
+          size={33}
+          icon="menu"
+          onPress={() => navigation.openDrawer()}
+        />
+        <Appbar.Content title="Your Order" />
+      </Appbar.Header>
+      <ScrollView style={{paddingHorizontal : 20}}>
+        <View style={{marginTop: 20}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>Transaction ID</Text>
+          <Text style={{fontSize: 18}}>{item._id}</Text>
+        </View>
+        <View style={{marginTop: 20}}>
+          <Text style={{paddingBottom: 10, fontSize: 20, fontWeight: 'bold'}}>
             {userCred.role === 'customer'
-              ? userDetails.fName + ' ' + userDetails.lName
-              : userDetails.name}
+              ? 'Supplier Details'
+              : 'Distributor Details'}
           </Text>
-        </Body>
-        <Right />
-      </Header>
-      <ScrollView>
-        <View style={common.leftTopIndent}>
-          <Text style={common.text}>Transaction ID : {item._id}</Text>
+          <DataTable>
+            <DataTable.Row>
+              <DataTable.Cell style={{flex: 1}}>Id</DataTable.Cell>
+              <DataTable.Cell style={{flex: 3}}>
+                {item.request.provider_id._id}
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={{flex: 1}}>Name</DataTable.Cell>
+              <DataTable.Cell style={{flex: 3}}>
+                {item.request.provider_id.name}
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={{flex: 1}}>Address</DataTable.Cell>
+              <DataTable.Cell style={{flex: 3}}>
+                {item.request.provider_id.address}
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={{flex: 1}}>Mobile</DataTable.Cell>
+              <DataTable.Cell style={{flex: 3}}>
+                {item.request.provider_id.mobNo}
+              </DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={{flex: 1}}>E-mail</DataTable.Cell>
+              <DataTable.Cell style={{flex: 3}}>
+                {item.request.provider_id.email}
+              </DataTable.Cell>
+            </DataTable.Row>
+          </DataTable>
         </View>
-        <View style={common.leftTopIndent}>
-          <Text style={[common.text, {paddingBottom: 10}]}>
-            {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} Details
+        <View style={{marginTop: 20}}>
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+            Items Requested
           </Text>
-          <Text style={common.text}>ID : {item.request.provider_id._id}</Text>
-          <Text style={common.text}>
-            Name : {item.request.provider_id.name}
-          </Text>
-          <Text style={common.text}>
-            Address : {item.request.provider_id.address}
-          </Text>
-          <Text style={common.text}>
-            MobNo : {item.request.provider_id.mobNo}
-          </Text>
-          <Text style={common.text}>
-            email : {item.request.provider_id.email}
-          </Text>
+          <DataTable style={{}}>
+            <DataTable.Header style={{borderBottomWidth: 1}}>
+              <DataTable.Title>
+                <Text style={{fontSize: 16, fontWeight: 'bold'}}>Items</Text>
+              </DataTable.Title>
+
+              <DataTable.Title numeric>
+                <Text style={{fontSize: 16, fontWeight: 'bold'}}>Quantity</Text>
+              </DataTable.Title>
+              <DataTable.Title numeric>
+                <Text style={{fontSize: 16, fontWeight: 'bold'}}>Amount</Text>
+              </DataTable.Title>
+            </DataTable.Header>
+            {listOrder}
+          </DataTable>
         </View>
-        <View style={common.leftTopIndent}>
-          <Text style={common.text}>Items Requested: </Text>
-          {listOrder}
-        </View>
-        <View style={common.leftTopIndent}>
-          <Text style={common.text}>
-            Request date : {new Date(item.request.time).toLocaleDateString()}
+        <View style={{marginTop: 20,flexDirection : 'row'}}>
+          <Text style={{fontSize : 18,fontWeight : 'bold'}}>
+            Request time : 
           </Text>
-          <Text style={common.text}>
-            Request time : {new Date(item.request.time).toLocaleTimeString()}
-          </Text>
+          <Text style={{fontSize : 18}}>{' '}{moment(new Date(item.request.time)).format('lll')}</Text>
         </View>
-        <View style={common.leftTopIndent}>
-          <Text style={common.text}>Payment ID : {item.payment.id}</Text>
+        <View style={{marginTop: 20}}>
+          <Text style={{fontSize : 18,fontWeight : 'bold'}}>Payment Details</Text>
+          <DataTable>
+            <DataTable.Row>
+              <DataTable.Cell>Payment ID</DataTable.Cell>
+              <DataTable.Cell>{item.payment.id}</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>Mode</DataTable.Cell>
+              <DataTable.Cell>{item.payment.mode}</DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell>Payment time</DataTable.Cell>
+              <DataTable.Cell>{moment(new Date(item.payment.time)).format('lll')}</DataTable.Cell>
+            </DataTable.Row>
+          </DataTable>
         </View>
-        <View style={common.leftTopIndent}>
-          <Text style={common.text}>Mode : {item.payment.mode}</Text>
-          <Text style={common.text}>
-            Payment date : {new Date(item.payment.time).toLocaleDateString()}
+        <View style={{marginTop: 20,flexDirection : 'row'}}>
+          <Text style={{fontSize : 18,fontWeight : 'bold'}}>
+            Confirmation time : 
           </Text>
-          <Text style={common.text}>
-            Payment time : {new Date(item.payment.time).toLocaleTimeString()}
-          </Text>
+          <Text style={{fontSize : 18}}>{' '}{moment(new Date(item.confirm.time)).format('lll')}</Text>
         </View>
-        <View style={common.leftTopIndent}>
-          <Text style={common.text}>Confirmed Details : </Text>
-        </View>
-        <View style={common.leftTopIndent}>
-          <Text style={common.text}>
-            Confirmed date : {new Date(item.confirm.time).toLocaleDateString()}
-          </Text>
-          <Text style={common.text}>
-            Confirmed time : {new Date(item.confirm.time).toLocaleTimeString()}
-          </Text>
-        </View>
-        <View style={common.leftTopIndent}>
-          <Text style={common.text}>
-            Amount paid : {item.request.payment_amount}
+        <View style={{marginTop: 20}}>
+          <Text style={{fontSize : 18,fontWeight : 'bold'}}>
+            Amount paid : {'₹ '}{item.request.payment_amount}
           </Text>
         </View>
         <View style={{alignSelf: 'center', padding: 20}}>
-          <Button onPress={() => navigation.goBack()}>
-            <Text>Okay</Text>
+          <Button onPress={() => navigation.pop()} mode = 'contained'>
+            Okay
           </Button>
         </View>
       </ScrollView>
