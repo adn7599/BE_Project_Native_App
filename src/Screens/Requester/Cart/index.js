@@ -147,10 +147,8 @@ const CartScreen = ({navigation}) => {
   return (
     <Container>
       <Appbar.Header>
-        <Appbar.Action
-          size={33}
-          icon="menu"
-          onPress={() => navigation.openDrawer()}
+      <Appbar.BackAction
+          onPress={() => navigation.pop()}
         />
         <Appbar.Content title="Cart" />
       </Appbar.Header>

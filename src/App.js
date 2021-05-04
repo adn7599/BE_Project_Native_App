@@ -36,14 +36,14 @@ const DrawerNavigation = () => {
   const {userCred} = useUserCred();
 
   const initialRoute =
-    userCred.role === 'customer' ? 'RequesterDashboard1' : 'ProviderDashboard';
+    userCred.role === 'customer' ? 'RequesterDashboard' : 'ProviderDashboard';
   return (
     <Drawer.Navigator
-      initialRouteName={initialRoute}
+      initialRouteName= {initialRoute}
       drawerContent={(props) => <SideDrawerContent {...props} />}>
       <Drawer.Screen name="MyProfile" component={MyProfileStack} />
       <Drawer.Screen
-        name="RequesterDashboard1"
+        name="RequesterDashboard"
         component={RequesterDashboardStack}
       />
       <Drawer.Screen

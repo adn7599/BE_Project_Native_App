@@ -9,9 +9,9 @@ const Stack = createStackNavigator();
 
 const YourConfirmStack = () => {
     return (
-      <Stack.Navigator initialRouteName="YourOrder">
+      <Stack.Navigator initialRouteName="ConfirmOrder">
         <Stack.Screen
-          name="YourOrder"
+          name="ConfirmOrder"
           component={ConfirmOrderScreen}
           options={{
             headerShown: false,

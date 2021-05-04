@@ -86,7 +86,7 @@ const RequestConfirmMsgScreen = ({route, navigation}) => {
         <View style={{paddingTop: 20, alignSelf: 'center'}}>
           <Button
             mode="contained"
-            onPress={() => navigation.navigate('RequesterDashboard')}
+            onPress={() => navigation.popToTop()}
             style={{width: 100, borderRadius: 5}}>
             Home
           </Button>

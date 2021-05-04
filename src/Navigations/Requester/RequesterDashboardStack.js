@@ -15,9 +15,9 @@ const HomeStack = () => {
 
 
   return (
-    <Stack.Navigator initialRouteName = 'RequesterDashboard' >
+    <Stack.Navigator initialRouteName = 'RequesterHome' >
       <Stack.Screen
-        name="RequesterDashboard"
+        name="RequesterHome"
         component={RequesterDashboardScreen}
         options={{
           headerShown: false,

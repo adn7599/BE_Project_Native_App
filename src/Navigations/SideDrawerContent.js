@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View, StyleSheet} from 'react-native';
 import {
   DrawerContent,
   DrawerContentScrollView,
@@ -19,45 +19,66 @@ const roleTitle = {
 
 const SideDrawerContent = (props) => {
   const {userCred, userDetails, deleteUserCred} = useUserCred();
-  const [expanded, setExpanded] = useState(null);
+  const [active, setActive] = React.useState(null);
 
   const CustomerDrawerContent = () => {
     return (
       <>
-        <List.AccordionGroup>
-          <List.Item
-            title="Home"
-            onPress={() => props.navigation.navigate('RequesterDashboard1')}
+        <Drawer.Section style = {{marginTop : 15}}>
+          <Drawer.Item
+            label="Home"
+            icon="home"
+            active={active === 'Home'}
+            onPress={() => {
+              setActive('Home');
+              props.navigation.navigate('RequesterHome');
+            }}
           />
-          <List.Accordion title="Your Order" id="YOurOrder">
-            <List.Item
-              title="Payment"
-              onPress={() => {
-                props.navigation.navigate('RequesterPayment');
-              }}
-            />
-            <List.Item
-              title="Confirm"
-              onPress={() => {
-                props.navigation.navigate('RequesterConfirm');
-              }}
-            />
-          </List.Accordion>
-          <List.Accordion title="Order History" id="OrderHistory">
-            <List.Item
-              title="completed"
-              onPress={() =>
-                props.navigation.navigate('RequesterConfirmedOrderHistory')
-              }
-            />
-            <List.Item
-              title="Cancel"
-              onPress={() =>
-                props.navigation.navigate('RequesterCancelledOrderHistory')
-              }
-            />
-          </List.Accordion>
-        </List.AccordionGroup>
+        </Drawer.Section>
+        <Drawer.Section title="Your Orders">
+          <Drawer.Item
+            label="Pending payments"
+            icon="cash"
+            active={active === 'Pending payments'}
+            onPress={() => {
+              setActive('Pending payments');
+              props.navigation.navigate('RequesterPayment');
+            }}
+            style={styles.drawerFirstChild}
+          />
+          <Drawer.Item
+            label="Pending confirmations"
+            icon="format-list-checks"
+            active={active === 'Pending confirmation'}
+            onPress={() => {
+              setActive('Pending confirmation');
+              props.navigation.navigate('RequesterConfirm');
+            }}
+            style={styles.drawerFirstChild}
+          />
+        </Drawer.Section>
+        <Drawer.Section title="Order History">
+          <Drawer.Item
+            label="Completed orders"
+            icon="check-all"
+            active={active === 'Completed orders'}
+            onPress={() => {
+              setActive('Completed orders');
+              props.navigation.navigate('RequesterConfirmedOrderHistory');
+            }}
+            style={styles.drawerFirstChild}
+          />
+          <Drawer.Item
+            label="Cancelled orders"
+            icon="cancel"
+            active={active === 'Cancelled orders'}
+            onPress={() => {
+              setActive('Cancelled orders');
+              props.navigation.navigate('RequesterCancelledOrderHistory');
+            }}
+            style={styles.drawerFirstChild}
+          />
+        </Drawer.Section>
       </>
     );
   };
@@ -65,101 +86,149 @@ const SideDrawerContent = (props) => {
   const SupplierDrawerContent = () => {
     return (
       <>
-        <List.AccordionGroup>
-          <List.Item
-            title="Home"
-            onPress={() => props.navigation.navigate('ProviderDashboard')}
-          />
-          <List.Item
-            title="Stock"
-            onPress={() => {
-              props.navigation.navigate('ProviderStock');
-            }}
-          />
-          <List.Accordion title="Order History" id="OrderHistory">
-            <List.Item
-              title="Completed"
+          <Drawer.Section style = {{marginTop : 15}}>
+            <Drawer.Item
+              label="Home"
+              icon="home"
+              active={active === 'Home'}
               onPress={() => {
+                setActive('Home');
+                props.navigation.navigate('ProviderHome');
+              }}
+            />
+            <Drawer.Item
+              label="Stock"
+              icon="silo"
+              active={active === 'Stock'}
+              onPress={() => {
+                setActive('Stock');
+                props.navigation.navigate('ProviderStock');
+              }}
+            />
+          </Drawer.Section>
+          <Drawer.Section title="Customer Order History">
+            <Drawer.Item
+              label="Customer Completed Orders"
+              icon="check-all"
+              active={active === 'Customer Completed Orders'}
+              onPress={() => {
+                setActive('Customer Completed Orders');
                 props.navigation.navigate('ProviderConfirmedOrderHistory');
               }}
+              style={styles.drawerFirstChild}
             />
-            <List.Item
-              title="Cancelled"
+            <Drawer.Item
+              label="Customer Cancelled Orders"
+              icon="cancel"
+              active={active === 'Customer Cancelled Orders'}
               onPress={() => {
+                setActive('Customer Cancelled Orders');
                 props.navigation.navigate('ProviderCancelledOrderHistory');
               }}
+              style={styles.drawerFirstChild}
             />
-          </List.Accordion>
-
-          <List.Accordion
-            title="Request Commodities"
-            id="RequestCommodities"
-            style={{backgroundColor: 'grey'}}>
-            <List.AccordionGroup>
-              <List.Item
-                title="Make Request"
-                onPress={() => props.navigation.navigate('RequesterDashboard')}
-              />
-              <List.Accordion title="Your Order" id="YourOrders">
-                <List.Item
-                  title="Payment"
-                  onPress={() => {
-                    props.navigation.navigate('RequesterPayment');
-                  }}
-                />
-                <List.Item
-                  title="Confirm"
-                  onPress={() => {
-                    props.navigation.navigate('RequesterConfirm');
-                  }}
-                />
-              </List.Accordion>
-              <List.Accordion title="Order History" id="OrderHistory">
-                <List.Item
-                  title="completed"
-                  onPress={() =>
-                    props.navigation.navigate('RequesterConfirmedOrderHistory')
-                  }
-                />
-                <List.Item
-                  title="Cancel"
-                  onPress={() =>
-                    props.navigation.navigate('RequesterCancelledOrderHistory')
-                  }
-                />
-              </List.Accordion>
-            </List.AccordionGroup>
-          </List.Accordion>
-        </List.AccordionGroup>
-      </>
+          </Drawer.Section>
+          <Drawer.Section title="Restock">
+            <Drawer.Item
+              label="Place restock request"
+              icon="restore"
+              active={active === 'Restock'}
+              onPress={() => {
+                setActive('Restock');
+                props.navigation.navigate('RequesterDashboard');
+              }}
+              style={styles.drawerFirstChild}
+            />
+            <Drawer.Item
+              label="Pending payments"
+              icon="cash"
+              active={active === 'Pending payments'}
+              onPress={() => {
+                setActive('Pending payments');
+                props.navigation.navigate('RequesterPayment');
+              }}
+              style={styles.drawerFirstChild}
+            />
+            <Drawer.Item
+              label="Pending confirmations"
+              icon="format-list-checks"
+              active={active === 'Pending confirmations'}
+              onPress={() => {
+                setActive('Pending confirmations');
+                props.navigation.navigate('RequesterConfirm');
+              }}
+              style={styles.drawerFirstChild}
+            />
+            <Drawer.Item
+              label="Completed requests"
+              icon="check-all"
+              active={active === 'Completed requests'}
+              onPress={() => {
+                setActive('Completed requests');
+                props.navigation.navigate('RequesterConfirmedOrderHistory');
+              }}
+              style={styles.drawerFirstChild}
+            />
+            <Drawer.Item
+              label="Cancelled requests"
+              icon="cancel"
+              active={active === 'Cancelled requests'}
+              onPress={() => {
+                setActive('Cancelled requests');
+                props.navigation.navigate('RequesterCancelledOrderHistory');
+              }}
+              style={styles.drawerFirstChild}
+            />
+          </Drawer.Section>
+        </>
     );
   };
 
   const DistributorDrawerContent = () => {
     return (
       <>
-        <List.Item
-          title="Home"
-          onPress={() => props.navigation.navigate('ProviderDashboard')}
-        />
-        <List.Item
-          title="Stock"
-          onPress={() => {
-            props.navigation.navigate('ProviderStock');
-          }}
-        />
-        <List.Item
-          title="Complete History"
-          onPress={() => {
-            props.navigation.navigate('ProviderConfirmedOrderHistory');
-          }}
-        />
-        <List.Item
-          title="Cancel History"
-          onPress={() => {
-            props.navigation.navigate('ProviderCancelledOrderHistory');
-          }}
-        />
+        <Drawer.Section style = {{marginTop : 15}}>
+            <Drawer.Item
+              label="Home"
+              icon="home"
+              active={active === 'Home'}
+              onPress={() => {
+                setActive('Home');
+                props.navigation.navigate('ProviderDashboard');
+              }}
+            />
+            <Drawer.Item
+              label="Stock"
+              icon="silo"
+              active={active === 'Stock'}
+              onPress={() => {
+                setActive('Stock');
+                props.navigation.navigate('ProviderStock');
+              }}
+            />
+          </Drawer.Section>
+          <Drawer.Section title="Supplier Order History">
+            <Drawer.Item
+              label="Supplier Completed Orders"
+              icon="check-all"
+              active={active === 'Supplier Completed Orders'}
+              onPress={() => {
+                setActive('Supplier Completed Orders');
+                props.navigation.navigate('ProviderConfirmedOrderHistory');
+              }}
+              style={styles.drawerFirstChild}
+            />
+            <Drawer.Item
+              label="Supplier Cancelled Orders"
+              icon="cancel"
+              active={active === 'Supplier Cancelled Orders'}
+              onPress={() => {
+                setActive('Supplier Cancelled Orders');
+                props.navigation.navigate('ProviderCancelledOrderHistory');
+              }}
+              style={styles.drawerFirstChild}
+            />
+          </Drawer.Section>
       </>
     );
   };
@@ -187,15 +256,15 @@ const SideDrawerContent = (props) => {
   return (
     <View style={common.flexOne}>
       <DrawerContentScrollView {...props}>
-        <View style={common.flexOne}>
+        <View >
           <TouchableOpacity
-            onPress={() =>
+            onPress={() =>{console.log('avatar text' , avatarText,name)
               props.navigation.navigate('MyProfile', {
                 avatarText: avatarText,
                 name: name,
               })
-            }>
-            <View
+            }}>
+            <Drawer.Section
               style={{paddingLeft: 20, flexDirection: 'row', marginTop: 20}}>
               <Avatar.Text size={70} label={avatarText} />
               <View style={{margin: 15}}>
@@ -203,11 +272,9 @@ const SideDrawerContent = (props) => {
                 <Text note>{userDetails._id}</Text>
                 <Text note>{roleTitle[userCred.role]}</Text>
               </View>
-            </View>
+            </Drawer.Section>
           </TouchableOpacity>
-          <Drawer.Section style={{marginTop: 15}}>
             <SelectedDrawerContent />
-          </Drawer.Section>
         </View>
       </DrawerContentScrollView>
       <Drawer.Section>
@@ -222,5 +289,11 @@ const SideDrawerContent = (props) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  drawerFirstChild: {
+    paddingLeft: 10,
+  },
+});
 
 export default SideDrawerContent;

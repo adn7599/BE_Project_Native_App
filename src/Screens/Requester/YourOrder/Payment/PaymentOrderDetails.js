@@ -161,10 +161,8 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
   return (
     <Container>
       <Appbar.Header>
-        <Appbar.Action
-          size={33}
-          icon="menu"
-          onPress={() => navigation.openDrawer()}
+      <Appbar.BackAction
+          onPress={() => navigation.pop()}
         />
         <Appbar.Content title="Your Order" />
       </Appbar.Header>

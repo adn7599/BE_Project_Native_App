@@ -9,9 +9,9 @@ const Stack = createStackNavigator();
 
 const StartStack = () => {
   return (
-    <Stack.Navigator initialRouteName="ProviderDashboard">
+    <Stack.Navigator initialRouteName="ProviderHome">
       <Stack.Screen
-        name="ProviderDashboard"
+        name="ProviderHome"
         component={ProviderDashboardScreen}
         options={{
           headerShown: false,
