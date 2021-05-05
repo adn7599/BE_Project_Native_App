@@ -1,20 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {
   Container,
-  Card,
-  Title,
-  CardItem,
-  Left,
-  Right,
-  Body,
-  Content,
-  Header,
-  Icon,
-  Text,
 } from 'native-base';
 import {FlatList, View, TouchableOpacity, ToastAndroid} from 'react-native';
+import {Appbar, Button, Text, Card} from 'react-native-paper';
 
-import common from '../../../../Global/stylesheet';
 import Loading from '../../../../Component/Loading';
 import useUserCred from '../../../../UserCredentials';
 import {
@@ -68,50 +58,51 @@ const ConfirmedOrdersScreen = ({navigation}) => {
         onPress={() =>
           navigation.navigate('ConfirmedOrderDetails', {item: item})
         }>
-        <Content style={common.cardContainer}>
-          <Card style={common.card}>
-            <CardItem>
-              <Body>
-                <Text>Transaction ID : {item._id}</Text>
-                <Text>
-                  {userCred.role === 'SP'
-                    ? `Customer : ${item.request.requester_id.fName} ${item.request.requester_id.lName}`
-                    : `Supplier : ${item.request.requester_id.name}`}
-                </Text>
-                <Text>Items: {ordersList.join(', ')}</Text>
-                <Text>Amount paid : {item.payment.amount}</Text>
-                <Text>Status : Transaction Completed</Text>
-              </Body>
-            </CardItem>
-          </Card>
-        </Content>
+        <Card
+          style={{
+            marginHorizontal: 20,
+            marginBottom: 20,
+            elevation: 12,
+            borderRadius: 15,
+          }}>
+          <Card.Content
+            style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View>
+              <Text
+                style={{fontSize: 17, fontWeight: 'bold', paddingBottom: 10}}>
+                {ordersList.join(', ')}
+              </Text>
+              <Text style={{fontSize: 17}}>
+                {userCred.role === 'SP'
+                  ? `Customer : ${item.request.requester_id.fName} ${item.request.requester_id.lName}`
+                  : `Supplier : ${item.request.requester_id.name}`}
+              </Text>
+            </View>
+            <Text style={{fontWeight: 'bold', fontSize: 20}}>
+              {'₹ '} {item.payment.amount}
+            </Text>
+          </Card.Content>
+          <Card.Content style={{paddingTop: 5}}>
+            <Text style={{fontSize: 17}}>
+              Confirmation date :{' '}
+              {new Date(item.confirm.time).toLocaleDateString()}
+            </Text>
+          </Card.Content>
+        </Card>
       </TouchableOpacity>
     );
   };
 
   return (
-    <Container style={common.container}>
-      <Header style={common.headerColor}>
-        <Left>
-          <Icon
-            onPress={() => navigation.openDrawer()}
-            name="md-menu"
-            style={common.headerMenuBtn}
-          />
-        </Left>
-        <Body>
-          <Title style={common.headerText}>Your Order</Title>
-        </Body>
-      </Header>
-      <Header style={common.welcomeHeader}>
-        <Body>
-          <Text style={common.welcomeHeaderText}>
-            Welcome {userDetails.name}
-          </Text>
-        </Body>
-        <Right />
-      </Header>
-      <View style={common.topBottomSep}></View>
+    <Container>
+      <Appbar.Header>
+        <Appbar.Action
+          size={33}
+          icon="menu"
+          onPress={() => navigation.openDrawer()}
+        />
+        <Appbar.Content title="Order History" />
+      </Appbar.Header>
       {completeResp !== null ? (
         <>
           <FlatList
@@ -119,6 +110,14 @@ const ConfirmedOrdersScreen = ({navigation}) => {
             initialNumToRender={7}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
+            ListHeaderComponent={
+              <View style={{padding: 20}}>
+                <Text style={{fontWeight: 'bold', fontSize: 20}}>
+                  Completed transaction
+                </Text>
+              </View>
+            }
+            ListHeaderComponentStyle={{paddingBottom: 20}}
           />
         </>
       ) : (

@@ -1,20 +1,14 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {
   Container,
-  Left,
-  Right,
-  Thumbnail,
   Body,
-  Content,
   Header,
-  Item,
-  Input,
-  Text,
 } from 'native-base';
 
 import {
   Appbar,
   Title,
+  Text,
   Paragraph,
   List,
   Button,
@@ -133,11 +127,10 @@ const CustomerDashboardScreen = ({navigation}) => {
       <Appbar.Header>
         <Appbar.Action
           size={33}
-       
           icon="menu"
           onPress={() => navigation.openDrawer()}
         />
-        <Appbar.Content title="Home" />
+        <Appbar.Content title= {userCred.role === 'customer' ? "Home" : 'Request Comodities'}/>
         <Appbar.Action
           size={33}
           icon="magnify"

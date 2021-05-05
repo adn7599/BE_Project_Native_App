@@ -1,21 +1,19 @@
 import React, {useEffect} from 'react';
+import {Container, Body, Header} from 'native-base';
 import {
-  Container,
-  Card,
-  CardItem,
-  Left,
-  Right,
-  Thumbnail,
-  Body,
-  Content,
-  Header,
-  Item,
-  Input,
-  Icon,
-  Button,
-  Text,
+  Appbar,
   Title,
-} from 'native-base';
+  Text,
+  Paragraph,
+  List,
+  Button,
+  Searchbar,
+  Card,
+  Provider as PaperProvider,
+  useTheme,
+  Surface,
+  Divider,
+} from 'react-native-paper';
 import {
   Dimensions,
   FlatList,
@@ -24,7 +22,9 @@ import {
   Image,
   BackHandler,
   ToastAndroid,
+  TouchableOpacity,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import useUserCred from '../../UserCredentials';
 import {suppProvQueries, distProvQueries} from '../../serverQueries/Provider';
@@ -32,7 +32,6 @@ import common from '../../Global/stylesheet';
 import {useState} from 'react/cjs/react.development';
 import Loading from '../../Component/Loading';
 import MyFastImage from '../../Component/FastImage';
-import {List} from 'react-native-paper';
 
 const ProviderStock = ({navigation}) => {
   const [prodList, setProdList] = useState(null);
@@ -72,108 +71,104 @@ const ProviderStock = ({navigation}) => {
   };
 
   return (
-    <Container style={Sytles.container}>
-      <Header style={common.headerColor}>
-        <Left>
-          <Icon
-            onPress={() => navigation.openDrawer()}
-            name="md-menu"
-            style={common.headerMenuBtn}
-          />
-        </Left>
-        <Body>
-          <Title style={common.headerText}>Stock</Title>
-        </Body>
-      </Header>
-      <Header searchBar rounded>
-        <Item>
-          <Icon name="ios-search" />
-          <Input placeholder="Search" />
-        </Item>
-        <Button transparent>
-          <Text>Search</Text>
-        </Button>
-      </Header>
-      <Header style={Sytles.welcomeHeader}>
-        <Body>
-          <Text style={Sytles.welcomeHeaderText}>
-            Welcome {userDetails.name}
-          </Text>
-        </Body>
-        <Right />
-      </Header>
+    <>
+      <Appbar.Header>
+        <Appbar.Action
+          size={33}
+          icon="menu"
+          onPress={() => navigation.openDrawer()}
+        />
+        <Appbar.Content title="Stock" />
+      </Appbar.Header>
+      {/* PRODUCTS */}
       {prodList !== null ? (
         <FlatList
           data={prodList}
           initialNumToRender={4}
           renderItem={renderItem}
           keyExtractor={(item) => item.product._id.toString()}
+          ListHeaderComponent={<View></View>}
+          ListHeaderComponentStyle={{paddingBottom: 20}}
         />
       ) : (
         <Loading />
       )}
-    </Container>
+    </>
   );
 };
 
 const ListItem = ({item, toggleAddToCart, userCred}) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   return (
-    <>
-      <Content style={Sytles.cardContainer}>
-        <Card style={Sytles.card}>
-          <CardItem>
-            <Body>
-              <MyFastImage
-                imageId={item.product._id}
-                imageLoaded={imageLoaded}
-                setImageLoaded={setImageLoaded}
-              />
-              <CardItem>
-                <Left>
-                  <Body>
-                    <Text>{item.product.name}</Text>
-                    <Text note>
-                      {item.product.price} Rs/{item.product.unit}
-                    </Text>
-                  </Body>
-                </Left>
-              </CardItem>
-
-              <Body>
-                <List.Accordion
-                  title="Product Info"
-                  style={{width: Dimensions.get('screen').width - 80}}>
-                  <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                    {item.product.description}
-                  </Text>
-                  {userCred.role === 'SP' ? (
-                    <View>
-                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                        Max Quantity : {item.maxQuantity}
-                      </Text>
-                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                        Available Quantity : {item.availableQuantity}
-                      </Text>
-                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                        Ordered Quantity : {item.orderedQuantity}
-                      </Text>
-                    </View>
-                  ) : (
-                    <View>
-                      <Text style={{paddingTop: 10, paddingLeft: 15}}>
-                        Available Quantity : {item.availableQuantity}
-                      </Text>
-                    </View>
-                  )}
-                </List.Accordion>
-              </Body>
-              <View style={common.topBottomSep}></View>
-            </Body>
-          </CardItem>
-        </Card>
-      </Content>
-    </>
+    <Card elevation={12} style={Sytles.card}>
+      <Card.Content>
+        <MyFastImage
+          imageId={item.product._id}
+          width={Dimensions.get('screen').width - 75}
+          height={200}
+          borderRadius={10}
+        />
+      </Card.Content>
+      <Card.Content
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingTop: 10,
+        }}>
+        <View style={{}}>
+          <Title>{item.product.name}</Title>
+          <Text
+            style={{
+              paddingTop: 3,
+              marginBottom: 10,
+              fontSize : 16
+            }}>
+            Available Quantity : {item.availableQuantity}
+          </Text>
+        </View>
+        <View style={{paddingTop: 5}}>
+          <Paragraph>
+            {item.product.price} Rs/{item.product.unit}
+          </Paragraph>
+        </View>
+      </Card.Content>
+      <Card.Content>
+        <Divider style={{borderBottomWidth: 0.5, marginVertical: 5}} />
+        <TouchableOpacity
+          style={{alignSelf: 'flex-end', flexDirection: 'row'}}
+          onPress={() => setIsExpanded(!isExpanded)}>
+          <Text style={{fontWeight: '900', fontSize: 12,color : 'lightgrey'}}>MORE INFO</Text>
+          <Icon
+            name={isExpanded ? 'chevron-up' : 'chevron-down'}
+            size={15}
+            color="lightgrey"
+            style={{paddingLeft: 10}}
+          />
+        </TouchableOpacity>
+        {isExpanded ? (
+          <>
+            <Text style={{paddingVertical: 10}}>
+              {item.product.description}
+            </Text>
+            <View>
+              <Text style={{paddingTop: 10, fontStyle: 'italic'}}>
+                Max Quantity : {item.maxQuantity}
+              </Text>
+              <Text
+                style={{
+                  paddingTop: 3,
+                  fontStyle: 'italic',
+                  marginBottom: 10,
+                }}>
+                Ordered Quantity : {item.orderedQuantity}
+              </Text>
+            </View>
+          </>
+        ) : (
+          <View></View>
+        )}
+      </Card.Content>
+    </Card>
   );
 };
 
@@ -193,6 +188,9 @@ const Sytles = StyleSheet.create({
   },
   card: {
     flex: 0,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    borderRadius: 15,
   },
   cartButton: {
     alignSelf: 'flex-end',

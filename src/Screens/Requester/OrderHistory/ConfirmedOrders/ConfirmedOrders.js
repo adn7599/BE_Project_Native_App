@@ -5,7 +5,6 @@ import {
 import {FlatList, View, TouchableOpacity, ToastAndroid} from 'react-native';
 import {Appbar,Button,Text,Card } from 'react-native-paper';
 
-import common from '../../../../Global/stylesheet';
 import Loading from '../../../../Component/Loading';
 import useUserCred from '../../../../UserCredentials';
 import {custReqQueries, suppReqQueries} from '../../../../serverQueries/Requester';

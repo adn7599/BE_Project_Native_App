@@ -1,8 +1,16 @@
 import React, {useState, useRef} from 'react';
-import {View, TextInput, StyleSheet, Modal, ToastAndroid} from 'react-native';
-import {Container, Text, Button} from 'native-base';
+import {View, StyleSheet, Modal, ToastAndroid} from 'react-native';
+import {Container} from 'native-base';
+import {
+  Appbar,
+  Button,
+  Text,
+  TextInput,
+  Dialog,
+  Paragraph,
+  Portal,
+} from 'react-native-paper';
 
-import common from '../../Global/stylesheet';
 import useUserCred from '../../UserCredentials';
 import * as UserQueries from '../../serverQueries/User/changePassword';
 import Loading from '../../Component/Loading';
@@ -14,6 +22,9 @@ const ChangePasswordScreen = ({navigation}) => {
   const [newRePassword, setNewRePassword] = useState('');
   const [modalMsg, setModalMsg] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [toggleOldPassVisible, setToggleOldPassvisible] = useState(true);
+  const [toggleNewPassVisible, setToggleNewPassvisible] = useState(true);
+  const [toggleNewRePassVisible, setToggleNewRePassvisible] = useState(true);
 
   const changePassword = async () => {
     setModalVisible(true);
@@ -41,96 +52,135 @@ const ChangePasswordScreen = ({navigation}) => {
   };
 
   return (
-    <Container style={[common.container, Styles.upiContainerView]}>
-      <View style={Styles.itemView}>
-        <View>
-          <Text>Old Password</Text>
-        </View>
-        <View>
-          <TextInput
-            value={oldPassword}
-            placeholder="Enter your old password"
-            onChangeText={(Text) => setOldPassword(Text)}
-            style={Styles.passwordTextField}
-          />
-        </View>
-      </View>
-      <View style={Styles.itemView}>
-        <View>
-          <Text>New Password</Text>
-        </View>
-        <View>
-          <TextInput
-            value={newPassword}
-            placeholder="Enter your new password"
-            onChangeText={(Text) => setNewPassword(Text)}
-            style={Styles.passwordTextField}
-          />
-        </View>
-      </View>
-      <View style={Styles.itemView}>
-        <View>
-          <Text>Re-enter New Password</Text>
-        </View>
-        <View>
-          <TextInput
-            value={newRePassword}
-            placeholder="Re-enter your new password"
-            onChangeText={(Text) => setNewRePassword(Text)}
-            style={Styles.passwordTextField}
-          />
-        </View>
-      </View>
-
-      <View style={Styles.centeredView}>
-        <Button
-          style={[Styles.button, Styles.buttonOpen]}
-          disabled={
-            !(
-              oldPassword.length > 0 &&
-              newPassword.length > 0 &&
-              newRePassword.length > 0
-            )
-          }
-          onPress={() => {
-            if (newPassword !== newRePassword) {
-              ToastAndroid.show(
-                'New passwords do not match',
-                ToastAndroid.SHORT,
-              );
-              return;
-            }
-            changePassword();
-          }}>
-          <Text style={Styles.textStyle}>Change Password</Text>
-        </Button>
-      </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}>
-        <View style={Styles.centeredView}>
-          <View style={Styles.modalView}>
-            {modalMsg !== null ? (
-              <Text style={Styles.modalText}>{modalMsg}</Text>
-            ) : (
-              <Loading />
-            )}
-            <View style={Styles.btnView}>
-              <Button
-                style={[Styles.button, Styles.buttonClose]}
-                onPress={() => {
-                  modalMsg === 'Changed Password Successfully'
-                    ? navigation.goBack()
-                    : setModalVisible(false);
-                }}>
-                <Text style={Styles.textStyle}>Ok</Text>
-              </Button>
-            </View>
+    <Container>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.pop()} />
+        <Appbar.Content title="Change Password" />
+      </Appbar.Header>
+      <View style={{padding: 20}}>
+        <View style={{paddingBottom: 20}}>
+          <View>
+            <Text style={{fontSize: 17, paddingBottom: 5}}>Old Password</Text>
+          </View>
+          <View>
+            <TextInput
+              value={oldPassword}
+              placeholder="Old Password"
+              mode="flat"
+              secureTextEntry={toggleOldPassVisible}
+              onChangeText={(Text) => setOldPassword(Text)}
+              right={
+                <TextInput.Icon
+                  name={
+                    toggleOldPassVisible ? 'eye-off-outline' : 'eye-outline'
+                  }
+                  onPress={() => setToggleOldPassvisible(!toggleOldPassVisible)}
+                />
+              }></TextInput>
           </View>
         </View>
-      </Modal>
+        <View style={{paddingBottom: 20}}>
+          <View>
+            <Text style={{fontSize: 17, paddingBottom: 5}}>New Password</Text>
+          </View>
+          <View>
+            <TextInput
+              value={newPassword}
+              placeholder="New Password"
+              mode="flat"
+              secureTextEntry={toggleNewPassVisible}
+              onChangeText={(Text) => setNewPassword(Text)}
+              right={
+                <TextInput.Icon
+                  name={
+                    toggleNewPassVisible ? 'eye-off-outline' : 'eye-outline'
+                  }
+                  onPress={() => setToggleNewPassvisible(!toggleNewPassVisible)}
+                />
+              }></TextInput>
+          </View>
+        </View>
+        <View style={{paddingBottom: 20}}>
+          <View>
+            <Text style={{fontSize: 17, paddingBottom: 5}}>
+              Re-enter New Password
+            </Text>
+          </View>
+          <View>
+            <TextInput
+              value={newRePassword}
+              placeholder="Re-enter New Password"
+              mode="flat"
+              secureTextEntry={toggleNewRePassVisible}
+              onChangeText={(Text) => setNewRePassword(Text)}
+              right={
+                <TextInput.Icon
+                  name={
+                    toggleNewRePassVisible ? 'eye-off-outline' : 'eye-outline'
+                  }
+                  onPress={() =>
+                    setToggleNewRePassvisible(!toggleNewRePassVisible)
+                  }
+                />
+              }></TextInput>
+          </View>
+        </View>
+
+        <View style={Styles.centeredView}>
+          <Button
+            style={{}}
+            disabled={
+              !(
+                oldPassword.length > 0 &&
+                newPassword.length > 0 &&
+                newRePassword.length > 0
+              )
+            }
+            mode="contained"
+            onPress={() => {
+              if (newPassword !== newRePassword) {
+                ToastAndroid.show(
+                  'New passwords do not match',
+                  ToastAndroid.SHORT,
+                );
+                return;
+              }
+              changePassword();
+            }}>
+            <Text>Change Password</Text>
+          </Button>
+        </View>
+        <Portal>
+          <Dialog
+            visible={modalVisible}
+            dismissable={false}
+          >
+            {/* <Dialog.Title></Dialog.Title> */}
+            {modalMsg !== null ? (
+              <>
+                <Dialog.Content style ={{}}>
+                  <Paragraph style ={{fontSize : 16,paddingTop : 25}}>{modalMsg}</Paragraph>
+                </Dialog.Content>
+                <Dialog.Actions>
+                  <Button onPress={() => navigation.popToTop()}>Done</Button>
+                </Dialog.Actions>
+              </>
+            ) : (
+              <Dialog.Content
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  padding: 10,
+                }}>
+                <Loading />
+                <Text style={{marginLeft: 30, fontSize: 15}}>
+                  Changing password...
+                </Text>
+              </Dialog.Content>
+            )}
+          </Dialog>
+        </Portal>
+      </View>
     </Container>
   );
 };
