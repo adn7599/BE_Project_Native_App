@@ -1,9 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {
-  Container,
-  Body,
-  Header,
-} from 'native-base';
+import {Container, Body, Header} from 'native-base';
 
 import {
   Appbar,
@@ -37,14 +33,15 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import useUserCred from '../../UserCredentials';
 import {custReqQueries, suppReqQueries} from '../../serverQueries/Requester';
-import common from '../../Global/stylesheet';
 import Loading from '../../Component/Loading';
 import MyFastImage from '../../Component/FastImage';
 
 const CustomerDashboardScreen = ({navigation}) => {
+  const [showProdList, setShowProdList] = useState(null);
   const [prodList, setProdList] = useState(null);
   const {userCred, userDetails, deleteUserCred} = useUserCred();
   const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const theme = useTheme();
 
@@ -59,6 +56,7 @@ const CustomerDashboardScreen = ({navigation}) => {
     if (respErr === null) {
       if (resp.status == 200) {
         setProdList(resp.data.commodities);
+        setShowProdList(resp.data.commodities)
       } else if (resp.status == 403) {
         ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
         await deleteUserCred();
@@ -112,6 +110,19 @@ const CustomerDashboardScreen = ({navigation}) => {
     setProdList([...prodList]);
   };
 
+  const showSearchItem = () => {
+    setShowProdList(
+      prodList.filter((item) =>
+        item.product.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      ),
+    );
+    console.log('searsh item',showProdList,searchQuery);
+  };
+
+  const touchCancel = (e) => {
+    console.log('touch cancel',e);
+  }
+
   const renderItem = ({item}) => {
     return (
       <ListItem
@@ -130,7 +141,9 @@ const CustomerDashboardScreen = ({navigation}) => {
           icon="menu"
           onPress={() => navigation.openDrawer()}
         />
-        <Appbar.Content title= {userCred.role === 'customer' ? "Home" : 'Request Comodities'}/>
+        <Appbar.Content
+          title={userCred.role === 'customer' ? 'Home' : 'Request Comodities'}
+        />
         <Appbar.Action
           size={33}
           icon="magnify"
@@ -146,8 +159,12 @@ const CustomerDashboardScreen = ({navigation}) => {
         <View
           style={{backgroundColor: theme.colors.primary, paddingBottom: 10}}>
           <Searchbar
+            value={searchQuery}
             placeholder="Search"
-            // eslint-disable-next-line react-native/no-inline-styles
+            onChangeText={(query) => setSearchQuery(query)}
+            onSubmitEditing={() => showSearchItem()}
+            onIconPress={() => showSearchItem()}
+            onTouchCancel = {(e) => touchCancel(e)}
             style={{
               alignSelf: 'center',
               width: Dimensions.get('screen').width - 20,
@@ -160,9 +177,9 @@ const CustomerDashboardScreen = ({navigation}) => {
       )}
 
       {/* PRODUCTS */}
-      {prodList !== null ? (
+      {showProdList !== null ? (
         <FlatList
-          data={prodList}
+          data={showProdList}
           initialNumToRender={4}
           renderItem={renderItem}
           keyExtractor={(item) => item.product._id.toString()}
@@ -179,7 +196,7 @@ const CustomerDashboardScreen = ({navigation}) => {
               </Body>
             </Header>
           }
-          ListHeaderComponentStyle = {{paddingBottom : 20}}
+          ListHeaderComponentStyle={{paddingBottom: 20}}
         />
       ) : (
         <Loading />
@@ -189,16 +206,15 @@ const CustomerDashboardScreen = ({navigation}) => {
 };
 
 const ListItem = ({item, toggleAddToCart, userCred}) => {
-  
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <Card elevation={12} style={Sytles.card}>
       <Card.Content>
         <MyFastImage
           imageId={item.product._id}
-          width = {Dimensions.get('screen').width - 75}
-          height = {200}
-          borderRadius = {10}
+          width={Dimensions.get('screen').width - 75}
+          height={200}
+          borderRadius={10}
         />
       </Card.Content>
       <Card.Content
