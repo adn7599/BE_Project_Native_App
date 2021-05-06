@@ -6,7 +6,6 @@ import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import org.reactnative.camera.RNCameraPackage;
 import com.reactnativecommunity.rnpermissions.RNPermissionsPackage;
-import com.upi.payment.UpiPaymentPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
