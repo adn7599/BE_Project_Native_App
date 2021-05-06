@@ -108,21 +108,21 @@ const SideDrawerContent = (props) => {
           </Drawer.Section>
           <Drawer.Section title="Customer Order History">
             <Drawer.Item
-              label="Customer Completed Orders"
+              label="Completed Orders"
               icon="check-all"
-              active={active === 'Customer Completed Orders'}
+              active={active === 'Completed Orders'}
               onPress={() => {
-                setActive('Customer Completed Orders');
+                setActive('Completed Orders');
                 props.navigation.navigate('ProviderConfirmedOrderHistory');
               }}
               style={styles.drawerFirstChild}
             />
             <Drawer.Item
-              label="Customer Cancelled Orders"
+              label="Cancelled Orders"
               icon="cancel"
-              active={active === 'Customer Cancelled Orders'}
+              active={active === 'Cancelled Orders'}
               onPress={() => {
-                setActive('Customer Cancelled Orders');
+                setActive('Cancelled Orders');
                 props.navigation.navigate('ProviderCancelledOrderHistory');
               }}
               style={styles.drawerFirstChild}
@@ -207,23 +207,23 @@ const SideDrawerContent = (props) => {
               }}
             />
           </Drawer.Section>
-          <Drawer.Section title="Supplier Order History">
+          <Drawer.Section title="Order History">
             <Drawer.Item
-              label="Supplier Completed Orders"
+              label="Completed Orders"
               icon="check-all"
-              active={active === 'Supplier Completed Orders'}
+              active={active === 'Completed Orders'}
               onPress={() => {
-                setActive('Supplier Completed Orders');
+                setActive('Completed Orders');
                 props.navigation.navigate('ProviderConfirmedOrderHistory');
               }}
               style={styles.drawerFirstChild}
             />
             <Drawer.Item
-              label="Supplier Cancelled Orders"
+              label="Cancelled Orders"
               icon="cancel"
-              active={active === 'Supplier Cancelled Orders'}
+              active={active === 'Cancelled Orders'}
               onPress={() => {
-                setActive('Supplier Cancelled Orders');
+                setActive('Cancelled Orders');
                 props.navigation.navigate('ProviderCancelledOrderHistory');
               }}
               style={styles.drawerFirstChild}

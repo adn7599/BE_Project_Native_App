@@ -36,6 +36,15 @@ const ConfirmedOrderDetailScreen = ({route, navigation}) => {
           onPress={() => navigation.pop()}
         />
         <Appbar.Content title="Your Order" />
+        <Appbar.Action
+          icon="alert-circle-outline"
+          onPress={() =>
+            navigation.navigate('RaiseComplaint', {
+              provider_id: item.request.provider_id._id,
+              transaction_id : item._id
+            })
+          }
+        />
       </Appbar.Header>
       <ScrollView style={{paddingHorizontal: 20}}>
         <View style={{marginTop: 20}}>

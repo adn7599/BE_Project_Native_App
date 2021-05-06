@@ -121,7 +121,7 @@ const ListItem = ({item, toggleAddToCart, userCred}) => {
             style={{
               paddingTop: 3,
               marginBottom: 10,
-              fontSize : 16
+              fontSize: 16,
             }}>
             Available Quantity : {item.availableQuantity}
           </Text>
@@ -137,7 +137,9 @@ const ListItem = ({item, toggleAddToCart, userCred}) => {
         <TouchableOpacity
           style={{alignSelf: 'flex-end', flexDirection: 'row'}}
           onPress={() => setIsExpanded(!isExpanded)}>
-          <Text style={{fontWeight: '900', fontSize: 12,color : 'lightgrey'}}>MORE INFO</Text>
+          <Text style={{fontWeight: '900', fontSize: 12, color: 'lightgrey'}}>
+            MORE INFO
+          </Text>
           <Icon
             name={isExpanded ? 'chevron-up' : 'chevron-down'}
             size={15}
@@ -150,19 +152,23 @@ const ListItem = ({item, toggleAddToCart, userCred}) => {
             <Text style={{paddingVertical: 10}}>
               {item.product.description}
             </Text>
-            <View>
-              <Text style={{paddingTop: 10, fontStyle: 'italic'}}>
-                Max Quantity : {item.maxQuantity}
-              </Text>
-              <Text
-                style={{
-                  paddingTop: 3,
-                  fontStyle: 'italic',
-                  marginBottom: 10,
-                }}>
-                Ordered Quantity : {item.orderedQuantity}
-              </Text>
-            </View>
+            {userCred.role === 'SP' ? (
+              <View>
+                <Text style={{paddingTop: 10, fontStyle: 'italic'}}>
+                  Max Quantity : {item.maxQuantity}
+                </Text>
+                <Text
+                  style={{
+                    paddingTop: 3,
+                    fontStyle: 'italic',
+                    marginBottom: 10,
+                  }}>
+                  Ordered Quantity : {item.orderedQuantity}
+                </Text>
+              </View>
+            ) : (
+              <View></View>
+            )}
           </>
         ) : (
           <View></View>

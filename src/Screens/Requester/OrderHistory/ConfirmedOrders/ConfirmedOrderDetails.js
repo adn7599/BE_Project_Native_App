@@ -1,12 +1,9 @@
 import React, {useState} from 'react';
-import { View,ScrollView,} from 'react-native';
-import {
-  Container,
-} from 'native-base';
-import { Button,Text,DataTable,Appbar} from 'react-native-paper';
+import {View, ScrollView} from 'react-native';
+import {Container} from 'native-base';
+import {Button, Text, DataTable, Appbar, Menu} from 'react-native-paper';
 import moment from 'moment';
 
-import common from '../../../../Global/stylesheet';
 import useUserCred from '../../../../UserCredentials';
 
 const ConfirmedOrderDetailScreen = ({route, navigation}) => {
@@ -34,12 +31,19 @@ const ConfirmedOrderDetailScreen = ({route, navigation}) => {
   return (
     <Container>
       <Appbar.Header>
-        <Appbar.BackAction
-          onPress={() => navigation.pop()}
-        />
+        <Appbar.BackAction onPress={() => navigation.pop()} />
         <Appbar.Content title="Your Order" />
+        <Appbar.Action
+          icon="alert-circle-outline"
+          onPress={() =>
+            navigation.navigate('RaiseComplaint', {
+              provider_id: item.request.provider_id._id,
+              transaction_id : item._id
+            })
+          }
+        />
       </Appbar.Header>
-      <ScrollView style={{paddingHorizontal : 20}}>
+      <ScrollView style={{paddingHorizontal: 20}}>
         <View style={{marginTop: 20}}>
           <Text style={{fontSize: 18, fontWeight: 'bold'}}>Transaction ID</Text>
           <Text style={{fontSize: 18}}>{item._id}</Text>
@@ -103,14 +107,17 @@ const ConfirmedOrderDetailScreen = ({route, navigation}) => {
             {listOrder}
           </DataTable>
         </View>
-        <View style={{marginTop: 20,flexDirection : 'row'}}>
-          <Text style={{fontSize : 18,fontWeight : 'bold'}}>
-            Request time : 
+        <View style={{marginTop: 20, flexDirection: 'row'}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>Request time :</Text>
+          <Text style={{fontSize: 18}}>
+            {' '}
+            {moment(new Date(item.request.time)).format('lll')}
           </Text>
-          <Text style={{fontSize : 18}}>{' '}{moment(new Date(item.request.time)).format('lll')}</Text>
         </View>
         <View style={{marginTop: 20}}>
-          <Text style={{fontSize : 18,fontWeight : 'bold'}}>Payment Details</Text>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            Payment Details
+          </Text>
           <DataTable>
             <DataTable.Row>
               <DataTable.Cell>Payment ID</DataTable.Cell>
@@ -122,23 +129,29 @@ const ConfirmedOrderDetailScreen = ({route, navigation}) => {
             </DataTable.Row>
             <DataTable.Row>
               <DataTable.Cell>Payment time</DataTable.Cell>
-              <DataTable.Cell>{moment(new Date(item.payment.time)).format('lll')}</DataTable.Cell>
+              <DataTable.Cell>
+                {moment(new Date(item.payment.time)).format('lll')}
+              </DataTable.Cell>
             </DataTable.Row>
           </DataTable>
         </View>
-        <View style={{marginTop: 20,flexDirection : 'row'}}>
-          <Text style={{fontSize : 18,fontWeight : 'bold'}}>
-            Confirmation time : 
+        <View style={{marginTop: 20, flexDirection: 'row'}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            Confirmation time :
           </Text>
-          <Text style={{fontSize : 18}}>{' '}{moment(new Date(item.confirm.time)).format('lll')}</Text>
+          <Text style={{fontSize: 18}}>
+            {' '}
+            {moment(new Date(item.confirm.time)).format('lll')}
+          </Text>
         </View>
         <View style={{marginTop: 20}}>
-          <Text style={{fontSize : 18,fontWeight : 'bold'}}>
-            Amount paid : {'₹ '}{item.request.payment_amount}
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            Amount paid : {'₹ '}
+            {item.request.payment_amount}
           </Text>
         </View>
         <View style={{alignSelf: 'center', padding: 20}}>
-          <Button onPress={() => navigation.pop()} mode = 'contained'>
+          <Button onPress={() => navigation.pop()} mode="contained">
             Okay
           </Button>
         </View>

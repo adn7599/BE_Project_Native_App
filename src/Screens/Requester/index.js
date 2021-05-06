@@ -6,7 +6,6 @@ import {
   Title,
   Text,
   Paragraph,
-  List,
   Button,
   Searchbar,
   Card,
@@ -21,8 +20,6 @@ import {
   FlatList,
   View,
   StyleSheet,
-  Image,
-  BackHandler,
   ToastAndroid,
   ScrollView,
   SafeAreaView,
@@ -35,6 +32,7 @@ import useUserCred from '../../UserCredentials';
 import {custReqQueries, suppReqQueries} from '../../serverQueries/Requester';
 import Loading from '../../Component/Loading';
 import MyFastImage from '../../Component/FastImage';
+
 
 const CustomerDashboardScreen = ({navigation}) => {
   const [showProdList, setShowProdList] = useState(null);
@@ -56,16 +54,18 @@ const CustomerDashboardScreen = ({navigation}) => {
     if (respErr === null) {
       if (resp.status == 200) {
         setProdList(resp.data.commodities);
-        setShowProdList(resp.data.commodities)
+        setShowProdList(resp.data.commodities);
       } else if (resp.status == 403) {
         ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
         await deleteUserCred();
       } else {
         setProdList(null);
+        setShowProdList(null);
         ToastAndroid.show(resp.data.error, ToastAndroid.LONG);
       }
     } else {
       setProdList(null);
+      setShowProdList(null);
       ToastAndroid.show(respErr.message, ToastAndroid.LONG);
     }
   };
@@ -108,6 +108,7 @@ const CustomerDashboardScreen = ({navigation}) => {
       item.addedToCart = !item.addedToCart;
     }
     setProdList([...prodList]);
+
   };
 
   const showSearchItem = () => {
@@ -142,7 +143,7 @@ const CustomerDashboardScreen = ({navigation}) => {
           onPress={() => navigation.openDrawer()}
         />
         <Appbar.Content
-          title={userCred.role === 'customer' ? 'Home' : 'Request Comodities'}
+          title={userCred.role === 'customer' ? 'Home' : 'Restock'}
         />
         <Appbar.Action
           size={33}
