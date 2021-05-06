@@ -1,20 +1,19 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Container,
-  Header,
-  Body
-} from 'native-base';
+import {Container, Header, Body} from 'native-base';
 import {
   FlatList,
   View,
-  TouchableOpacity,
   StyleSheet,
   ToastAndroid,
+  Dimensions,
 } from 'react-native';
 import {
   Appbar,
   Card,
   Text,
+  TouchableRipple,
+  useTheme,
+  Searchbar,
 } from 'react-native-paper';
 
 import Loading from '../../../Component/Loading';
@@ -25,7 +24,12 @@ import {
 } from '../../../serverQueries/Provider';
 
 const ProviderDashboardScreen = ({navigation}) => {
+  const [showProvresp, setShowProvResp] = useState(null);
   const [provResp, setProvResp] = useState(null);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const theme = useTheme();
 
   const {userCred, userDetails, deleteUserCred} = useUserCred();
 
@@ -49,29 +53,36 @@ const ProviderDashboardScreen = ({navigation}) => {
             let tempArr = payResp.data;
             tempArr.push(...reqResp.data);
             setProvResp(tempArr);
+            setShowProvResp(tempArr);
           } else if (reqResp.status == 403) {
             ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
             await deleteUserCred();
             setProvResp(null);
+            setShowProvResp(null);
           } else {
             ToastAndroid.show(reqResp.data.error, ToastAndroid.LONG);
             setProvResp(null);
+            setShowProvResp(null);
           }
         } else {
           ToastAndroid.show(reqRespErr.message, ToastAndroid.LONG);
           setProvResp(null);
+          setShowProvResp(null);
         }
       } else if (payResp.status == 403) {
         ToastAndroid.show('Token expired\nLogin again', ToastAndroid.LONG);
         await deleteUserCred();
         setProvResp(null);
+        setShowProvResp(null);
       } else {
         ToastAndroid.show(payResp.data.error, ToastAndroid.LONG);
         setProvResp(null);
+        setShowProvResp(null);
       }
     } else {
       ToastAndroid.show(payRespErr.message, ToastAndroid.LONG);
       setProvResp(null);
+      setShowProvResp(null);
     }
   };
 
@@ -83,11 +94,35 @@ const ProviderDashboardScreen = ({navigation}) => {
     return unsubscribe;
   }, []);
 
+  const showSearchItem = () => {
+    userCred.role === 'SP' ? 
+    setShowProvResp(
+      provResp.filter((item) =>
+        (
+          item.request.requester_id.fName +
+          ' ' +
+          item.request.requester_id.lName
+        )
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()),
+      ),
+    ) : 
+    setShowProvResp(
+      provResp.filter((item) =>
+        (
+          item.request.requester_id.name
+        )
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase()),
+      ),
+    )
+  };
+
   const renderItem = ({item}) => {
     const ordersList = item.request.orders.map((ord) => ord.product.name);
 
     return (
-      <TouchableOpacity
+      <TouchableRipple
         onPress={() => navigation.navigate('RequestDetail', {item: item})}>
         <Card
           style={{
@@ -134,7 +169,7 @@ const ProviderDashboardScreen = ({navigation}) => {
             </Text>
           </Card.Content>
         </Card>
-      </TouchableOpacity>
+      </TouchableRipple>
     );
   };
 
@@ -147,11 +182,36 @@ const ProviderDashboardScreen = ({navigation}) => {
           onPress={() => navigation.openDrawer()}
         />
         <Appbar.Content title="Home" />
+        <Appbar.Action
+          size={33}
+          icon="magnify"
+          onPress={() => setShowSearch(!showSearch)}
+        />
       </Appbar.Header>
-      {provResp !== null ? (
+      {showSearch ? (
+        <View
+          style={{backgroundColor: theme.colors.primary, paddingBottom: 10}}>
+          <Searchbar
+            value={searchQuery}
+            placeholder="Search"
+            onChangeText={(query) => setSearchQuery(query)}
+            onSubmitEditing={() => showSearchItem()}
+            onIconPress={() => showSearchItem()}
+            onTouchCancel={(e) => touchCancel(e)}
+            style={{
+              alignSelf: 'center',
+              width: Dimensions.get('screen').width - 20,
+              borderRadius: 5,
+            }}
+          />
+        </View>
+      ) : (
+        <View />
+      )}
+      {showProvresp !== null ? (
         <>
           <FlatList
-            data={provResp}
+            data={showProvresp}
             initialNumToRender={7}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}

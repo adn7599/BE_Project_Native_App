@@ -1,13 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {SafeAreaView, View, ScrollView} from 'react-native';
-import {Appbar, Text, DataTable, TextInput} from 'react-native-paper';
+import {Appbar, Text, DataTable, TextInput, Button} from 'react-native-paper';
 import useUserCred from '../../../../UserCredentials';
 import moment from 'moment';
 
-import {} from 'react-native-paper';
 import {Container} from 'native-base';
 
-export default function ComplaintHistoryDetails({navigation, route}) {
+const ComplaintHistoryDetailsScreen = ({navigation, route}) => {
   const {userCred} = useUserCred();
   const {item} = route.params;
 
@@ -17,12 +16,14 @@ export default function ComplaintHistoryDetails({navigation, route}) {
         <Appbar.BackAction onPress={() => navigation.pop()} />
         <Appbar.Content title="Complaint Details" />
       </Appbar.Header>
-      <ScrollView style={{padding: 20}}>
-        <Text style={{fontWeight: 'bold', fontSize: 23}}>{item.subject}</Text>
-        <Text style={{fontSize: 17}}>
-          {moment(new Date(item.time)).format('lll')}
-        </Text>
-        <View style={{paddingVertical: 20}}>
+      <ScrollView style={{paddingHorizontal: 20}}>
+        <View style = {{marginTop : 20}}>
+          <Text style={{fontWeight: 'bold', fontSize: 23}}>{item.subject}</Text>
+          <Text style={{fontSize: 17}}>
+            {moment(new Date(item.time)).format('lll')}
+          </Text>
+        </View>
+        <View style={{marginVertical: 20}}>
           <Text
             style={{
               fontWeight: 'bold',
@@ -59,16 +60,16 @@ export default function ComplaintHistoryDetails({navigation, route}) {
             </DataTable.Row>
           </DataTable>
         </View>
-        <Text
-          style={{
-            fontSize: 20,
-            fontStyle: 'italic',
-            fontWeight: 'bold',
-            paddingBottom: 10,
-          }}>
-          Complaint
-        </Text>
-        <View style={{paddingBottom: 20}}>
+        <View style={{marginBottom : 20}}>
+          <Text
+            style={{
+              fontSize: 20,
+              fontStyle: 'italic',
+              fontWeight: 'bold',
+              paddingBottom: 10,
+            }}>
+            Complaint
+          </Text>
           <TextInput
             value={item.body}
             editable={false}
@@ -77,7 +78,14 @@ export default function ComplaintHistoryDetails({navigation, route}) {
             numberOfLines={18}
           />
         </View>
+        <View style={{alignSelf: 'center', paddingBottom: 20}}>
+          <Button mode="contained" onPress={() => navigation.pop()}>
+            Okay
+          </Button>
+        </View>
       </ScrollView>
     </Container>
   );
-}
+};
+
+export default ComplaintHistoryDetailsScreen;
