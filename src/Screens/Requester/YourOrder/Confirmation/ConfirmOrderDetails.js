@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Modal, ScrollView, ToastAndroid} from 'react-native';
-import {
-  Container,
-} from 'native-base';
+import {Container} from 'native-base';
 import {sha256} from 'react-native-sha256';
-import {Appbar,Button,Text,DataTable } from 'react-native-paper';
+import {Appbar, Button, Text, DataTable} from 'react-native-paper';
 import moment from 'moment';
 
 import useUserCred from '../../../../UserCredentials';
 import {sign} from '../../../../serverQueries/User/sign';
+import MyContainer from '../../../../Component/MyContainer';
 
 const OrderDetailScreen = ({route, navigation}) => {
   const {item} = route.params;
@@ -59,12 +58,10 @@ const OrderDetailScreen = ({route, navigation}) => {
   };
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
-      <Appbar.BackAction
-          onPress={() => navigation.pop()}
-        />
-        <Appbar.Content title="Your Order" />
+        <Appbar.BackAction color="white" onPress={() => navigation.pop()} />
+        <Appbar.Content color="white" title="Your Order" />
       </Appbar.Header>
       <ScrollView style={{paddingHorizontal: 20}}>
         <View style={{marginTop: 20}}>
@@ -130,14 +127,17 @@ const OrderDetailScreen = ({route, navigation}) => {
             {listOrder}
           </DataTable>
         </View>
-        <View style={{marginTop: 20,flexDirection : 'row'}}>
-          <Text style={{fontSize : 18,fontWeight : 'bold'}}>
-            Request time : 
+        <View style={{marginTop: 20, flexDirection: 'row'}}>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>Request time :</Text>
+          <Text style={{fontSize: 18}}>
+            {' '}
+            {moment(new Date(item.request.time)).format('lll')}
           </Text>
-          <Text style={{fontSize : 18}}>{' '}{moment(new Date(item.request.time)).format('lll')}</Text>
         </View>
         <View style={{marginTop: 20}}>
-          <Text style={{fontSize : 18,fontWeight : 'bold'}}>Payment Details</Text>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            Payment Details
+          </Text>
           <DataTable>
             <DataTable.Row>
               <DataTable.Cell>Payment ID</DataTable.Cell>
@@ -149,22 +149,25 @@ const OrderDetailScreen = ({route, navigation}) => {
             </DataTable.Row>
             <DataTable.Row>
               <DataTable.Cell>Payment time</DataTable.Cell>
-              <DataTable.Cell>{moment(new Date(item.payment.time)).format('lll')}</DataTable.Cell>
+              <DataTable.Cell>
+                {moment(new Date(item.payment.time)).format('lll')}
+              </DataTable.Cell>
             </DataTable.Row>
           </DataTable>
         </View>
         <View style={{marginTop: 20}}>
-          <Text style={{fontSize : 18,fontWeight : 'bold'}}>
-            Amount paid : {'₹ '}{item.request.payment_amount}
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            Amount paid : {'₹ '}
+            {item.request.payment_amount}
           </Text>
         </View>
         <View style={{alignSelf: 'center', padding: 20}}>
-          <Button onPress={() => generateQR()} mode = 'contained'>
+          <Button onPress={() => generateQR()} mode="contained">
             <Text>Confirm</Text>
           </Button>
         </View>
       </ScrollView>
-    </Container>
+    </MyContainer>
   );
 };
 

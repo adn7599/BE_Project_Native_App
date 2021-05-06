@@ -4,20 +4,24 @@ import {Avatar, Appbar, Button, Text, Menu, Divider} from 'react-native-paper';
 import {myProfileContext} from '../../Navigations/MyProfileStack';
 import common from '../../Global/stylesheet';
 import useUserCred from '../../UserCredentials';
+import {useTheme} from '@react-navigation/native';
 
 const ProfileScreen = ({navigation}) => {
+  const theme = useTheme();
   const {userDetails, deleteUserCred, userCred} = useUserCred();
   const {avatarText, name} = useContext(myProfileContext);
   return (
     <SafeAreaView style={{flex: 1}}>
       <Appbar.Header>
         <Appbar.Action
+          color="white"
           size={33}
           icon="menu"
           onPress={() => navigation.openDrawer()}
         />
-        <Appbar.Content title="Profile" />
+        <Appbar.Content color="white" title="Profile" />
         <Appbar.Action
+          color="white"
           icon="clock-alert-outline"
           onPress={() => {
             navigation.navigate('ComplaintHistory');
@@ -26,7 +30,7 @@ const ProfileScreen = ({navigation}) => {
       </Appbar.Header>
       <View style={{paddingHorizontal: 30}}>
         <View style={Styles.avatarView}>
-          <Avatar.Text size={150} label={avatarText} />
+          <Avatar.Text size={150} label={avatarText} color="white" />
         </View>
         <View style={Styles.userNameView}>
           <Text style={common.text}>{name}</Text>
@@ -37,14 +41,14 @@ const ProfileScreen = ({navigation}) => {
         </View>
         {userCred.role !== 'customer' ? (
           <View style={{marginTop: 15}}>
-            <Text style={common.text}>Region </Text>
+            <Text style={{fontSize: 18}}>Region </Text>
             <Text style={common.text}>{userDetails.region}</Text>
           </View>
         ) : (
           <></>
         )}
         <View style={{marginTop: 15}}>
-          <Text style={common.text}>
+          <Text style={{fontSize: 18}}>
             {userCred.role === 'customer'
               ? `Ration Number `
               : `Registration ID `}
@@ -52,11 +56,12 @@ const ProfileScreen = ({navigation}) => {
           <Text style={common.text}>{userDetails._id}</Text>
         </View>
         <View style={{marginTop: 15}}>
-          <Text style={common.text}>Phone Number </Text>
+          <Text style={{fontSize: 18}}>Phone Number </Text>
           <Text style={common.text}>{userDetails.mobNo}</Text>
         </View>
         <View style={{marginTop: 15}}>
           <Button
+            labelStyle={{color: 'white'}}
             onPress={() => {
               navigation.navigate('ChangePassword');
             }}

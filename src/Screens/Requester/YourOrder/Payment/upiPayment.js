@@ -5,6 +5,7 @@ import {
   Modal,
   ToastAndroid,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import {
   Text,
@@ -13,7 +14,7 @@ import {
   TextInput,
   Portal,
   Dialog,
-  Paragraph
+  Paragraph,
 } from 'react-native-paper';
 import uuid from 'react-native-uuid';
 
@@ -68,8 +69,8 @@ const UPIPaymentScreen = ({route, navigation}) => {
   return (
     <SafeAreaView>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.pop()} />
-        <Appbar.Content title="UPI Payment" />
+        <Appbar.BackAction color="white" onPress={() => navigation.pop()} />
+        <Appbar.Content color="white" title="UPI Payment" />
       </Appbar.Header>
       <View style={{margin: 20}}>
         <View style={{marginTop: 20, flexDirection: 'row'}}>
@@ -122,14 +123,14 @@ const UPIPaymentScreen = ({route, navigation}) => {
             <Portal>
               <Dialog
                 visible={modalVisible}
-                dismissable = {false}
+                dismissable={false}
                 //onDismiss={() => {}}
-                >
+              >
                 <Dialog.Title>Payment Status</Dialog.Title>
                 {upiModalMsg !== null ? (
                   <>
                     <Dialog.Content>
-                      <Paragraph >{upiModalMsg}</Paragraph>
+                      <Paragraph>{upiModalMsg}</Paragraph>
                     </Dialog.Content>
                     <Dialog.Actions>
                       <Button onPress={() => navigation.popToTop()}>
@@ -144,7 +145,7 @@ const UPIPaymentScreen = ({route, navigation}) => {
                       alignItems: 'center',
                       padding: 10,
                     }}>
-                    <Loading />
+                    <ActivityIndicator size={'large'} animating={true} />
                     <Text style={{marginLeft: 30, fontSize: 15}}>
                       Processing transaction...
                     </Text>

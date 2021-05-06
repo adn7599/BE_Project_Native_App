@@ -74,11 +74,12 @@ const ProviderStock = ({navigation}) => {
     <>
       <Appbar.Header>
         <Appbar.Action
+          color="white"
           size={33}
           icon="menu"
           onPress={() => navigation.openDrawer()}
         />
-        <Appbar.Content title="Stock" />
+        <Appbar.Content color="white" title="Stock" />
       </Appbar.Header>
       {/* PRODUCTS */}
       {prodList !== null ? (

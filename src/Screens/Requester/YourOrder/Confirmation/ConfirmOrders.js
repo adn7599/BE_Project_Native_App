@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Container,
-} from 'native-base';
+import {Container} from 'native-base';
 import {
   FlatList,
   View,
@@ -9,7 +7,7 @@ import {
   StyleSheet,
   ToastAndroid,
 } from 'react-native';
-import {Appbar,Button,Text,Card} from 'react-native-paper';
+import {Appbar, Button, Text, Card} from 'react-native-paper';
 
 import common from '../../../../Global/stylesheet';
 import Loading from '../../../../Component/Loading';
@@ -18,6 +16,7 @@ import {
   custReqQueries,
   suppReqQueries,
 } from '../../../../serverQueries/Requester';
+import MyContainer from '../../../../Component/MyContainer';
 
 const ConfirmOrderScreen = ({navigation}) => {
   const [payResp, setPayResp] = useState(null);
@@ -72,20 +71,26 @@ const ConfirmOrderScreen = ({navigation}) => {
             marginBottom: 20,
             elevation: 12,
             borderRadius: 15,
-            
           }}>
-          <Card.Content style={{flexDirection: 'row',justifyContent : 'space-between'}}>
+          <Card.Content
+            style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View>
-              <Text style ={{fontSize : 17,fontWeight : 'bold',paddingBottom : 10}}>{ordersList.join(', ')}</Text>
-              <Text style ={{fontSize : 17}}>
+              <Text
+                style={{fontSize: 17, fontWeight: 'bold', paddingBottom: 10}}>
+                {ordersList.join(', ')}
+              </Text>
+              <Text style={{fontSize: 17}}>
                 {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} :{' '}
                 {item.request.provider_id.name}
               </Text>
             </View>
-            <Text style = {{fontWeight : 'bold',fontSize : 20}}>{'₹ '} {item.request.payment_amount}</Text>
+            <Text style={{fontWeight: 'bold', fontSize: 20}}>
+              {'₹ '} {item.request.payment_amount}
+            </Text>
           </Card.Content>
-          <Card.Content style={{paddingTop:5}}>
-            <Text style ={{fontSize : 17}}>Payment date : {new Date(item.payment.time).toLocaleDateString()}
+          <Card.Content style={{paddingTop: 5}}>
+            <Text style={{fontSize: 17}}>
+              Payment date : {new Date(item.payment.time).toLocaleDateString()}
             </Text>
           </Card.Content>
         </Card>
@@ -94,14 +99,15 @@ const ConfirmOrderScreen = ({navigation}) => {
   };
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
         <Appbar.Action
+          color="white"
           size={33}
           icon="menu"
           onPress={() => navigation.openDrawer()}
         />
-        <Appbar.Content title="Your Order" />
+        <Appbar.Content color="white" title="Your Order" />
       </Appbar.Header>
       {payResp !== null ? (
         <>
@@ -123,7 +129,7 @@ const ConfirmOrderScreen = ({navigation}) => {
       ) : (
         <Loading />
       )}
-    </Container>
+    </MyContainer>
   );
 };
 

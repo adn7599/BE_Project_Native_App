@@ -25,6 +25,7 @@ import {useEffect} from 'react';
 import useUserCred from '../../../UserCredentials';
 import {custReqQueries, suppReqQueries} from '../../../serverQueries/Requester';
 import Loading from '../../../Component/Loading';
+import MyContainer from '../../../Component/MyContainer';
 
 const SelectProviderScreen = ({route, navigation}) => {
   const [locLong, locLat] = [72.9756461, 19.1869078];
@@ -249,7 +250,13 @@ const SelectProviderScreen = ({route, navigation}) => {
     }
 
     return (
-      <Card style={{marginHorizontal: 20, marginBottom: 20, elevation: 12,borderRadius : 15}}>
+      <Card
+        style={{
+          marginHorizontal: 20,
+          marginBottom: 20,
+          elevation: 12,
+          borderRadius: 15,
+        }}>
         <Card.Content
           style={{
             flexDirection: 'row',
@@ -258,8 +265,8 @@ const SelectProviderScreen = ({route, navigation}) => {
           }}>
           <Text style={{fontWeight: 'bold', fontSize: 20}}>{item.name}</Text>
           <RadioButton
-            color={themes.colors.primary}
-            uncheckedColor="red"
+            // color={themes.colors.primary}
+            // uncheckedColor="red"
             status={
               providers.selectedProv === item._id ? 'checked' : 'unchecked'
             }
@@ -309,10 +316,10 @@ const SelectProviderScreen = ({route, navigation}) => {
   };
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.pop()} />
-        <Appbar.Content title="Select Provider" />
+        <Appbar.BackAction color="white" onPress={() => navigation.pop()} />
+        <Appbar.Content color="white" title="Select Provider" />
       </Appbar.Header>
       <RangeSelector />
       {providers !== null ? (
@@ -341,7 +348,7 @@ const SelectProviderScreen = ({route, navigation}) => {
                 height: 3,
               },
               shadowColor: '#000000',
-              shadowOpacity : 0.9            
+              shadowOpacity: 0.9,
             }}>
             <View
               style={{
@@ -378,7 +385,7 @@ const SelectProviderScreen = ({route, navigation}) => {
       ) : (
         <Loading />
       )}
-    </Container>
+    </MyContainer>
   );
 };
 

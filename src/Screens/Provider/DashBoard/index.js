@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ToastAndroid,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import {
   Appbar,
@@ -22,6 +23,7 @@ import {
   suppProvQueries,
   distProvQueries,
 } from '../../../serverQueries/Provider';
+import MyContainer from '../../../Component/MyContainer';
 
 const ProviderDashboardScreen = ({navigation}) => {
   const [showProvresp, setShowProvResp] = useState(null);
@@ -95,27 +97,25 @@ const ProviderDashboardScreen = ({navigation}) => {
   }, []);
 
   const showSearchItem = () => {
-    userCred.role === 'SP' ? 
-    setShowProvResp(
-      provResp.filter((item) =>
-        (
-          item.request.requester_id.fName +
-          ' ' +
-          item.request.requester_id.lName
+    userCred.role === 'SP'
+      ? setShowProvResp(
+          provResp.filter((item) =>
+            (
+              item.request.requester_id.fName +
+              ' ' +
+              item.request.requester_id.lName
+            )
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase()),
+          ),
         )
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()),
-      ),
-    ) : 
-    setShowProvResp(
-      provResp.filter((item) =>
-        (
-          item.request.requester_id.name
-        )
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()),
-      ),
-    )
+      : setShowProvResp(
+          provResp.filter((item) =>
+            item.request.requester_id.name
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase()),
+          ),
+        );
   };
 
   const renderItem = ({item}) => {
@@ -174,15 +174,17 @@ const ProviderDashboardScreen = ({navigation}) => {
   };
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
         <Appbar.Action
+          color="white"
           size={33}
           icon="menu"
           onPress={() => navigation.openDrawer()}
         />
-        <Appbar.Content title="Home" />
+        <Appbar.Content color="white" title="Home" />
         <Appbar.Action
+          color="white"
           size={33}
           icon="magnify"
           onPress={() => setShowSearch(!showSearch)}
@@ -219,8 +221,8 @@ const ProviderDashboardScreen = ({navigation}) => {
               <>
                 <Header
                   style={{
-                    backgroundColor: '#E4E',
-                    height: 40,
+                    backgroundColor: theme.colors.accent,
+                    height: 50,
                   }}>
                   <Body>
                     <Text
@@ -246,7 +248,7 @@ const ProviderDashboardScreen = ({navigation}) => {
       ) : (
         <Loading />
       )}
-    </Container>
+    </MyContainer>
   );
 };
 

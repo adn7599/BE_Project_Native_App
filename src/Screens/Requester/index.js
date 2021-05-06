@@ -32,7 +32,7 @@ import useUserCred from '../../UserCredentials';
 import {custReqQueries, suppReqQueries} from '../../serverQueries/Requester';
 import Loading from '../../Component/Loading';
 import MyFastImage from '../../Component/FastImage';
-
+import MyContainer from '../../Component/MyContainer';
 
 const CustomerDashboardScreen = ({navigation}) => {
   const [showProdList, setShowProdList] = useState(null);
@@ -108,7 +108,6 @@ const CustomerDashboardScreen = ({navigation}) => {
       item.addedToCart = !item.addedToCart;
     }
     setProdList([...prodList]);
-
   };
 
   const showSearchItem = () => {
@@ -117,12 +116,12 @@ const CustomerDashboardScreen = ({navigation}) => {
         item.product.name.toLowerCase().includes(searchQuery.toLowerCase()),
       ),
     );
-    console.log('searsh item',showProdList,searchQuery);
+    console.log('searsh item', showProdList, searchQuery);
   };
 
   const touchCancel = (e) => {
-    console.log('touch cancel',e);
-  }
+    console.log('touch cancel', e);
+  };
 
   const renderItem = ({item}) => {
     return (
@@ -135,22 +134,26 @@ const CustomerDashboardScreen = ({navigation}) => {
   };
 
   return (
-    <>
+    <MyContainer>
       <Appbar.Header>
         <Appbar.Action
+          color="white"
           size={33}
           icon="menu"
           onPress={() => navigation.openDrawer()}
         />
         <Appbar.Content
+          color="white"
           title={userCred.role === 'customer' ? 'Home' : 'Restock'}
         />
         <Appbar.Action
+          color="white"
           size={33}
           icon="magnify"
           onPress={() => setShowSearch(!showSearch)}
         />
         <Appbar.Action
+          color="white"
           size={33}
           icon="cart"
           onPress={() => navigation.navigate('Cart')}
@@ -165,7 +168,7 @@ const CustomerDashboardScreen = ({navigation}) => {
             onChangeText={(query) => setSearchQuery(query)}
             onSubmitEditing={() => showSearchItem()}
             onIconPress={() => showSearchItem()}
-            onTouchCancel = {(e) => touchCancel(e)}
+            onTouchCancel={(e) => touchCancel(e)}
             style={{
               alignSelf: 'center',
               width: Dimensions.get('screen').width - 20,
@@ -185,7 +188,11 @@ const CustomerDashboardScreen = ({navigation}) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.product._id.toString()}
           ListHeaderComponent={
-            <Header style={Sytles.welcomeHeader}>
+            <Header
+              style={
+                // eslint-disable-next-line react-native/no-inline-styles
+                {backgroundColor: theme.colors.accent, height: 50}
+              }>
               <Body>
                 <Text style={Sytles.welcomeHeaderText}>
                   Welcome,{' '}
@@ -202,7 +209,7 @@ const CustomerDashboardScreen = ({navigation}) => {
       ) : (
         <Loading />
       )}
-    </>
+    </MyContainer>
   );
 };
 
@@ -232,9 +239,13 @@ const ListItem = ({item, toggleAddToCart, userCred}) => {
         </View>
         <View style={{paddingTop: 5}}>
           <Button
+            labelStyle={{color: '#FFF'}}
             style={[
               Sytles.cartButton,
-              {backgroundColor: item.addedToCart ? 'red' : 'green'},
+              // eslint-disable-next-line react-native/no-inline-styles
+              {
+                backgroundColor: item.addedToCart ? 'red' : 'green',
+              },
             ]}
             icon="cart"
             mode="contained"
@@ -309,10 +320,6 @@ const Sytles = StyleSheet.create({
   container: {
     //backgroundColor: '#F9D1A3',
     elevation: 4,
-  },
-  welcomeHeader: {
-    backgroundColor: '#E4E',
-    height: 40,
   },
   welcomeHeaderText: {
     fontSize: 20,

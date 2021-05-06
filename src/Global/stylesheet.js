@@ -4,7 +4,7 @@ const dimension = Dimensions.get('screen');
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: '#F9D1A3',
+    backgroundColor: '#e3fffe',
   },
   welcomeHeader: {
     backgroundColor: '#E4B884',

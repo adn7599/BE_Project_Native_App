@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Container,
-} from 'native-base';
+import {Container} from 'native-base';
 import {FlatList, View, TouchableOpacity, ToastAndroid} from 'react-native';
 import {Appbar, Button, Text, Card} from 'react-native-paper';
 
@@ -11,6 +9,7 @@ import {
   suppProvQueries,
   distProvQueries,
 } from '../../../../serverQueries/Provider';
+import MyContainer from '../../../../Component/MyContainer';
 
 const ConfirmedOrdersScreen = ({navigation}) => {
   const [completeResp, setCompleteResp] = useState(null);
@@ -94,14 +93,15 @@ const ConfirmedOrdersScreen = ({navigation}) => {
   };
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
         <Appbar.Action
+          color="white"
           size={33}
           icon="menu"
           onPress={() => navigation.openDrawer()}
         />
-        <Appbar.Content title="Order History" />
+        <Appbar.Content color="white" title="Order History" />
       </Appbar.Header>
       {completeResp !== null ? (
         <>
@@ -123,7 +123,7 @@ const ConfirmedOrdersScreen = ({navigation}) => {
       ) : (
         <Loading />
       )}
-    </Container>
+    </MyContainer>
   );
 };
 

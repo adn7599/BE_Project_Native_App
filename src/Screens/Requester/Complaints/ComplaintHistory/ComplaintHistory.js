@@ -77,8 +77,8 @@ export default function ComplaintHistory({navigation}) {
   return (
     <SafeAreaView>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.pop()} />
-        <Appbar.Content title="Your Complaints" />
+        <Appbar.BackAction color="white" onPress={() => navigation.pop()} />
+        <Appbar.Content color="white" title="Your Complaints" />
       </Appbar.Header>
 
       {complaintsResp !== null ? (

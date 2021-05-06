@@ -9,11 +9,13 @@ import {
   Dialog,
   Paragraph,
   Portal,
+  ActivityIndicator,
 } from 'react-native-paper';
 
 import useUserCred from '../../UserCredentials';
 import * as UserQueries from '../../serverQueries/User/changePassword';
 import Loading from '../../Component/Loading';
+import MyContainer from '../../Component/MyContainer';
 
 const ChangePasswordScreen = ({navigation}) => {
   const {userCred, deleteUserCred} = useUserCred();
@@ -52,10 +54,10 @@ const ChangePasswordScreen = ({navigation}) => {
   };
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.pop()} />
-        <Appbar.Content title="Change Password" />
+        <Appbar.BackAction color="white" onPress={() => navigation.pop()} />
+        <Appbar.Content color="white" title="Change Password" />
       </Appbar.Header>
       <View style={{padding: 20}}>
         <View style={{paddingBottom: 20}}>
@@ -151,15 +153,14 @@ const ChangePasswordScreen = ({navigation}) => {
           </Button>
         </View>
         <Portal>
-          <Dialog
-            visible={modalVisible}
-            dismissable={false}
-          >
+          <Dialog visible={modalVisible} dismissable={false}>
             {/* <Dialog.Title></Dialog.Title> */}
             {modalMsg !== null ? (
               <>
-                <Dialog.Content style ={{}}>
-                  <Paragraph style ={{fontSize : 16,paddingTop : 25}}>{modalMsg}</Paragraph>
+                <Dialog.Content style={{}}>
+                  <Paragraph style={{fontSize: 16, paddingTop: 25}}>
+                    {modalMsg}
+                  </Paragraph>
                 </Dialog.Content>
                 <Dialog.Actions>
                   <Button onPress={() => navigation.popToTop()}>Done</Button>
@@ -172,7 +173,7 @@ const ChangePasswordScreen = ({navigation}) => {
                   alignItems: 'center',
                   padding: 10,
                 }}>
-                <Loading />
+                <ActivityIndicator size={'large'} animating={true} />
                 <Text style={{marginLeft: 30, fontSize: 15}}>
                   Changing password...
                 </Text>
@@ -181,7 +182,7 @@ const ChangePasswordScreen = ({navigation}) => {
           </Dialog>
         </Portal>
       </View>
-    </Container>
+    </MyContainer>
   );
 };
 

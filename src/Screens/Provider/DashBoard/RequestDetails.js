@@ -15,6 +15,7 @@ import moment from 'moment';
 
 import common from '../../../Global/stylesheet';
 import useUserCred from '../../../UserCredentials';
+import MyContainer from '../../../Component/MyContainer';
 
 const RequestDetailScreen = ({route, navigation}) => {
   const {item} = route.params;
@@ -23,7 +24,7 @@ const RequestDetailScreen = ({route, navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const goToScanQR = () => {
-    setModalVisible(false)
+    setModalVisible(false);
     navigation.navigate('QRScanner', {item: item});
   };
 
@@ -46,12 +47,10 @@ const RequestDetailScreen = ({route, navigation}) => {
   });
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
-        <Appbar.BackAction
-          onPress={() => navigation.pop()}
-        />
-        <Appbar.Content title="Your Order" />
+        <Appbar.BackAction color="white" onPress={() => navigation.pop()} />
+        <Appbar.Content color="white" title="Your Order" />
       </Appbar.Header>
       <ScrollView style={{paddingHorizontal: 20}}>
         <View style={{marginTop: 20}}>
@@ -232,7 +231,7 @@ const RequestDetailScreen = ({route, navigation}) => {
           </View>
         </Modal> */}
       </View>
-    </Container>
+    </MyContainer>
   );
 };
 

@@ -15,6 +15,7 @@ import useUserCred from '../../../UserCredentials';
 import * as UserQueries from '../../../serverQueries/User/complaints';
 import Loading from '../../../Component/Loading';
 import {sub} from 'react-native-reanimated';
+import MyContainer from '../../../Component/MyContainer';
 
 const RaiseComplaintScreen = ({route, navigation}) => {
   const {provider_id, transaction_id} = route.params;
@@ -49,10 +50,10 @@ const RaiseComplaintScreen = ({route, navigation}) => {
   };
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.pop()} />
-        <Appbar.Content title="Raise Complaint" />
+        <Appbar.BackAction color="white" onPress={() => navigation.pop()} />
+        <Appbar.Content color="white" title="Raise Complaint" />
       </Appbar.Header>
       <View style={{padding: 20}}>
         <View style={{paddingBottom: 20}}>
@@ -62,20 +63,19 @@ const RaiseComplaintScreen = ({route, navigation}) => {
           <View>
             <TextInput
               value={subject}
-              
-              mode= 'outlined'
+              mode="outlined"
               onChangeText={(Text) => setSubject(Text)}
             />
           </View>
-          <View style ={{paddingTop : 20}}>
+          <View style={{paddingTop: 20}}>
             <Text style={{fontSize: 17, paddingBottom: 5}}>Body</Text>
           </View>
           <View>
             <TextInput
               value={body}
-              mode= 'outlined'
-              multiline = {true}
-              numberOfLines = {15}
+              mode="outlined"
+              multiline={true}
+              numberOfLines={15}
               onChangeText={(Text) => setBody(Text)}
             />
           </View>
@@ -122,7 +122,7 @@ const RaiseComplaintScreen = ({route, navigation}) => {
           </Dialog>
         </Portal>
       </View>
-    </Container>
+    </MyContainer>
   );
 };
 

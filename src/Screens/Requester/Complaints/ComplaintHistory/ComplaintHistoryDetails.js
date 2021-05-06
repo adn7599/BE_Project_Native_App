@@ -5,16 +5,17 @@ import useUserCred from '../../../../UserCredentials';
 import moment from 'moment';
 
 import {Container} from 'native-base';
+import MyContainer from '../../../../Component/MyContainer';
 
 const ComplaintHistoryDetailsScreen = ({navigation, route}) => {
   const {userCred} = useUserCred();
   const {item} = route.params;
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.pop()} />
-        <Appbar.Content title="Complaint Details" />
+        <Appbar.BackAction color="white" onPress={() => navigation.pop()} />
+        <Appbar.Content color="white" title="Complaint Details" />
       </Appbar.Header>
       <ScrollView style={{paddingHorizontal: 20}}>
         <View style = {{marginTop : 20}}>
@@ -84,7 +85,7 @@ const ComplaintHistoryDetailsScreen = ({navigation, route}) => {
           </Button>
         </View>
       </ScrollView>
-    </Container>
+    </MyContainer>
   );
 };
 

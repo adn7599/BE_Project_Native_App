@@ -1,14 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Container,
-} from 'native-base';
+import {Container} from 'native-base';
 import {FlatList, View, TouchableOpacity, ToastAndroid} from 'react-native';
-import {Appbar,Button,Text,Card } from 'react-native-paper';
+import {Appbar, Button, Text, Card} from 'react-native-paper';
 
 import common from '../../../../Global/stylesheet';
 import Loading from '../../../../Component/Loading';
 import useUserCred from '../../../../UserCredentials';
-import {custReqQueries, suppReqQueries} from '../../../../serverQueries/Requester';
+import {
+  custReqQueries,
+  suppReqQueries,
+} from '../../../../serverQueries/Requester';
+import MyContainer from '../../../../Component/MyContainer';
 
 const CancelledOrdersScreen = ({navigation}) => {
   const [cancelledResp, setCancelledResp] = useState(null);
@@ -63,20 +65,27 @@ const CancelledOrdersScreen = ({navigation}) => {
             marginBottom: 20,
             elevation: 12,
             borderRadius: 15,
-            
           }}>
-          <Card.Content style={{flexDirection: 'row',justifyContent : 'space-between'}}>
+          <Card.Content
+            style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View>
-              <Text style ={{fontSize : 17,fontWeight : 'bold',paddingBottom : 10}}>{ordersList.join(', ')}</Text>
-              <Text style ={{fontSize : 17}}>
+              <Text
+                style={{fontSize: 17, fontWeight: 'bold', paddingBottom: 10}}>
+                {ordersList.join(', ')}
+              </Text>
+              <Text style={{fontSize: 17}}>
                 {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} :{' '}
                 {item.request.provider_id.name}
               </Text>
             </View>
-            <Text style = {{fontWeight : 'bold',fontSize : 20}}>{'₹ '} {item.request.payment_amount}</Text>
+            <Text style={{fontWeight: 'bold', fontSize: 20}}>
+              {'₹ '} {item.request.payment_amount}
+            </Text>
           </Card.Content>
-          <Card.Content style={{paddingTop:5}}>
-            <Text style ={{fontSize : 17}}>Cancellation date : {new Date(item.cancel.time).toLocaleDateString()}
+          <Card.Content style={{paddingTop: 5}}>
+            <Text style={{fontSize: 17}}>
+              Cancellation date :{' '}
+              {new Date(item.cancel.time).toLocaleDateString()}
             </Text>
           </Card.Content>
         </Card>
@@ -85,14 +94,15 @@ const CancelledOrdersScreen = ({navigation}) => {
   };
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
         <Appbar.Action
+          color="white"
           size={33}
           icon="menu"
           onPress={() => navigation.openDrawer()}
         />
-        <Appbar.Content title="Order History" />
+        <Appbar.Content color="white" title="Order History" />
       </Appbar.Header>
       {cancelledResp !== null ? (
         <>
@@ -114,7 +124,7 @@ const CancelledOrdersScreen = ({navigation}) => {
       ) : (
         <Loading />
       )}
-    </Container>
+    </MyContainer>
   );
 };
 

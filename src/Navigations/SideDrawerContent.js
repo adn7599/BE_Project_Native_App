@@ -6,7 +6,7 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import {Icon, Text, Title} from 'native-base';
-import {Avatar, Drawer, List} from 'react-native-paper';
+import {Avatar, Drawer, List, TouchableRipple} from 'react-native-paper';
 import common from '../Global/stylesheet';
 
 import useUserCred from '../UserCredentials';
@@ -24,7 +24,7 @@ const SideDrawerContent = (props) => {
   const CustomerDrawerContent = () => {
     return (
       <>
-        <Drawer.Section style = {{marginTop : 15}}>
+        <Drawer.Section style={{marginTop: 15}}>
           <Drawer.Item
             label="Home"
             icon="home"
@@ -86,149 +86,149 @@ const SideDrawerContent = (props) => {
   const SupplierDrawerContent = () => {
     return (
       <>
-          <Drawer.Section style = {{marginTop : 15}}>
-            <Drawer.Item
-              label="Home"
-              icon="home"
-              active={active === 'Home'}
-              onPress={() => {
-                setActive('Home');
-                props.navigation.navigate('ProviderHome');
-              }}
-            />
-            <Drawer.Item
-              label="Stock"
-              icon="silo"
-              active={active === 'Stock'}
-              onPress={() => {
-                setActive('Stock');
-                props.navigation.navigate('ProviderStock');
-              }}
-            />
-          </Drawer.Section>
-          <Drawer.Section title="Customer Order History">
-            <Drawer.Item
-              label="Completed Orders"
-              icon="check-all"
-              active={active === 'Completed Orders'}
-              onPress={() => {
-                setActive('Completed Orders');
-                props.navigation.navigate('ProviderConfirmedOrderHistory');
-              }}
-              style={styles.drawerFirstChild}
-            />
-            <Drawer.Item
-              label="Cancelled Orders"
-              icon="cancel"
-              active={active === 'Cancelled Orders'}
-              onPress={() => {
-                setActive('Cancelled Orders');
-                props.navigation.navigate('ProviderCancelledOrderHistory');
-              }}
-              style={styles.drawerFirstChild}
-            />
-          </Drawer.Section>
-          <Drawer.Section title="Restock">
-            <Drawer.Item
-              label="Place restock request"
-              icon="restore"
-              active={active === 'Restock'}
-              onPress={() => {
-                setActive('Restock');
-                props.navigation.navigate('RequesterDashboard');
-              }}
-              style={styles.drawerFirstChild}
-            />
-            <Drawer.Item
-              label="Pending payments"
-              icon="cash"
-              active={active === 'Pending payments'}
-              onPress={() => {
-                setActive('Pending payments');
-                props.navigation.navigate('RequesterPayment');
-              }}
-              style={styles.drawerFirstChild}
-            />
-            <Drawer.Item
-              label="Pending confirmations"
-              icon="format-list-checks"
-              active={active === 'Pending confirmations'}
-              onPress={() => {
-                setActive('Pending confirmations');
-                props.navigation.navigate('RequesterConfirm');
-              }}
-              style={styles.drawerFirstChild}
-            />
-            <Drawer.Item
-              label="Completed requests"
-              icon="check-all"
-              active={active === 'Completed requests'}
-              onPress={() => {
-                setActive('Completed requests');
-                props.navigation.navigate('RequesterConfirmedOrderHistory');
-              }}
-              style={styles.drawerFirstChild}
-            />
-            <Drawer.Item
-              label="Cancelled requests"
-              icon="cancel"
-              active={active === 'Cancelled requests'}
-              onPress={() => {
-                setActive('Cancelled requests');
-                props.navigation.navigate('RequesterCancelledOrderHistory');
-              }}
-              style={styles.drawerFirstChild}
-            />
-          </Drawer.Section>
-        </>
+        <Drawer.Section style={{marginTop: 15}}>
+          <Drawer.Item
+            label="Home"
+            icon="home"
+            active={active === 'Home'}
+            onPress={() => {
+              setActive('Home');
+              props.navigation.navigate('ProviderHome');
+            }}
+          />
+          <Drawer.Item
+            label="Stock"
+            icon="silo"
+            active={active === 'Stock'}
+            onPress={() => {
+              setActive('Stock');
+              props.navigation.navigate('ProviderStock');
+            }}
+          />
+        </Drawer.Section>
+        <Drawer.Section title="Customer Order History">
+          <Drawer.Item
+            label="Completed Orders"
+            icon="check-all"
+            active={active === 'Completed Orders'}
+            onPress={() => {
+              setActive('Completed Orders');
+              props.navigation.navigate('ProviderConfirmedOrderHistory');
+            }}
+            style={styles.drawerFirstChild}
+          />
+          <Drawer.Item
+            label="Cancelled Orders"
+            icon="cancel"
+            active={active === 'Cancelled Orders'}
+            onPress={() => {
+              setActive('Cancelled Orders');
+              props.navigation.navigate('ProviderCancelledOrderHistory');
+            }}
+            style={styles.drawerFirstChild}
+          />
+        </Drawer.Section>
+        <Drawer.Section title="Restock">
+          <Drawer.Item
+            label="Place restock request"
+            icon="restore"
+            active={active === 'Restock'}
+            onPress={() => {
+              setActive('Restock');
+              props.navigation.navigate('RequesterDashboard');
+            }}
+            style={styles.drawerFirstChild}
+          />
+          <Drawer.Item
+            label="Pending payments"
+            icon="cash"
+            active={active === 'Pending payments'}
+            onPress={() => {
+              setActive('Pending payments');
+              props.navigation.navigate('RequesterPayment');
+            }}
+            style={styles.drawerFirstChild}
+          />
+          <Drawer.Item
+            label="Pending confirmations"
+            icon="format-list-checks"
+            active={active === 'Pending confirmations'}
+            onPress={() => {
+              setActive('Pending confirmations');
+              props.navigation.navigate('RequesterConfirm');
+            }}
+            style={styles.drawerFirstChild}
+          />
+          <Drawer.Item
+            label="Completed requests"
+            icon="check-all"
+            active={active === 'Completed requests'}
+            onPress={() => {
+              setActive('Completed requests');
+              props.navigation.navigate('RequesterConfirmedOrderHistory');
+            }}
+            style={styles.drawerFirstChild}
+          />
+          <Drawer.Item
+            label="Cancelled requests"
+            icon="cancel"
+            active={active === 'Cancelled requests'}
+            onPress={() => {
+              setActive('Cancelled requests');
+              props.navigation.navigate('RequesterCancelledOrderHistory');
+            }}
+            style={styles.drawerFirstChild}
+          />
+        </Drawer.Section>
+      </>
     );
   };
 
   const DistributorDrawerContent = () => {
     return (
       <>
-        <Drawer.Section style = {{marginTop : 15}}>
-            <Drawer.Item
-              label="Home"
-              icon="home"
-              active={active === 'Home'}
-              onPress={() => {
-                setActive('Home');
-                props.navigation.navigate('ProviderDashboard');
-              }}
-            />
-            <Drawer.Item
-              label="Stock"
-              icon="silo"
-              active={active === 'Stock'}
-              onPress={() => {
-                setActive('Stock');
-                props.navigation.navigate('ProviderStock');
-              }}
-            />
-          </Drawer.Section>
-          <Drawer.Section title="Order History">
-            <Drawer.Item
-              label="Completed Orders"
-              icon="check-all"
-              active={active === 'Completed Orders'}
-              onPress={() => {
-                setActive('Completed Orders');
-                props.navigation.navigate('ProviderConfirmedOrderHistory');
-              }}
-              style={styles.drawerFirstChild}
-            />
-            <Drawer.Item
-              label="Cancelled Orders"
-              icon="cancel"
-              active={active === 'Cancelled Orders'}
-              onPress={() => {
-                setActive('Cancelled Orders');
-                props.navigation.navigate('ProviderCancelledOrderHistory');
-              }}
-              style={styles.drawerFirstChild}
-            />
-          </Drawer.Section>
+        <Drawer.Section style={{marginTop: 15}}>
+          <Drawer.Item
+            label="Home"
+            icon="home"
+            active={active === 'Home'}
+            onPress={() => {
+              setActive('Home');
+              props.navigation.navigate('ProviderDashboard');
+            }}
+          />
+          <Drawer.Item
+            label="Stock"
+            icon="silo"
+            active={active === 'Stock'}
+            onPress={() => {
+              setActive('Stock');
+              props.navigation.navigate('ProviderStock');
+            }}
+          />
+        </Drawer.Section>
+        <Drawer.Section title="Order History">
+          <Drawer.Item
+            label="Completed Orders"
+            icon="check-all"
+            active={active === 'Completed Orders'}
+            onPress={() => {
+              setActive('Completed Orders');
+              props.navigation.navigate('ProviderConfirmedOrderHistory');
+            }}
+            style={styles.drawerFirstChild}
+          />
+          <Drawer.Item
+            label="Cancelled Orders"
+            icon="cancel"
+            active={active === 'Cancelled Orders'}
+            onPress={() => {
+              setActive('Cancelled Orders');
+              props.navigation.navigate('ProviderCancelledOrderHistory');
+            }}
+            style={styles.drawerFirstChild}
+          />
+        </Drawer.Section>
       </>
     );
   };
@@ -256,25 +256,31 @@ const SideDrawerContent = (props) => {
   return (
     <View style={common.flexOne}>
       <DrawerContentScrollView {...props}>
-        <View >
-          <TouchableOpacity
-            onPress={() =>{console.log('avatar text' , avatarText,name)
+        <View>
+          <TouchableRipple
+            onPress={() => {
+              console.log('avatar text', avatarText, name);
               props.navigation.navigate('MyProfile', {
                 avatarText: avatarText,
                 name: name,
-              })
+              });
             }}>
             <Drawer.Section
-              style={{paddingLeft: 20, flexDirection: 'row', marginTop: 20}}>
-              <Avatar.Text size={70} label={avatarText} />
-              <View style={{margin: 15}}>
+              style={{
+                paddingLeft: 20,
+                flexDirection: 'row',
+                marginTop: 20,
+                justifyContent: 'space-around',
+              }}>
+              <Avatar.Text size={70} label={avatarText} color="white" />
+              <View style={{margin: 10}}>
                 <Text>{name}</Text>
                 <Text note>{userDetails._id}</Text>
                 <Text note>{roleTitle[userCred.role]}</Text>
               </View>
             </Drawer.Section>
-          </TouchableOpacity>
-            <SelectedDrawerContent />
+          </TouchableRipple>
+          <SelectedDrawerContent />
         </View>
       </DrawerContentScrollView>
       <Drawer.Section>

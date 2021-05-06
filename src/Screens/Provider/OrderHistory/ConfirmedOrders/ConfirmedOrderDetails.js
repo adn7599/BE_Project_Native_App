@@ -5,6 +5,7 @@ import {Appbar, Button, Text, DataTable} from 'react-native-paper';
 import moment from 'moment';
 
 import useUserCred from '../../../../UserCredentials';
+import MyContainer from '../../../../Component/MyContainer';
 
 const ConfirmedOrderDetailScreen = ({route, navigation}) => {
   const {item} = route.params;
@@ -29,10 +30,10 @@ const ConfirmedOrderDetailScreen = ({route, navigation}) => {
   });
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.pop()} />
-        <Appbar.Content title="Your Order" />
+        <Appbar.BackAction color="white" onPress={() => navigation.pop()} />
+        <Appbar.Content color="white" title="Your Order" />
       </Appbar.Header>
       <ScrollView style={{paddingHorizontal: 20}}>
         <View style={{marginTop: 20}}>
@@ -146,7 +147,7 @@ const ConfirmedOrderDetailScreen = ({route, navigation}) => {
           </Button>
         </View>
       </ScrollView>
-    </Container>
+    </MyContainer>
   );
 };
 

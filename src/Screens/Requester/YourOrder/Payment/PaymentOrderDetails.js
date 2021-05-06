@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Modal, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Modal,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
 import {Container} from 'native-base';
 import {
   Appbar,
@@ -21,6 +27,7 @@ import {
 } from '../../../../serverQueries/Requester';
 import Loading from '../../../../Component/Loading';
 import colours from '../../../../colours';
+import MyContainer from '../../../../Component/MyContainer';
 
 const PaymentOrderDetailScreen = ({route, navigation}) => {
   const {item} = route.params;
@@ -109,7 +116,7 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
                   alignItems: 'center',
                   padding: 10,
                 }}>
-                <Loading />
+                <ActivityIndicator size={'large'} animating={true} />
                 <Text style={{marginLeft: 30, fontSize: 15}}>
                   {PaymentMode === 'cash'
                     ? 'Processing transaction...'
@@ -159,12 +166,10 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
   console.log(listOrder);
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
-      <Appbar.BackAction
-          onPress={() => navigation.pop()}
-        />
-        <Appbar.Content title="Your Order" />
+        <Appbar.BackAction color="white" onPress={() => navigation.pop()} />
+        <Appbar.Content color="white" title="Your Order" />
       </Appbar.Header>
       <ScrollView style={{paddingHorizontal: 20}}>
         <View style={{marginTop: 20}}>
@@ -306,7 +311,7 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
           </Button>
         </View>
       </ScrollView>
-    </Container>
+    </MyContainer>
   );
 };
 

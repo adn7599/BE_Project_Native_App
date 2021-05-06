@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 import {Appbar, Text, Card} from 'react-native-paper';
 
-
 import Loading from '../../../../Component/Loading';
 import useUserCred from '../../../../UserCredentials';
 import {
   custReqQueries,
   suppReqQueries,
 } from '../../../../serverQueries/Requester';
+import MyContainer from '../../../../Component/MyContainer';
 
 const PaymentOrderScreen = ({navigation}) => {
   const [payResp, setPayResp] = useState(null);
@@ -68,20 +68,26 @@ const PaymentOrderScreen = ({navigation}) => {
             marginBottom: 20,
             elevation: 12,
             borderRadius: 15,
-            
           }}>
-          <Card.Content style={{flexDirection: 'row',justifyContent : 'space-between'}}>
+          <Card.Content
+            style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <View>
-              <Text style ={{fontSize : 17,fontWeight : 'bold',paddingBottom : 10}}>{ordersList.join(', ')}</Text>
-              <Text style ={{fontSize : 17}}>
+              <Text
+                style={{fontSize: 17, fontWeight: 'bold', paddingBottom: 10}}>
+                {ordersList.join(', ')}
+              </Text>
+              <Text style={{fontSize: 17}}>
                 {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} :{' '}
                 {item.request.provider_id.name}
               </Text>
             </View>
-            <Text style = {{fontWeight : 'bold',fontSize : 20}}>{'₹ '} {item.request.payment_amount}</Text>
+            <Text style={{fontWeight: 'bold', fontSize: 20}}>
+              {'₹ '} {item.request.payment_amount}
+            </Text>
           </Card.Content>
-          <Card.Content style={{paddingTop:5}}>
-            <Text style ={{fontSize : 17}}>Request date : {new Date(item.request.time).toLocaleDateString()}
+          <Card.Content style={{paddingTop: 5}}>
+            <Text style={{fontSize: 17}}>
+              Request date : {new Date(item.request.time).toLocaleDateString()}
             </Text>
           </Card.Content>
         </Card>
@@ -90,14 +96,15 @@ const PaymentOrderScreen = ({navigation}) => {
   };
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
         <Appbar.Action
+          color="white"
           size={33}
           icon="menu"
           onPress={() => navigation.openDrawer()}
         />
-        <Appbar.Content title="Your Order" />
+        <Appbar.Content color="white" title="Your Order" />
       </Appbar.Header>
       {payResp !== null ? (
         <>
@@ -119,7 +126,7 @@ const PaymentOrderScreen = ({navigation}) => {
       ) : (
         <Loading />
       )}
-    </Container>
+    </MyContainer>
   );
 };
 

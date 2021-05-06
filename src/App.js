@@ -24,11 +24,13 @@ const Drawer = createDrawerNavigator();
 
 const theme = {
   ...DefaultTheme,
-  roundness: 2,
+  mode: 'exact',
+  roundness: 5,
   colors: {
     ...DefaultTheme.colors,
-    //   primary: '#3498db',
-    //   accent: '#f1c40f',
+    primary: '#EF6C35',
+    accent: '#2BB3C0',
+    text: '#161C2E',
   },
 };
 
@@ -39,7 +41,7 @@ const DrawerNavigation = () => {
     userCred.role === 'customer' ? 'RequesterDashboard' : 'ProviderDashboard';
   return (
     <Drawer.Navigator
-      initialRouteName= {initialRoute}
+      initialRouteName={initialRoute}
       drawerContent={(props) => <SideDrawerContent {...props} />}>
       <Drawer.Screen name="MyProfile" component={MyProfileStack} />
       <Drawer.Screen

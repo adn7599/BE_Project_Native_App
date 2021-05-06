@@ -117,8 +117,8 @@ const ShowCard = ({item, updateCartQuantity, deleteCartItem, toggleSelect}) => {
               <Checkbox
                 status={item.isSelected ? 'checked' : 'unchecked'}
                 onPress={() => toggleSelect(item.product._id)}
-                uncheckedColor="red"
-                color={theme.colors.primary}
+                // uncheckedColor="red"
+                // color={theme.colors.primary}
               />
             </View>
           </View>
@@ -160,11 +160,9 @@ const ShowCard = ({item, updateCartQuantity, deleteCartItem, toggleSelect}) => {
                 justifyContent: 'center',
                 width: 40,
                 height: 40,
-                borderBottomWidth : 0.5
+                borderBottomWidth: 0.5,
               }}>
-              <Text style ={{fontSize : 17}}>
-                {item.cartQuantity.toString()}
-              </Text>
+              <Text style={{fontSize: 17}}>{item.cartQuantity.toString()}</Text>
             </TouchableRipple>
             <TouchableOpacity
               onPress={() => increment()}
@@ -189,8 +187,8 @@ const ShowCard = ({item, updateCartQuantity, deleteCartItem, toggleSelect}) => {
               value={inputValue}
               onChangeText={(text) => setInputValue(text)}
               keyboardType="numeric"
-              style = {{marginHorizontal : 50,textAlign : 'center'}}
-              mode = 'outlined'
+              style={{marginHorizontal: 50, textAlign: 'center'}}
+              mode="outlined"
             />
           </Dialog.Content>
           <Dialog.Actions>

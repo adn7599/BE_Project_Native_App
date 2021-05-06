@@ -31,6 +31,7 @@ const CartScreen = ({navigation}) => {
     console.log('loaded resp', respErr, resp);
     if (respErr === null) {
       if (resp.status == 200) {
+        let respData;
         respData = {...resp.data};
 
         respData.orders.forEach((item) => (item.isSelected = false));
@@ -145,12 +146,10 @@ const CartScreen = ({navigation}) => {
   };
 
   return (
-    <Container>
+    <MyContainer>
       <Appbar.Header>
-      <Appbar.BackAction
-          onPress={() => navigation.pop()}
-        />
-        <Appbar.Content title="Cart" />
+        <Appbar.BackAction color="white" onPress={() => navigation.pop()} />
+        <Appbar.Content color="white" title="Cart" />
       </Appbar.Header>
       {Cart !== null ? (
         <>
@@ -164,7 +163,7 @@ const CartScreen = ({navigation}) => {
           />
           <View
             style={{
-              backgroundColor: '#3498db', 
+              backgroundColor: '#3498db',
             }}>
             <View style={Styles.amountDisplayRow}>
               <Text style={{fontWeight: 'bold', fontSize: 23}}>Total Cost</Text>
@@ -193,7 +192,7 @@ const CartScreen = ({navigation}) => {
       ) : (
         <Loading />
       )}
-    </Container>
+    </MyContainer>
   );
 };
 
