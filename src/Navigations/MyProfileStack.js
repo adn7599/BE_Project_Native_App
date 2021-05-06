@@ -3,7 +3,9 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import ProfileScreen from '../Screens/MyProfile/Profile';
 import ChangePasswordScreen from '../Screens/MyProfile/ChangePassword';
-import RaiseComplaintScreen from '../Screens/Requester/Complaints/PlaceComplaints';
+import ComplaintHistoryScreen from '../Screens/Requester/Complaints/ComplaintHistory/ComplaintHistory';
+import ComplaintHistoryDetailsScreen from '../Screens/Requester/Complaints/ComplaintHistory/ComplaintHistoryDetails';
+
 import {createContext} from 'react';
 
 export const myProfileContext = createContext();
@@ -28,7 +30,20 @@ const MyProfileStack = ({route, navigation}) => {
             headerShown: false,
           }}
         />
-        
+        <Stack.Screen
+          name="ComplaintHistory"
+          component={ComplaintHistoryScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="ComplaintHistoryDetails"
+          component={ComplaintHistoryDetailsScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Navigator>
     </myProfileContext.Provider>
   );

@@ -17,9 +17,11 @@ const ProfileScreen = ({navigation}) => {
           onPress={() => navigation.openDrawer()}
         />
         <Appbar.Content title="Profile" />
-        <Appbar.Action 
-        icon = 'clock-alert-outline'
-        onPress = {() => {}} 
+        <Appbar.Action
+          icon="clock-alert-outline"
+          onPress={() => {
+            navigation.navigate('ComplaintHistory');
+          }}
         />
       </Appbar.Header>
       <View style={{paddingHorizontal: 30}}>
