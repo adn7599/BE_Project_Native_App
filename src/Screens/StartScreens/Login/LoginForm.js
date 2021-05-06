@@ -3,13 +3,12 @@ import {
   SafeAreaView,
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  BackHandler,
   ToastAndroid,
 } from 'react-native';
+import {TextInput} from 'react-native-paper';
 
 import colours from '../../../colours';
 import Logo from '../../../Assets/svgComponents/Logo';
@@ -26,6 +25,7 @@ const LoginForm = ({route, navigation}) => {
   const {role, roleTitle} = route.params;
   const [password, setPassword] = useState('');
   const [regId, setRegId] = useState('');
+  const [togglePassVisible, setTogglePassvisible] = useState(true);
 
   const {saveUserCred} = useUserCred();
 
@@ -113,18 +113,28 @@ const LoginForm = ({route, navigation}) => {
         <View style={styles.inputFields}>
           <TextInput
             value={regId}
-            style={styles.input}
+            //style={styles.input}
             maxLength={12}
             placeholder={numberType}
+            mode = 'outlined'
             placeholderTextColor={colours.brown}
             onChangeText={(text) => setRegId(text)}
           />
           <TextInput
             value={password}
-            style={styles.input}
-            secureTextEntry={true}
+            //style={styles.input}
+            secureTextEntry={togglePassVisible}
             placeholder="Password"
             placeholderTextColor={colours.brown}
+            mode = 'outlined'
+            right={
+              <TextInput.Icon
+                name={
+                  togglePassVisible ? 'eye-off-outline' : 'eye-outline'
+                }
+                onPress={() => setTogglePassvisible(!togglePassVisible)}
+              />
+            }
             onChangeText={(text) => setPassword(text)}
           />
           <Text
@@ -179,8 +189,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colours.brown,
     backgroundColor: '#fff',
-    marginVertical: 5,
-    paddingHorizontal: 10,
+    //marginVertical: 5,
+    //paddingHorizontal: 10,
   },
   button: {
     minWidth: windowWidth / 1.5,
