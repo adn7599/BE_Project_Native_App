@@ -1,13 +1,12 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {
   StyleSheet,
-  Text,
   View,
   KeyboardAvoidingView,
-  TextInput,
   TouchableOpacity,
   ToastAndroid,
 } from 'react-native';
+import {TextInput,Text} from 'react-native-paper';
 import colours from '../../../colours';
 import {accountVerify, sendOTP} from '../../../serverQueries/User/register';
 
@@ -94,20 +93,20 @@ const IdentificationScreen = ({route, navigation}) => {
           Please provide your valid identity number
         </Text>
         <View
-          style={[
-            styles.containerInput,
-            {
-              borderBottomColor: colours.green,
-            },
-          ]}>
+          // style={[
+          //   styles.containerInput,
+          //   {
+          //     borderBottomColor: colours.green,
+          //   },
+          // ]}
+          >
           <TextInput
             ref={(input) => (textInput = input)}
-            style={styles.phoneInputStyle}
+            //style={styles.phoneInputStyle}
             placeholder={numberType}
-            //keyboardType="numeric"
             maxLength={12}
+            mode ='outlined'
             onChangeText={onChangePhone}
-            secureTextEntry={false}
             onFocus={onChangeFocus}
             onBlur={onChangeBlur}
           />

@@ -203,6 +203,9 @@ dependencies {
     }
 
     compile project(':react-native-vector-icons')
+    implementation project(':react-native-location')
+    implementation "com.google.android.gms:play-services-base:16.0.1"
+    implementation "com.google.android.gms:play-services-location:16.0.0"
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

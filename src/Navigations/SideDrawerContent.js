@@ -6,7 +6,7 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import {Icon, Text, Title} from 'native-base';
-import {Avatar, Drawer, List, TouchableRipple} from 'react-native-paper';
+import {Avatar, Divider, Drawer, List, TouchableRipple} from 'react-native-paper';
 import common from '../Global/stylesheet';
 
 import useUserCred from '../UserCredentials';
@@ -19,7 +19,7 @@ const roleTitle = {
 
 const SideDrawerContent = (props) => {
   const {userCred, userDetails, deleteUserCred} = useUserCred();
-  const [active, setActive] = React.useState(null);
+  const [active, setActive] = React.useState('Home');
 
   const CustomerDrawerContent = () => {
     return (
@@ -280,9 +280,11 @@ const SideDrawerContent = (props) => {
               </View>
             </Drawer.Section>
           </TouchableRipple>
+          <Divider />
           <SelectedDrawerContent />
         </View>
       </DrawerContentScrollView>
+      <Divider />
       <Drawer.Section>
         <DrawerItem
           icon={({color, size}) => (

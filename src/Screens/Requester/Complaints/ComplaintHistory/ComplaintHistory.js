@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, View, FlatList} from 'react-native';
+import {SafeAreaView, View, FlatList,ToastAndroid} from 'react-native';
 import {Appbar, Text, TouchableRipple, Card} from 'react-native-paper';
 import useUserCred from '../../../../UserCredentials';
 import {getComplaints} from '../../../../serverQueries/User/complaints';
@@ -7,6 +7,7 @@ import {getComplaints} from '../../../../serverQueries/User/complaints';
 import {} from 'react-native-paper';
 import Loading from '../../../../Component/Loading';
 import {Row} from 'native-base';
+import MyContainer from '../../../../Component/MyContainer';
 
 export default function ComplaintHistory({navigation}) {
   const [complaintsResp, setComplaintsResp] = useState(null);
@@ -72,7 +73,7 @@ export default function ComplaintHistory({navigation}) {
   };
 
   return (
-    <SafeAreaView>
+    <MyContainer>
       <Appbar.Header>
         <Appbar.BackAction color="white" onPress={() => navigation.pop()} />
         <Appbar.Content color="white" title="Your Complaints" />
@@ -92,6 +93,6 @@ export default function ComplaintHistory({navigation}) {
       ) : (
         <Loading />
       )}
-    </SafeAreaView>
+    </MyContainer>
   );
 }

@@ -80,7 +80,7 @@ const ComplaintHistoryDetailsScreen = ({navigation, route}) => {
           />
         </View>
         <View style={{alignSelf: 'center', paddingBottom: 20}}>
-          <Button mode="contained" onPress={() => navigation.pop()}>
+          <Button uppercase = {false} mode="contained" onPress={() => navigation.pop()}>
             Okay
           </Button>
         </View>

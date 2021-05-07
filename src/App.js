@@ -42,7 +42,7 @@ const DrawerNavigation = () => {
   return (
     <Drawer.Navigator
       initialRouteName={initialRoute}
-      drawerContent={(props) => <SideDrawerContent {...props} />}>
+      drawerContent={(props) => <SideDrawerContent {...props}/>}>
       <Drawer.Screen name="MyProfile" component={MyProfileStack} />
       <Drawer.Screen
         name="RequesterDashboard"

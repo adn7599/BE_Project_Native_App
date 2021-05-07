@@ -81,6 +81,12 @@ const CancelledOrdersScreen = ({navigation}) => {
             {'₹ '} {item.request.payment_amount}
           </Text>
         </Card.Content>
+        <Card.Content style={{paddingTop: 5}}>
+          <Text style={{fontSize: 17}}>
+            Cancellation date :{' '}
+            {new Date(item.cancel.time).toLocaleDateString()}
+          </Text>
+        </Card.Content>
       </Card>
     );
   };

@@ -246,6 +246,18 @@ const ProviderDashboardScreen = ({navigation}) => {
               </>
             }
             ListHeaderComponentStyle={{paddingBottom: 10}}
+            ListEmptyComponent={
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Text style={{fontSize: 17, fontStyle: 'italic'}}>
+                  {showSearch ? 'Name not found!!' : 'No orders for you!!'}
+                </Text>
+              </View>
+            }
           />
         </>
       ) : (

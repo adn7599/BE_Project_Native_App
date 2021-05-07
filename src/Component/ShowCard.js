@@ -45,8 +45,11 @@ const ShowCard = ({item, updateCartQuantity, deleteCartItem, toggleSelect}) => {
             </Paragraph>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setDialogVisble(false)}>Cancel</Button>
+            <Button uppercase={false} onPress={() => setDialogVisble(false)}>
+              Cancel
+            </Button>
             <Button
+              uppercase={false}
               onPress={() => {
                 setQuantity(inputValue);
                 setDialogVisble(false);
@@ -199,8 +202,11 @@ const ShowCard = ({item, updateCartQuantity, deleteCartItem, toggleSelect}) => {
             />
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={() => setDialogVisble(false)}>Cancel</Button>
+            <Button uppercase={false} onPress={() => setDialogVisble(false)}>
+              Cancel
+            </Button>
             <Button
+              uppercase={false}
               onPress={() => {
                 setQuantity(inputValue);
                 setDialogVisble(false);

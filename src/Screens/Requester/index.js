@@ -239,6 +239,7 @@ const ListItem = ({item, toggleAddToCart, userCred}) => {
         </View>
         <View style={{paddingTop: 5}}>
           <Button
+          uppercase = {false}
             labelStyle={{color: '#FFF'}}
             style={[
               Sytles.cartButton,

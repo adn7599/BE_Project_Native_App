@@ -20,13 +20,14 @@ const ProfileScreen = ({navigation}) => {
           onPress={() => navigation.openDrawer()}
         />
         <Appbar.Content color="white" title="Profile" />
-        <Appbar.Action
+        {userCred.role !== 'DA' ? <Appbar.Action
           color="white"
           icon="clock-alert-outline"
           onPress={() => {
             navigation.navigate('ComplaintHistory');
           }}
-        />
+        /> : <View />}
+        
       </Appbar.Header>
       <View style={{paddingHorizontal: 30}}>
         <View style={Styles.avatarView}>
@@ -61,6 +62,7 @@ const ProfileScreen = ({navigation}) => {
         </View>
         <View style={{marginTop: 15}}>
           <Button
+            uppercase = {false}
             labelStyle={{color: 'white'}}
             onPress={() => {
               navigation.navigate('ChangePassword');

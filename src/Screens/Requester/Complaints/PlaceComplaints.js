@@ -83,7 +83,8 @@ const RaiseComplaintScreen = ({route, navigation}) => {
 
         <View style={Styles.centeredView}>
           <Button
-            style={{}}
+          uppercase = {false}
+            
             disabled={subject.length < 1 || body.length < 1}
             mode="contained"
             onPress={() => {
@@ -103,7 +104,7 @@ const RaiseComplaintScreen = ({route, navigation}) => {
                   </Paragraph>
                 </Dialog.Content>
                 <Dialog.Actions>
-                  <Button onPress={() => navigation.pop()}>Done</Button>
+                  <Button uppercase = {false} onPress={() => navigation.pop()}>Done</Button>
                 </Dialog.Actions>
               </>
             ) : (

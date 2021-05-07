@@ -8,6 +8,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {Container} from 'native-base';
+import RNLocation from 'react-native-location';
 
 import {Appbar, Text, Button} from 'react-native-paper';
 
@@ -146,6 +147,72 @@ const CartScreen = ({navigation}) => {
     return selectedOrders.map((ord) => ord.product._id);
   };
 
+  const proceedNext = () => {
+    //Location not required in case of supplier
+    if (userCred.role === 'SP') {
+      navigation.navigate('SelectProvider', {
+        orders: getSelectedOrdersList(),
+        location: null,
+      });
+    } else {
+      //User role is customer
+      //First need to get Location
+      //Location permission required first
+
+      RNLocation.configure({
+        distanceFilter: 5.0,
+        desiredAccuracy: {
+          ios: 'best',
+          android: 'balancedPowerAccuracy',
+        },
+        //androidProvider: 'standard',
+      });
+
+      RNLocation.requestPermission({
+        //ios: 'whenInUse',
+        android: {
+          detail: 'fine', // or 'fine'
+          rationale: {
+            title: 'We need to access your location',
+            message: 'We need your location to show you the Suppliers near you',
+            buttonPositive: 'OK',
+            buttonNegative: 'Cancel',
+          },
+        },
+      }).then((granted) => {
+        if (granted) {
+          RNLocation.getLatestLocation()
+            .then((location) => {
+              console.log('current location', location);
+              if (location === null) {
+                ToastAndroid.show(
+                  'Invalid location received!',
+                  ToastAndroid.SHORT,
+                );
+              } else {
+                //Valid location going to next screen
+                navigation.navigate('SelectProvider', {
+                  orders: getSelectedOrdersList(),
+                  location: {
+                    latitude: location.latitude,
+                    longitude: location.longitude,
+                  },
+                });
+              }
+            })
+            .catch((err) => {
+              console.log('Location error: ', err);
+            });
+        } else {
+          ToastAndroid.show(
+            'Need to provide location permission for selecting Providers',
+            ToastAndroid.LONG,
+          );
+        }
+      });
+    }
+  };
+
   return (
     <MyContainer>
       <Appbar.Header>
@@ -161,12 +228,37 @@ const CartScreen = ({navigation}) => {
             keyExtractor={(item) => item.product._id.toString()}
             ListHeaderComponent={<View></View>}
             ListHeaderComponentStyle={{paddingBottom: 20}}
+            ListEmptyComponent={
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Text style={{fontSize: 17, fontStyle: 'italic'}}>
+                  Cart Empty!!
+                </Text>
+              </View>
+            }
+            // ListFooterComponent={{}
+
+            // }
+            // ListFooterComponentStyle={{justifyContent: 'flex-end'}}
           />
           <View
             style={{
               backgroundColor: '#3498db',
+              borderTopStartRadius: 30,
+              borderTopEndRadius: 30,
             }}>
-            <View style={Styles.amountDisplayRow}>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginHorizontal: 20,
+                marginBottom: 20,
+                marginTop: 30,
+                justifyContent: 'space-between',
+              }}>
               <Text style={{fontWeight: 'bold', fontSize: 23}}>Total Cost</Text>
               <Text style={{fontWeight: 'bold', fontSize: 23}}>
                 {'₹ '}
@@ -175,11 +267,7 @@ const CartScreen = ({navigation}) => {
             </View>
             <View style={Styles.centerBtnView}>
               <Button
-                onPress={() =>
-                  navigation.navigate('SelectProvider', {
-                    orders: getSelectedOrdersList(),
-                  })
-                }
+                onPress={() => proceedNext()}
                 disabled={Cart.selectedItemsTotalAmount === 0 ? true : false}
                 uppercase={false}
                 mode="contained"

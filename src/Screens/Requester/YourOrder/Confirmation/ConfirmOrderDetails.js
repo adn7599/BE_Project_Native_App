@@ -166,7 +166,7 @@ const OrderDetailScreen = ({route, navigation}) => {
           </Text>
         </View>
         <View style={{alignSelf: 'center', padding: 20}}>
-          <Button onPress={() => generateQR()} mode="contained">
+          <Button uppercase = {false} onPress={() => generateQR()} mode="contained">
             <Text>Confirm</Text>
           </Button>
         </View>

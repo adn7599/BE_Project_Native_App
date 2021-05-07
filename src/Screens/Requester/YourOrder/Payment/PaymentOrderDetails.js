@@ -1,11 +1,5 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  Modal,
-  ScrollView,
-  ActivityIndicator,
-} from 'react-native';
+import {StyleSheet, View, ScrollView} from 'react-native';
 import {Container} from 'native-base';
 import {
   Appbar,
@@ -15,6 +9,7 @@ import {
   Dialog,
   Portal,
   Paragraph,
+  ActivityIndicator,
 } from 'react-native-paper';
 import DropDownPicker from 'react-native-dropdown-picker';
 import uuid from 'react-native-uuid';
@@ -25,7 +20,7 @@ import {
   custReqQueries,
   suppReqQueries,
 } from '../../../../serverQueries/Requester';
-import Loading from '../../../../Component/Loading';
+
 import colours from '../../../../colours';
 import MyContainer from '../../../../Component/MyContainer';
 
@@ -90,60 +85,7 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
     }
   };
 
-  const PaymentBtn = () => {
-    return (
-      <View style={Styles.centeredView}>
-        <Portal>
-          <Dialog visible={cashModalVisible} dismissable={false}>
-            <Dialog.Title>
-              {PaymentMode === 'cash'
-                ? 'Payment Status'
-                : 'Cancellation Status'}
-            </Dialog.Title>
-            {cashModalMsg !== null ? (
-              <>
-                <Dialog.Content>
-                  <Paragraph>{cashModalMsg}</Paragraph>
-                </Dialog.Content>
-                <Dialog.Actions>
-                  <Button onPress={() => navigation.popToTop()}>Okay</Button>
-                </Dialog.Actions>
-              </>
-            ) : (
-              <Dialog.Content
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  padding: 10,
-                }}>
-                <ActivityIndicator size={'large'} animating={true} />
-                <Text style={{marginLeft: 30, fontSize: 15}}>
-                  {PaymentMode === 'cash'
-                    ? 'Processing transaction...'
-                    : 'Cancelling transaction...'}
-                </Text>
-              </Dialog.Content>
-            )}
-          </Dialog>
-        </Portal>
-        <Button
-          style={{borderRadius: 5, height: 45, justifyContent: 'center'}}
-          mode="contained"
-          disabled={PaymentMode === null}
-          onPress={() =>
-            PaymentMode === 'cash'
-              ? payByCash()
-              : navigation.navigate('UPIPayment', {
-                  transaction_id: item._id,
-                  provider_info: item.request.provider_id,
-                  payment_amount: item.request.payment_amount,
-                })
-          }>
-          Proceed To Pay
-        </Button>
-      </View>
-    );
-  };
+  
 
   const listOrder = item.request.orders.map((ord) => {
     return (
@@ -248,31 +190,79 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
             {item.request.payment_amount}
           </Text>
         </View>
+        <Portal>
+          <Dialog visible={cashModalVisible} dismissable={false}>
+            <Dialog.Title>
+              {PaymentMode === 'cash'
+                ? 'Payment Status'
+                : 'Cancellation Status'}
+            </Dialog.Title>
+            {cashModalMsg !== null ? (
+              <>
+                <Dialog.Content>
+                  <Paragraph>{cashModalMsg}</Paragraph>
+                </Dialog.Content>
+                <Dialog.Actions>
+                  <Button
+                    uppercase={false}
+                    onPress={() => navigation.popToTop()}>
+                    Okay
+                  </Button>
+                </Dialog.Actions>
+              </>
+            ) : (
+              <Dialog.Content
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  padding: 10,
+                }}>
+                <ActivityIndicator size={'large'} animating={true} />
+                <Text style={{marginLeft: 30, fontSize: 15}}>
+                  {PaymentMode === 'cash'
+                    ? 'Processing transaction...'
+                    : 'Cancelling transaction...'}
+                </Text>
+              </Dialog.Content>
+            )}
+          </Dialog>
+        </Portal>
         <View
           style={{
             marginTop: 20,
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <View style={{}}>
-            <DropDownPicker
-              items={[
-                {label: 'Cash', value: 'cash'},
-                {label: 'UPI Pay', value: 'upi'},
-              ]}
-              defaultValue={PaymentMode}
-              placeholder="Payment Mode"
-              containerStyle={{height: 45, width: 170}}
-              itemStyle={{
-                justifyContent: 'flex-start',
-              }}
-              dropDownStyle={{backgroundColor: '#fafafa'}}
-              onChangeItem={(item) => setPaymentMode(item.value)}
-            />
-          </View>
-          <View>
-            <PaymentBtn />
-          </View>
+          <DropDownPicker
+            items={[
+              {label: 'Cash', value: 'cash'},
+              {label: 'UPI Pay', value: 'upi'},
+            ]}
+            defaultValue={PaymentMode}
+            placeholder="Payment Mode"
+            containerStyle={{height: 45, width: 160}}
+            itemStyle={{
+              justifyContent: 'flex-start',
+            }}
+            dropDownStyle={{backgroundColor: '#fafafa'}}
+            onChangeItem={(item) => setPaymentMode(item.value)}
+          />
+          <Button
+            uppercase={false}
+            style={{borderRadius: 5, height: 45, justifyContent: 'center'}}
+            mode="contained"
+            disabled={PaymentMode === null}
+            onPress={() =>
+              PaymentMode === 'cash'
+                ? payByCash()
+                : navigation.navigate('UPIPayment', {
+                    transaction_id: item._id,
+                    provider_info: item.request.provider_id,
+                    payment_amount: item.request.payment_amount,
+                  })
+            }>
+            Proceed To Pay
+          </Button>
         </View>
         <View style={Styles.centeredView}>
           <Portal>
@@ -285,11 +275,15 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
               </Dialog.Content>
               <Dialog.Actions>
                 <Button
+                  uppercase={false}
                   style={{borderRadius: 5}}
                   onPress={() => setCancelModalVisible(false)}>
                   Disagree
                 </Button>
-                <Button style={{borderRadius: 5}} onPress={() => cancelReq()}>
+                <Button
+                  uppercase={false}
+                  style={{borderRadius: 5}}
+                  onPress={() => cancelReq()}>
                   Agree
                 </Button>
               </Dialog.Actions>
@@ -304,6 +298,7 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
             zIndex: 2,
           }}>
           <Button
+            uppercase={false}
             onPress={() => setCancelModalVisible(true)}
             mode="contained"
             style={{borderRadius: 5, height: 45, justifyContent: 'center'}}>

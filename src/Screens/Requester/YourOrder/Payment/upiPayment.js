@@ -133,7 +133,7 @@ const UPIPaymentScreen = ({route, navigation}) => {
                       <Paragraph>{upiModalMsg}</Paragraph>
                     </Dialog.Content>
                     <Dialog.Actions>
-                      <Button onPress={() => navigation.popToTop()}>
+                      <Button uppercase = {false} onPress={() => navigation.popToTop()}>
                         Done
                       </Button>
                     </Dialog.Actions>

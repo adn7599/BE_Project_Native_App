@@ -2,13 +2,12 @@ import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  Text,
-  TextInput,
   View,
   TouchableOpacity,
   ToastAndroid,
   Modal,
 } from 'react-native';
+import {Dialog, Portal, Paragraph, Text, TextInput} from 'react-native-paper';
 import {Button} from 'native-base';
 import colours from '../../../colours';
 
@@ -20,6 +19,8 @@ const SetPassword = ({route, navigation}) => {
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [ModalVisible, setModalVisible] = useState(false);
+  const [togglePassVisible, setTogglePassvisible] = useState(true);
+  const [toggleRePassVisible, setToggleRePassvisible] = useState(true);
 
   let selectedQuery;
   if (intent === 'forgotPassword') {
@@ -73,42 +74,50 @@ const SetPassword = ({route, navigation}) => {
           style={Styles.textInput}
           placeholder="Enter password"
           keyboardType="visible-password"
-          secureTextEntry={true}
+          secureTextEntry={togglePassVisible}
           onChangeText={(text) => setPassword(text)}
+          right={
+            <TextInput.Icon
+              name={togglePassVisible ? 'eye-off-outline' : 'eye-outline'}
+              onPress={() => setTogglePassvisible(!togglePassVisible)}
+            />
+          }
         />
         <TextInput
           value={rePassword}
           style={Styles.textInput}
           placeholder="Re-enter password"
           keyboardType="visible-password"
-          secureTextEntry={true}
+          secureTextEntry={toggleRePassVisible}
           onChangeText={(text) => setRePassword(text)}
+          right={
+            <TextInput.Icon
+              name={toggleRePassVisible ? 'eye-off-outline' : 'eye-outline'}
+              onPress={() => setToggleRePassvisible(!toggleRePassVisible)}
+            />
+          }
         />
       </View>
       <View style={Styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={ModalVisible}
-          onRequestClose={() => navigation.popToTop()}>
-          <View style={Styles.centeredView}>
-            <View style={Styles.modalView}>
-              <Text style={Styles.modalText}>
+        <Portal>
+          <Dialog visible={ModalVisible} dismissable={false}>
+            <Dialog.Content>
+              <Paragraph>
                 {intent === 'forgotPassword'
                   ? 'Password reset successfully'
                   : 'User successfully registered'}
-              </Text>
-              <Text style={Styles.modalText}>You can login now</Text>
-              <View style={Styles.btnView}>
-                <Button
-                  style={[Styles.button, Styles.buttonClose]}
-                  onPress={() => navigation.popToTop()}>
-                  <Text style={Styles.textStyle}>Ok</Text>
-                </Button>
-              </View>
-            </View>
-          </View>
-        </Modal>
+              </Paragraph>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button
+                uppercase={false}
+                style={[Styles.button, Styles.buttonClose]}
+                onPress={() => navigation.popToTop()}>
+                Okay
+              </Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
       </View>
       <View style={Styles.viewBottom}>
         <TouchableOpacity onPress={onPressContinue}>

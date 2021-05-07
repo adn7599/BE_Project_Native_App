@@ -123,7 +123,7 @@ const ConfirmedOrderDetailScreen = ({route, navigation}) => {
           </Text>
         </View>
         <View style={{alignSelf: 'center', padding: 20}}>
-          <Button onPress={() => navigation.goBack()} mode ='contained'>
+          <Button uppercase = {false} onPress={() => navigation.goBack()} mode ='contained'>
             Okay
           </Button>
         </View>

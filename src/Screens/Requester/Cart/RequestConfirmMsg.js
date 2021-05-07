@@ -6,7 +6,7 @@ import {
   ToastAndroid,
   SafeAreaView,
 } from 'react-native';
-import {Button, Text} from 'react-native-paper';
+import {Button, Text, ActivityIndicator} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Loading from '../../../Component/Loading';
@@ -21,7 +21,7 @@ const RequestConfirmMsgScreen = ({route, navigation}) => {
   const selectedQueries =
     userCred.role === 'customer' ? custReqQueries : suppReqQueries;
 
-  let [status,setStatus] = useState(null);
+  let [status, setStatus] = useState(null);
 
   const makeRequest = async () => {
     const [respErr, resp] = await selectedQueries.request(
@@ -75,22 +75,23 @@ const RequestConfirmMsgScreen = ({route, navigation}) => {
               name={status === 'success' ? 'check-circle' : 'times-circle'}
               size={120}
               color={status === 'success' ? 'green' : 'red'}
-              style = {{alignSelf : 'center'}}
+              style={{alignSelf: 'center'}}
             />
             <Text style={Styles.text}>{reqResp}</Text>
+            <Text style={Styles.text}>Go to home screen</Text>
+            <View style={{paddingTop: 20, alignSelf: 'center'}}>
+              <Button
+              uppercase = {false}
+                mode="contained"
+                onPress={() => navigation.popToTop()}
+                style={{width: 100, borderRadius: 5}}>
+                Home
+              </Button>
+            </View>
           </>
         ) : (
           <Loading />
         )}
-        <Text style={Styles.text}>Go to home screen</Text>
-        <View style={{paddingTop: 20, alignSelf: 'center'}}>
-          <Button
-            mode="contained"
-            onPress={() => navigation.popToTop()}
-            style={{width: 100, borderRadius: 5}}>
-            Home
-          </Button>
-        </View>
       </View>
     </SafeAreaView>
   );

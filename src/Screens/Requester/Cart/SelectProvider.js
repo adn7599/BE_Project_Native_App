@@ -36,16 +36,17 @@ const SelectProviderScreen = ({route, navigation}) => {
 
   const themes = useTheme();
 
-  const {orders} = route.params;
+  const {orders, location} = route.params;
   console.log('Orders selected: ', orders);
+  console.log('Location received : ', location);
 
   const loadScreen = async () => {
     let respArr;
     if (userCred.role === 'customer') {
       respArr = await custReqQueries.getSuppliers(
         userCred.relayToken,
-        locLong,
-        locLat,
+        location.longitude, //locLong,
+        location.latitude, //locLat,
         orders,
         Range,
       );
@@ -343,13 +344,6 @@ const SelectProviderScreen = ({route, navigation}) => {
               backgroundColor: '#3498db',
               borderTopStartRadius: 30,
               borderTopEndRadius: 30,
-              shadowRadius: 10,
-              shadowOffset: {
-                width: 0,
-                height: 3,
-              },
-              shadowColor: '#000000',
-              shadowOpacity: 0.9,
             }}>
             <View
               style={{

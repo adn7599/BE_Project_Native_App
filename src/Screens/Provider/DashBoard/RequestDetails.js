@@ -160,6 +160,7 @@ const RequestDetailScreen = ({route, navigation}) => {
             </View>
             <View style={{alignSelf: 'center', padding: 20}}>
               <Button
+                uppercase = {false}
                 onPress={() => {
                   setModalVisible(true);
                   console.log('pressed');
@@ -177,7 +178,7 @@ const RequestDetailScreen = ({route, navigation}) => {
               </Text>
             </View>
             <View style={{alignSelf: 'center', padding: 20}}>
-              <Button onPress={() => navigation.goBack()} mode="contained">
+              <Button uppercase = {false} onPress={() => navigation.goBack()} mode="contained">
                 <Text>Back</Text>
               </Button>
             </View>
@@ -197,43 +198,11 @@ const RequestDetailScreen = ({route, navigation}) => {
               </Paragraph>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button onPress={() => setModalVisible(false)}>Cancel</Button>
-              <Button onPress={() => goToScanQR()}>Continue</Button>
+              <Button uppercase = {false} onPress={() => setModalVisible(false)}>Cancel</Button>
+              <Button uppercase = {false} onPress={() => goToScanQR()}>Continue</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>
-        {/* <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}>
-          <View style={Styles.centeredView}>
-            <View style={Styles.modalView}>
-              <Text style={Styles.modalText}>
-                {item.stageCompleted === 'payment' &&
-                item.payment.mode === 'cash'
-                  ? "The requester opted for cash payment. Make sure you've received the cash before confirming"
-                  : 'Do you really want to confirm'}
-              </Text>
-              <View style={{flexDirection: 'row'}}>
-                <View style={Styles.btnView}>
-                  <Button
-                    style={[Styles.button, Styles.buttonClose]}
-                    onPress={() => goToScanQR()}>
-                    <Text style={Styles.textStyle}>Yes</Text>
-                  </Button>
-                </View>
-                <View style={Styles.btnView}>
-                  <Button
-                    style={[Styles.button, Styles.buttonClose]}
-                    onPress={() => setModalVisible(false)}>
-                    <Text style={Styles.textStyle}>No</Text>
-                  </Button>
-                </View>
-              </View>
-            </View>
-          </View>
-        </Modal> */}
       </View>
     </MyContainer>
   );

@@ -14,6 +14,8 @@ target 'Commoditied_Distribution' do
 
   pod 'react-native-camera', :path => '../node_modules/react-native-camera'
 
+  pod 'react-native-location', :path => '../node_modules/react-native-location'
+
   target 'Commoditied_DistributionTests' do
     inherit! :complete
     # Pods for testing
