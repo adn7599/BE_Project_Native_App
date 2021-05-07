@@ -139,9 +139,13 @@ const OrderDetailScreen = ({route, navigation}) => {
             Payment Details
           </Text>
           <DataTable>
-            <DataTable.Row>
-              <DataTable.Cell>Payment ID</DataTable.Cell>
-              <DataTable.Cell>{item.payment.id}</DataTable.Cell>
+            <DataTable.Row style={{paddingVertical: 10}}>
+              <View style={{flex: 1, alignSelf: 'center'}}>
+                <Text>Payment ID</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text>{item.payment.id}</Text>
+              </View>
             </DataTable.Row>
             <DataTable.Row>
               <DataTable.Cell>Mode</DataTable.Cell>

@@ -98,6 +98,9 @@ const ScanScreen = ({route, navigation}) => {
       onRead={onSuccess}
       //flashMode={RNCamera.Constants.FlashMode.torch}
       showMarker={true}
+      markerStyle = {{borderColor : 'red',borderWidth : 5,}}
+      
+      cameraStyle = {{backfaceVisibility : 'hidden'}}
       topContent={
         <Text style={[styles.heading]}>
           Scan your requester's QR Code to confirm the transaction

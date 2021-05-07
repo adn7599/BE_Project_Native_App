@@ -122,17 +122,18 @@ const ProviderDashboardScreen = ({navigation}) => {
     const ordersList = item.request.orders.map((ord) => ord.product.name);
 
     return (
-      <TouchableRipple
-        onPress={() => navigation.navigate('RequestDetail', {item: item})}>
         <Card
           style={{
-            marginHorizontal: 20,
-            marginBottom: 20,
-            elevation: 12,
+            marginHorizontal : 20,
+            marginBottom : 20,
             borderRadius: 15,
-          }}>
+            borderWidth : 2,
+            borderColor : 'lightgrey'
+          }}
+          onPress={() =>  navigation.navigate('RequestDetail', {item: item})}>
+          
           <Card.Content
-            style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            style={{flexDirection: 'row', justifyContent: 'space-between',}}>
             <View>
               <Text
                 style={{fontSize: 17, fontWeight: 'bold', paddingBottom: 10}}>
@@ -169,7 +170,6 @@ const ProviderDashboardScreen = ({navigation}) => {
             </Text>
           </Card.Content>
         </Card>
-      </TouchableRipple>
     );
   };
 
