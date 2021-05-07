@@ -123,13 +123,15 @@ const ListItem = ({item, toggleAddToCart, userCred}) => {
               paddingTop: 3,
               marginBottom: 10,
               fontSize: 16,
+              color: item.availableQuantity < 30 ? 'red' : 'green',
             }}>
             Available Quantity : {item.availableQuantity}
           </Text>
         </View>
         <View style={{paddingTop: 5}}>
           <Paragraph>
-            {item.product.price} Rs/{item.product.unit}
+            {'₹ '}
+            {item.product.price}/{item.product.unit}
           </Paragraph>
         </View>
       </Card.Content>

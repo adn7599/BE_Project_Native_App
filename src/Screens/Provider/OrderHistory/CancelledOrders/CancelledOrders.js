@@ -54,36 +54,34 @@ const CancelledOrdersScreen = ({navigation}) => {
     const ordersList = item.request.orders.map((ord) => ord.product.name);
 
     return (
-      <TouchableOpacity
+      <Card
+        style={{
+          marginHorizontal: 20,
+          marginBottom: 20,
+          borderRadius: 15,
+          borderWidth: 2,
+          borderColor: 'lightgrey',
+        }}
         onPress={() =>
           navigation.navigate('CancelledOrderDetails', {item: item})
         }>
-        <Card
-          style={{
-            marginHorizontal: 20,
-            marginBottom: 20,
-            elevation: 12,
-            borderRadius: 15,
-          }}>
-          <Card.Content
-            style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <View>
-              <Text
-                style={{fontSize: 17, fontWeight: 'bold', paddingBottom: 10}}>
-                {ordersList.join(', ')}
-              </Text>
-              <Text style={{fontSize: 17}}>
-                {userCred.role === 'SP'
-                  ? `Customer : ${item.request.requester_id.fName} ${item.request.requester_id.lName}`
-                  : `Supplier : ${item.request.requester_id.name}`}
-              </Text>
-            </View>
-            <Text style={{fontWeight: 'bold', fontSize: 20}}>
-              {'₹ '} {item.request.payment_amount}
+        <Card.Content
+          style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View>
+            <Text style={{fontSize: 17, fontWeight: 'bold', paddingBottom: 10}}>
+              {ordersList.join(', ')}
             </Text>
-          </Card.Content>
-        </Card>
-      </TouchableOpacity>
+            <Text style={{fontSize: 17}}>
+              {userCred.role === 'SP'
+                ? `Customer : ${item.request.requester_id.fName} ${item.request.requester_id.lName}`
+                : `Supplier : ${item.request.requester_id.name}`}
+            </Text>
+          </View>
+          <Text style={{fontWeight: 'bold', fontSize: 20}}>
+            {'₹ '} {item.request.payment_amount}
+          </Text>
+        </Card.Content>
+      </Card>
     );
   };
 

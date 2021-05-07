@@ -54,41 +54,39 @@ const ConfirmedOrdersScreen = ({navigation}) => {
     const ordersList = item.request.orders.map((ord) => ord.product.name);
 
     return (
-      <TouchableOpacity
+      <Card
+        style={{
+          marginHorizontal: 20,
+          marginBottom: 20,
+          borderRadius: 15,
+          borderWidth: 2,
+          borderColor: 'lightgrey',
+        }}
         onPress={() =>
           navigation.navigate('ConfirmedOrderDetails', {item: item})
         }>
-        <Card
-          style={{
-            marginHorizontal: 20,
-            marginBottom: 20,
-            elevation: 12,
-            borderRadius: 15,
-          }}>
-          <Card.Content
-            style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <View>
-              <Text
-                style={{fontSize: 17, fontWeight: 'bold', paddingBottom: 10}}>
-                {ordersList.join(', ')}
-              </Text>
-              <Text style={{fontSize: 17}}>
-                {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} :{' '}
-                {item.request.provider_id.name}
-              </Text>
-            </View>
-            <Text style={{fontWeight: 'bold', fontSize: 20}}>
-              {'₹ '} {item.request.payment_amount}
+        <Card.Content
+          style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View>
+            <Text style={{fontSize: 20, fontWeight: 'bold', paddingBottom: 5}}>
+              {ordersList.join(', ')}
             </Text>
-          </Card.Content>
-          <Card.Content style={{paddingTop: 5}}>
             <Text style={{fontSize: 17}}>
-              Confirmation date :{' '}
-              {new Date(item.confirm.time).toLocaleDateString()}
+              {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} :{' '}
+              {item.request.provider_id.name}
             </Text>
-          </Card.Content>
-        </Card>
-      </TouchableOpacity>
+          </View>
+          <Text style={{fontWeight: 'bold', fontSize: 20}}>
+            {'₹ '} {item.request.payment_amount}
+          </Text>
+        </Card.Content>
+        <Card.Content style={{paddingTop: 5}}>
+          <Text style={{fontSize: 17}}>
+            Confirmation date :{' '}
+            {new Date(item.confirm.time).toLocaleDateString()}
+          </Text>
+        </Card.Content>
+      </Card>
     );
   };
 

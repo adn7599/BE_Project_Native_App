@@ -122,54 +122,57 @@ const ProviderDashboardScreen = ({navigation}) => {
     const ordersList = item.request.orders.map((ord) => ord.product.name);
 
     return (
-        <Card
-          style={{
-            marginHorizontal : 20,
-            marginBottom : 20,
-            borderRadius: 15,
-            borderWidth : 2,
-            borderColor : 'lightgrey'
-          }}
-          onPress={() =>  navigation.navigate('RequestDetail', {item: item})}>
-          
-          <Card.Content
-            style={{flexDirection: 'row', justifyContent: 'space-between',}}>
-            <View>
-              <Text
-                style={{fontSize: 17, fontWeight: 'bold', paddingBottom: 10}}>
-                {ordersList.join(', ')}
-              </Text>
-              <Text style={{fontSize: 17}}>
-                {userCred.role === 'SP' ? 'Customer' : 'Supplier'} :{' '}
-                {userCred.role === 'SP'
-                  ? item.request.requester_id.fName +
-                    ' ' +
-                    item.request.requester_id.lName
-                  : item.request.requester_id.name}
-              </Text>
-            </View>
-            <Text style={{fontWeight: 'bold', fontSize: 20}}>
-              {'₹ '} {item.request.payment_amount}
-            </Text>
-          </Card.Content>
-          <Card.Content>
-            <Text style={{fontSize: 17}}>
-              {item.stageCompleted === 'request'
-                ? `Request date : ${new Date(
-                    item.request.time,
-                  ).toLocaleDateString()}`
-                : `Payment date : ${new Date(
-                    item.payment.time,
-                  ).toLocaleDateString()}`}
+      <Card
+        style={{
+          marginHorizontal: 20,
+          marginBottom: 20,
+          borderRadius: 15,
+          borderWidth: 2,
+          borderColor: 'lightgrey',
+        }}
+        onPress={() => navigation.navigate('RequestDetail', {item: item})}>
+        <Card.Content
+          style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View>
+            <Text style={{fontSize: 20, fontWeight: 'bold', paddingBottom: 5}}>
+              {ordersList.join(', ')}
             </Text>
             <Text style={{fontSize: 17}}>
-              Status :{' '}
-              {item.stageCompleted === 'request'
-                ? 'Payment Not done'
-                : 'Confirm Action needed'}
+              {userCred.role === 'SP' ? 'Customer' : 'Supplier'} :{' '}
+              {userCred.role === 'SP'
+                ? item.request.requester_id.fName +
+                  ' ' +
+                  item.request.requester_id.lName
+                : item.request.requester_id.name}
             </Text>
-          </Card.Content>
-        </Card>
+          </View>
+          <Text style={{fontWeight: 'bold', fontSize: 20}}>
+            {'₹ '} {item.request.payment_amount}
+          </Text>
+        </Card.Content>
+        <Card.Content>
+          <Text style={{fontSize: 17}}>
+            {item.stageCompleted === 'request'
+              ? `Request date : ${new Date(
+                  item.request.time,
+                ).toLocaleDateString()}`
+              : `Payment date : ${new Date(
+                  item.payment.time,
+                ).toLocaleDateString()}`}
+          </Text>
+          <Text
+            style={{
+              fontSize: 17,
+              fontWeight: 'bold',
+              color: item.stageCompleted === 'request' ? 'red' : 'orange',
+            }}>
+            {/* Status :{' '} */}
+            {item.stageCompleted === 'request'
+              ? 'Payment Not done'
+              : 'Confirm Action needed'}
+          </Text>
+        </Card.Content>
+      </Card>
     );
   };
 

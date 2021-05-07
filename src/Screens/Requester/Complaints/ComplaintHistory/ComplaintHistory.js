@@ -42,35 +42,32 @@ export default function ComplaintHistory({navigation}) {
 
   const renderItem = ({item}) => {
     return (
-      <TouchableRipple
+      <Card
+        style={{
+          marginHorizontal: 20,
+          marginBottom: 20,
+          borderRadius: 15,
+          borderWidth: 2,
+          borderColor: 'lightgrey',
+        }}
         onPress={() =>
           navigation.navigate('ComplaintHistoryDetails', {item: item})
         }>
-        <Card
-          style={{
-            marginHorizontal: 20,
-            marginBottom: 20,
-            elevation: 12,
-            borderRadius: 15,
-          }}>
-          <Card.Content>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-              {item.subject}
+        <Card.Content>
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>{item.subject}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{fontSize: 17, fontWeight: 'bold'}}>
+              {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} :{' '}
             </Text>
-            <View style={{flexDirection: 'row'}}>
-              <Text style={{fontSize: 17, fontWeight: 'bold'}}>
-                {userCred.role === 'customer' ? 'Supplier' : 'Distributor'} :{' '}
-              </Text>
-              <Text style={{fontSize: 17}}>{item.complainee.name}</Text>
-            </View>
-          </Card.Content>
-          <Card.Content style={{paddingTop: 5}}>
-            <Text style={{fontSize: 17}}>
-              {new Date(item.time).toLocaleDateString()}
-            </Text>
-          </Card.Content>
-        </Card>
-      </TouchableRipple>
+            <Text style={{fontSize: 17}}>{item.complainee.name}</Text>
+          </View>
+        </Card.Content>
+        <Card.Content style={{paddingTop: 5}}>
+          <Text style={{fontSize: 17}}>
+            {new Date(item.time).toLocaleDateString()}
+          </Text>
+        </Card.Content>
+      </Card>
     );
   };
 

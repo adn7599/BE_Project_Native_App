@@ -254,8 +254,9 @@ const SelectProviderScreen = ({route, navigation}) => {
         style={{
           marginHorizontal: 20,
           marginBottom: 20,
-          elevation: 12,
           borderRadius: 15,
+          borderWidth: 2,
+          borderColor: 'lightgrey',
         }}>
         <Card.Content
           style={{

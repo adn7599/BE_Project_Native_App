@@ -89,7 +89,14 @@ const ShowCard = ({item, updateCartQuantity, deleteCartItem, toggleSelect}) => {
 
   return (
     <>
-      <Card style={Styles.card}>
+      <Card
+        style={{
+          marginHorizontal: 20,
+          marginBottom: 20,
+          borderRadius: 15,
+          borderWidth: 2,
+          borderColor: 'lightgrey',
+        }}>
         <Card.Content style={{flexDirection: 'row'}}>
           <View style={{flex: 3}}>
             <MyFastImage
