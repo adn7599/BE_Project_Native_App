@@ -1,6 +1,5 @@
-import React, {useState, useRef} from 'react';
-import {View, StyleSheet, Modal, ToastAndroid} from 'react-native';
-import {Container} from 'native-base';
+import React, {useState} from 'react';
+import {View, StyleSheet, ToastAndroid} from 'react-native';
 import {
   Appbar,
   Button,
@@ -14,7 +13,6 @@ import {
 
 import useUserCred from '../../UserCredentials';
 import * as UserQueries from '../../serverQueries/User/changePassword';
-import Loading from '../../Component/Loading';
 import MyContainer from '../../Component/MyContainer';
 
 const ChangePasswordScreen = ({navigation}) => {

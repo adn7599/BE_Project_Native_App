@@ -1,12 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useState, createContext, useEffect} from 'react';
-import {useContext} from 'react/cjs/react.development';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  TimePickerAndroid,
-  ToastAndroid,
-} from 'react-native';
+import React, {useState, useContext, createContext, useEffect} from 'react';
+import {ToastAndroid} from 'react-native';
 
 import common from './Global/stylesheet';
 import SplashScreen from './Screens/StartScreens/SplashScreen';

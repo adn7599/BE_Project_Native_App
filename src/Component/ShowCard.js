@@ -1,5 +1,5 @@
 import {ThemeProvider} from '@react-navigation/native';
-import React, {useState, useContext, useRef} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,

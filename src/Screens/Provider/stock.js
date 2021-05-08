@@ -1,17 +1,11 @@
-import React, {useEffect} from 'react';
-import {Container, Body, Header} from 'native-base';
+import React, {useEffect, useState} from 'react';
 import {
   Appbar,
   Title,
   Text,
   Paragraph,
-  List,
-  Button,
-  Searchbar,
   Card,
   Provider as PaperProvider,
-  useTheme,
-  Surface,
   Divider,
 } from 'react-native-paper';
 import {
@@ -19,8 +13,6 @@ import {
   FlatList,
   View,
   StyleSheet,
-  Image,
-  BackHandler,
   ToastAndroid,
   TouchableOpacity,
 } from 'react-native';
@@ -28,8 +20,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import useUserCred from '../../UserCredentials';
 import {suppProvQueries, distProvQueries} from '../../serverQueries/Provider';
-import common from '../../Global/stylesheet';
-import {useState} from 'react/cjs/react.development';
 import Loading from '../../Component/Loading';
 import MyFastImage from '../../Component/FastImage';
 
