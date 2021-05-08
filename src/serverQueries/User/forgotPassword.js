@@ -19,7 +19,7 @@ export async function sendOTP(role, reg_id) {
     const response = await axios(config);
     return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    console.error(err.stack);
+    console.log(err.stack);
     return [err, null];
   }
 }
@@ -46,7 +46,7 @@ export async function verifyOTP(role, reg_id, otp, token) {
     const response = await axios(config);
     return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    console.error(err.stack);
+    console.log(err.stack);
     return [err, null];
   }
 }
@@ -73,7 +73,7 @@ export async function resetPassword(role, reg_id, newPassword, token) {
     const response = await axios(config);
     return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    console.error(err.stack);
+    console.log(err.stack);
     return [err, null];
   }
 }

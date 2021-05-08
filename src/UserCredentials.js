@@ -60,7 +60,7 @@ export const UserCredentials = ({children}) => {
       }
     } catch (err) {
       console.log('Error while loading stored user credentials');
-      console.error(err);
+      console.log(err);
     }
   };
 
@@ -95,7 +95,7 @@ export const UserCredentials = ({children}) => {
       console.log('Logged in as user : ', storedUserCreds);
     } catch (err) {
       console.log('Error while saving user credentials');
-      console.error(err, err.lineNumber, err.columnNumber);
+      console.log(err, err.lineNumber, err.columnNumber);
     }
   };
 
@@ -105,7 +105,7 @@ export const UserCredentials = ({children}) => {
       setUserCred(null);
     } catch (err) {
       console.log('Error while saving user credentials');
-      console.error(err);
+      console.log(err);
     }
   };
 

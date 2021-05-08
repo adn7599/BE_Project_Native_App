@@ -28,7 +28,7 @@ import Loading from '../../../Component/Loading';
 import MyContainer from '../../../Component/MyContainer';
 
 const SelectProviderScreen = ({route, navigation}) => {
-  const [locLong, locLat] = [72.9756461, 19.1869078];
+  //const [locLong, locLat] = [72.9756461, 19.1869078];
   const [providers, setProviders] = useState(null);
   const [Range, setRange] = useState(100);
 

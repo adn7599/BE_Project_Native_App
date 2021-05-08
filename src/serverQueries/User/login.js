@@ -79,21 +79,21 @@ export default async function login(role, reg_id, password) {
         } else {
           //Relay 400
           //status code 400, something wrong
-          console.error('Relay Server => ', respRelay.data);
+          console.log('Relay Server => ', respRelay.data);
           return [respRelay.data.error, null, null];
         }
       } else {
-        console.error('Relay Server =>', relayErr);
+        console.log('Relay Server =>', relayErr);
         return [relayErr, null, null];
       }
     } else {
       //TTP 400
       //status code 400, something wrong
-      console.error('TTP Server => ', respTTP.data);
+      console.log('TTP Server => ', respTTP.data);
       return [respTTP.data.error, null, null];
     }
   } else {
-    console.error('TTP Server =>', ttpError);
+    console.log('TTP Server =>', ttpError);
     return [ttpError, null, null];
   }
 }

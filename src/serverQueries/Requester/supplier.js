@@ -20,7 +20,7 @@ export async function getProducts(relayToken) {
     const response = await axios(config);
     return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    console.error(err.stack);
+    console.log(err.stack);
     return [err, null];
   }
 }
@@ -40,7 +40,7 @@ export async function getCart(relayToken) {
     const response = await axios(config);
     return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    console.error(err.stack);
+    console.log(err.stack);
     return [err, null];
   }
 }
@@ -66,7 +66,7 @@ export async function postCart(relayToken, product, quantity) {
     const response = await axios(config);
     return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    console.error(err.stack);
+    console.log(err.stack);
     return [err, null];
   }
 }
@@ -91,7 +91,7 @@ export async function getDistributors(relayToken, ordersArray) {
     const response = await axios(config);
     return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    console.error(err.stack);
+    console.log(err.stack);
     return [err, null];
   }
 }
@@ -117,7 +117,7 @@ async function postRequest(relayToken, request, requestSign) {
     const response = await axios(config);
     return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    console.error(err.stack);
+    console.log(err.stack);
     return [err, null];
   }
 }
@@ -143,7 +143,7 @@ async function cancelRequest(relayToken, cancel, cancelSign) {
     const response = await axios(config);
     return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    console.error(err.stack);
+    console.log(err.stack);
     return [err, null];
   }
 }
@@ -169,7 +169,7 @@ async function postPayment(relayToken, payment, paymentSign) {
     const response = await axios(config);
     return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    console.error(err.stack);
+    console.log(err.stack);
     return [err, null];
   }
 }
@@ -189,7 +189,7 @@ export async function getOrders(relayToken, stageCompleted) {
     const response = await axios(config);
     return [null, {status: response.status, data: response.data}];
   } catch (err) {
-    console.error(err.stack);
+    console.log(err.stack);
     return [err, null];
   }
 }
