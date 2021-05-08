@@ -122,6 +122,18 @@ const ConfirmOrderScreen = ({navigation}) => {
               </View>
             }
             ListHeaderComponentStyle={{paddingBottom: 20}}
+            ListEmptyComponent={
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Text style={{fontSize: 17, fontStyle: 'italic'}}>
+                  List Empty!!
+                </Text>
+              </View>
+            }
           />
         </>
       ) : (

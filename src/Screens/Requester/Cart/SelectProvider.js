@@ -337,6 +337,18 @@ const SelectProviderScreen = ({route, navigation}) => {
             initialNumToRender={6}
             renderItem={renderItem}
             keyExtractor={(item) => item._id}
+            ListEmptyComponent={
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Text style={{fontSize: 17, fontStyle: 'italic'}}>
+                  No provider found!!
+                </Text>
+              </View>
+            }
           />
 
           <View

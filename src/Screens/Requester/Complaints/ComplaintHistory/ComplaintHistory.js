@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, View, FlatList,ToastAndroid} from 'react-native';
+import {SafeAreaView, View, FlatList, ToastAndroid} from 'react-native';
 import {Appbar, Text, TouchableRipple, Card} from 'react-native-paper';
 import useUserCred from '../../../../UserCredentials';
 import {getComplaints} from '../../../../serverQueries/User/complaints';
@@ -88,6 +88,18 @@ export default function ComplaintHistory({navigation}) {
             keyExtractor={(item) => item._id}
             ListHeaderComponent={<View></View>}
             ListHeaderComponentStyle={{paddingBottom: 20}}
+            ListEmptyComponent={
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Text style={{fontSize: 17, fontStyle: 'italic'}}>
+                  List Empty!!
+                </Text>
+              </View>
+            }
           />
         </>
       ) : (

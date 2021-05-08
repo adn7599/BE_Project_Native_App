@@ -90,6 +90,18 @@ const ProviderStock = ({navigation}) => {
           keyExtractor={(item) => item.product._id.toString()}
           ListHeaderComponent={<View></View>}
           ListHeaderComponentStyle={{paddingBottom: 20}}
+          ListEmptyComponent={
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text style={{fontSize: 17, fontStyle: 'italic'}}>
+                Stock Empty!!
+              </Text>
+            </View>
+          }
         />
       ) : (
         <Loading />
@@ -123,7 +135,6 @@ const ListItem = ({item, toggleAddToCart, userCred}) => {
               paddingTop: 3,
               marginBottom: 10,
               fontSize: 16,
-              
             }}>
             Available Quantity : {item.availableQuantity}
           </Text>

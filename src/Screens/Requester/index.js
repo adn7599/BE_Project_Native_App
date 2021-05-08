@@ -195,7 +195,7 @@ const CustomerDashboardScreen = ({navigation}) => {
               }>
               <Body>
                 <Text style={Sytles.welcomeHeaderText}>
-                  Welcome,{' '}
+                  Welcome{' '}
                   {userCred.role === 'customer'
                     ? userDetails.fName
                     : userDetails.name}
@@ -205,6 +205,18 @@ const CustomerDashboardScreen = ({navigation}) => {
             </Header>
           }
           ListHeaderComponentStyle={{paddingBottom: 20}}
+          ListEmptyComponent={
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text style={{fontSize: 17, fontStyle: 'italic'}}>
+                List Empty!!
+              </Text>
+            </View>
+          }
         />
       ) : (
         <Loading />

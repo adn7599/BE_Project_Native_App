@@ -234,7 +234,7 @@ const ProviderDashboardScreen = ({navigation}) => {
                         paddingLeft: 20,
                         color: '#fff',
                       }}>
-                      Welcome, {userDetails.name}!
+                      Welcome {userDetails.name}!
                     </Text>
                   </Body>
                 </Header>
