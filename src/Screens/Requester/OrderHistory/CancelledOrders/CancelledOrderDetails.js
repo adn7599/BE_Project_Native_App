@@ -125,12 +125,17 @@ const ConfirmedOrderDetailScreen = ({route, navigation}) => {
           </Text>
         </View>
         <View style={{marginTop: 20}}>
-          <Text style={{fontSize: 18,fontWeight : 'bold'}}>
-            Total Cost : {'₹ '}{item.request.payment_amount}
+          <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            Total Cost : {'₹ '}
+            {item.request.payment_amount}
           </Text>
         </View>
         <View style={{alignSelf: 'center', margin: 20}}>
-          <Button uppercase = {false} onPress={() => navigation.pop()} mode="contained">
+          <Button
+            labelStyle={{color: 'white'}}
+            uppercase={false}
+            onPress={() => navigation.pop()}
+            mode="contained">
             Okay
           </Button>
         </View>

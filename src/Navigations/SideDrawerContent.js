@@ -6,7 +6,13 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import {Icon, Text, Title} from 'native-base';
-import {Avatar, Divider, Drawer, List, TouchableRipple} from 'react-native-paper';
+import {
+  Avatar,
+  Divider,
+  Drawer,
+  List,
+  TouchableRipple,
+} from 'react-native-paper';
 import common from '../Global/stylesheet';
 
 import useUserCred from '../UserCredentials';
@@ -291,7 +297,9 @@ const SideDrawerContent = (props) => {
             <Icon name="md-exit-outline" color={color} size={size} />
           )}
           label="Sign Out"
-          onPress={() => deleteUserCred()}
+          onPress={() => {
+            deleteUserCred();
+          }}
         />
       </Drawer.Section>
     </View>

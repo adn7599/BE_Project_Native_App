@@ -271,7 +271,7 @@ const CartScreen = ({navigation}) => {
                 disabled={Cart.selectedItemsTotalAmount === 0 ? true : false}
                 uppercase={false}
                 mode="contained"
-                labelStyle={{fontSize: 18}}
+                labelStyle={{fontSize: 18, color: 'white'}}
                 style={{borderRadius: 10}}>
                 Proceed To Order
               </Button>

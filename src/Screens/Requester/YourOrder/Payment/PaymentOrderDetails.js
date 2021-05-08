@@ -85,8 +85,6 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
     }
   };
 
-  
-
   const listOrder = item.request.orders.map((ord) => {
     return (
       <DataTable.Row
@@ -249,6 +247,7 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
           />
           <Button
             uppercase={false}
+            labelStyle={{color: 'white'}}
             style={{borderRadius: 5, height: 45, justifyContent: 'center'}}
             mode="contained"
             disabled={PaymentMode === null}
@@ -298,6 +297,7 @@ const PaymentOrderDetailScreen = ({route, navigation}) => {
             zIndex: 2,
           }}>
           <Button
+            labelStyle={{color: 'white'}}
             uppercase={false}
             onPress={() => setCancelModalVisible(true)}
             mode="contained"

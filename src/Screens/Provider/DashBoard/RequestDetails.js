@@ -132,8 +132,8 @@ const RequestDetailScreen = ({route, navigation}) => {
                 Payment Details
               </Text>
               <DataTable>
-                <DataTable.Row style ={{paddingVertical : 10}}>
-                  <View style={{flex: 1,alignSelf : 'center'}}>
+                <DataTable.Row style={{paddingVertical: 10}}>
+                  <View style={{flex: 1, alignSelf: 'center'}}>
                     <Text>Payment ID</Text>
                   </View>
                   <View style={{flex: 1}}>
@@ -160,13 +160,14 @@ const RequestDetailScreen = ({route, navigation}) => {
             </View>
             <View style={{alignSelf: 'center', padding: 20}}>
               <Button
-                uppercase = {false}
+                labelStyle={{color: 'white'}}
+                uppercase={false}
                 onPress={() => {
                   setModalVisible(true);
                   console.log('pressed');
                 }}
                 mode="contained">
-                <Text>Confirm</Text>
+                Confirm
               </Button>
             </View>
           </>
@@ -178,8 +179,12 @@ const RequestDetailScreen = ({route, navigation}) => {
               </Text>
             </View>
             <View style={{alignSelf: 'center', padding: 20}}>
-              <Button uppercase = {false} onPress={() => navigation.goBack()} mode="contained">
-                <Text>Back</Text>
+              <Button
+                labelStyle={{color: 'white'}}
+                uppercase={false}
+                onPress={() => navigation.goBack()}
+                mode="contained">
+                Back
               </Button>
             </View>
           </View>
@@ -198,8 +203,12 @@ const RequestDetailScreen = ({route, navigation}) => {
               </Paragraph>
             </Dialog.Content>
             <Dialog.Actions>
-              <Button uppercase = {false} onPress={() => setModalVisible(false)}>Cancel</Button>
-              <Button uppercase = {false} onPress={() => goToScanQR()}>Continue</Button>
+              <Button uppercase={false} onPress={() => setModalVisible(false)}>
+                Cancel
+              </Button>
+              <Button uppercase={false} onPress={() => goToScanQR()}>
+                Continue
+              </Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>

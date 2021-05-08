@@ -142,6 +142,7 @@ const ShowCard = ({item, updateCartQuantity, deleteCartItem, toggleSelect}) => {
           <Button
             icon="delete"
             mode="contained"
+            labelStyle={{color: 'white'}}
             onPress={() => deleteCartItem(item.product._id)}
             style={{width: 120, borderRadius: 8}}
             uppercase={false}

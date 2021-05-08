@@ -18,7 +18,7 @@ const ComplaintHistoryDetailsScreen = ({navigation, route}) => {
         <Appbar.Content color="white" title="Complaint Details" />
       </Appbar.Header>
       <ScrollView style={{paddingHorizontal: 20}}>
-        <View style = {{marginTop : 20}}>
+        <View style={{marginTop: 20}}>
           <Text style={{fontWeight: 'bold', fontSize: 23}}>{item.subject}</Text>
           <Text style={{fontSize: 17}}>
             {moment(new Date(item.time)).format('lll')}
@@ -61,7 +61,7 @@ const ComplaintHistoryDetailsScreen = ({navigation, route}) => {
             </DataTable.Row>
           </DataTable>
         </View>
-        <View style={{marginBottom : 20}}>
+        <View style={{marginBottom: 20}}>
           <Text
             style={{
               fontSize: 20,
@@ -80,7 +80,11 @@ const ComplaintHistoryDetailsScreen = ({navigation, route}) => {
           />
         </View>
         <View style={{alignSelf: 'center', paddingBottom: 20}}>
-          <Button uppercase = {false} mode="contained" onPress={() => navigation.pop()}>
+          <Button
+            labelStyle={{color: 'white'}}
+            uppercase={false}
+            mode="contained"
+            onPress={() => navigation.pop()}>
             Okay
           </Button>
         </View>

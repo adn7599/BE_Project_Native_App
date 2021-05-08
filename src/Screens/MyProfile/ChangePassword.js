@@ -130,7 +130,8 @@ const ChangePasswordScreen = ({navigation}) => {
 
         <View style={Styles.centeredView}>
           <Button
-          uppercase = {false}
+            labelStyle={{color: 'white'}}
+            uppercase={false}
             style={{}}
             disabled={
               !(
@@ -164,7 +165,11 @@ const ChangePasswordScreen = ({navigation}) => {
                   </Paragraph>
                 </Dialog.Content>
                 <Dialog.Actions>
-                  <Button uppercase = {false} onPress={() => navigation.popToTop()}>Done</Button>
+                  <Button
+                    uppercase={false}
+                    onPress={() => navigation.popToTop()}>
+                    Done
+                  </Button>
                 </Dialog.Actions>
               </>
             ) : (

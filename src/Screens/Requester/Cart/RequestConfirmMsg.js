@@ -81,7 +81,8 @@ const RequestConfirmMsgScreen = ({route, navigation}) => {
             <Text style={Styles.text}>Go to home screen</Text>
             <View style={{paddingTop: 20, alignSelf: 'center'}}>
               <Button
-              uppercase = {false}
+                uppercase={false}
+                labelStyle={{color: 'white'}}
                 mode="contained"
                 onPress={() => navigation.popToTop()}
                 style={{width: 100, borderRadius: 5}}>

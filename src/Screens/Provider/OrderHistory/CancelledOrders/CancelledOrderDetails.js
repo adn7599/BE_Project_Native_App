@@ -1,8 +1,6 @@
 import React from 'react';
-import {StyleSheet, View,ScrollView,} from 'react-native';
-import {
-  Container,
-} from 'native-base';
+import {StyleSheet, View, ScrollView} from 'react-native';
+import {Container} from 'native-base';
 import {Appbar, Button, Text, DataTable} from 'react-native-paper';
 import moment from 'moment';
 
@@ -123,7 +121,11 @@ const ConfirmedOrderDetailScreen = ({route, navigation}) => {
           </Text>
         </View>
         <View style={{alignSelf: 'center', padding: 20}}>
-          <Button uppercase = {false} onPress={() => navigation.goBack()} mode ='contained'>
+          <Button
+            labelStyle={{color: 'white'}}
+            uppercase={false}
+            onPress={() => navigation.goBack()}
+            mode="contained">
             Okay
           </Button>
         </View>

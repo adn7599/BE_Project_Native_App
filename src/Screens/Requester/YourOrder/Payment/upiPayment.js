@@ -133,7 +133,9 @@ const UPIPaymentScreen = ({route, navigation}) => {
                       <Paragraph>{upiModalMsg}</Paragraph>
                     </Dialog.Content>
                     <Dialog.Actions>
-                      <Button uppercase = {false} onPress={() => navigation.popToTop()}>
+                      <Button
+                        uppercase={false}
+                        onPress={() => navigation.popToTop()}>
                         Done
                       </Button>
                     </Dialog.Actions>
@@ -155,6 +157,7 @@ const UPIPaymentScreen = ({route, navigation}) => {
             </Portal>
             <Button
               style={{borderRadius: 5, height: 40}}
+              labelStyle={{color: 'white'}}
               disabled={UPI_ID.length < 4 || mPin.length < 4}
               mode="contained"
               uppercase={false}

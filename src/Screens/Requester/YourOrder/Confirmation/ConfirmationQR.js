@@ -35,7 +35,11 @@ const ConfirmationQRScreen = ({route, navigation}) => {
         </Text>
       </View>
       <View>
-        <Button uppercase = {false} onPress = {() => navigation.popToTop()} mode = 'contained'>
+        <Button
+          labelStyle={{color: 'white'}}
+          uppercase={false}
+          onPress={() => navigation.popToTop()}
+          mode="contained">
           Done
         </Button>
       </View>
