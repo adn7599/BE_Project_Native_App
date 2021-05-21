@@ -1,4 +1,4 @@
-import React ,{useContext} from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,30 +7,31 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-
 import Customer from '../../Assets/svgComponents/Customer';
 import Supplier from '../../Assets/svgComponents/Supplier';
 import Distributor from '../../Assets/svgComponents/Distributor';
 
 import colours from '../../colours';
 
-
-
-
-const WhoAreYou = ({route ,navigation}) => {
-
+const WhoAreYou = ({route, navigation}) => {
   const {action} = route.params;
 
-  const MyButton = ({title,role, colour}) => {
+  const MyButton = ({title, role, colour}) => {
     let nextScreen;
-    if(action === 'Login'){nextScreen = 'LoginForm'}
-    else{nextScreen = 'IdentificationScreen'}
+    if (action === 'Login') {
+      nextScreen = 'LoginForm';
+    } else {
+      nextScreen = 'IdentificationScreen';
+    }
     return (
-      <TouchableOpacity style={[styles.button, {backgroundColor: colour}]} 
-      onPress={() =>  navigation.navigate(nextScreen,{
-        role : role,
-        roleTitle : title
-      })}>
+      <TouchableOpacity
+        style={[styles.button, {backgroundColor: colour}]}
+        onPress={() =>
+          navigation.navigate(nextScreen, {
+            role: role,
+            roleTitle: title,
+          })
+        }>
         <Text style={styles.btText}>{title}</Text>
       </TouchableOpacity>
     );
@@ -39,29 +40,42 @@ const WhoAreYou = ({route ,navigation}) => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
-        
         <View style={{flex: 1, padding: 10}}>
-            <Text style={styles.text}>
-                Who are{'\n'}
-                you?
-            </Text>    
-        </View> 
+          <Text style={styles.text}>
+            Who are{'\n'}
+            you?
+          </Text>
+        </View>
 
         <View style={[styles.innerContainer]}>
-            <Customer style={{flex: 1}} width={140}/>
-            <MyButton style={{flex: 1}} title="Customer" role = 'customer' colour={colours.yellow} />
+          <Customer style={{flex: 1}} width={140} />
+          <MyButton
+            style={{flex: 1}}
+            title="Customer"
+            role="customer"
+            colour={colours.yellow}
+          />
         </View>
 
         <View style={styles.innerContainer}>
-            <MyButton style={{flex: 1}} title="Supplier" role = 'SP' colour={colours.orange} />
-            <Supplier style={{flex: 1}} width={130}/>
-        </View> 
-        
-        <View style={styles.innerContainer}>
-            <Distributor style={{flex: 1}} width={130}/>
-            <MyButton style={{flex: 1 }} title="Distributor" role = 'DA' colour={colours.green} />
-        </View> 
+          <MyButton
+            style={{flex: 1}}
+            title="Supplier"
+            role="SP"
+            colour={colours.orange}
+          />
+          <Supplier style={{flex: 1}} width={130} />
+        </View>
 
+        <View style={styles.innerContainer}>
+          <Distributor style={{flex: 1}} width={130} />
+          <MyButton
+            style={{flex: 1}}
+            title="Distributor"
+            role="DA"
+            colour={colours.green}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

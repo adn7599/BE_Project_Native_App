@@ -1,4 +1,4 @@
-import React, {useRef, useContext} from 'react';
+import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -83,7 +83,6 @@ const DrawerNavigation = () => {
 };
 
 const WhichStack = () => {
-  //const {UserType} = useContext(Context);
   const {userCred, userDetails} = useUserCred();
 
   console.log('{which}User logged in: ', userCred);

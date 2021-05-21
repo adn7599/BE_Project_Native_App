@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet, SafeAreaView, Dimensions} from 'react-native';
 import {Avatar, Appbar, Button, Text, Menu, Divider} from 'react-native-paper';
 import {myProfileContext} from '../../Navigations/MyProfileStack';
@@ -7,7 +7,6 @@ import useUserCred from '../../UserCredentials';
 import {useTheme} from '@react-navigation/native';
 
 const ProfileScreen = ({navigation}) => {
-  const theme = useTheme();
   const {userDetails, deleteUserCred, userCred} = useUserCred();
   const {avatarText, name} = useContext(myProfileContext);
   return (
@@ -20,14 +19,17 @@ const ProfileScreen = ({navigation}) => {
           onPress={() => navigation.openDrawer()}
         />
         <Appbar.Content color="white" title="Profile" />
-        {userCred.role !== 'DA' ? <Appbar.Action
-          color="white"
-          icon="clock-alert-outline"
-          onPress={() => {
-            navigation.navigate('ComplaintHistory');
-          }}
-        /> : <View />}
-        
+        {userCred.role !== 'DA' ? (
+          <Appbar.Action
+            color="white"
+            icon="clock-alert-outline"
+            onPress={() => {
+              navigation.navigate('ComplaintHistory');
+            }}
+          />
+        ) : (
+          <View />
+        )}
       </Appbar.Header>
       <View style={{paddingHorizontal: 30}}>
         <View style={Styles.avatarView}>
@@ -62,7 +64,7 @@ const ProfileScreen = ({navigation}) => {
         </View>
         <View style={{marginTop: 15}}>
           <Button
-            uppercase = {false}
+            uppercase={false}
             labelStyle={{color: 'white'}}
             onPress={() => {
               navigation.navigate('ChangePassword');

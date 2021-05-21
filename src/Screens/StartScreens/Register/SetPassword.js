@@ -7,7 +7,14 @@ import {
   ToastAndroid,
   Modal,
 } from 'react-native';
-import {Dialog, Portal, Paragraph, Text, TextInput,Button} from 'react-native-paper';
+import {
+  Dialog,
+  Portal,
+  Paragraph,
+  Text,
+  TextInput,
+  Button,
+} from 'react-native-paper';
 import colours from '../../../colours';
 
 import {accountRegister} from '../../../serverQueries/User/register';

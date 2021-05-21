@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -12,7 +12,6 @@ import {TextInput} from 'react-native-paper';
 
 import colours from '../../../colours';
 import Logo from '../../../Assets/svgComponents/Logo';
-import {useState} from 'react/cjs/react.development';
 import login from '../../../serverQueries/User/login';
 import {accountVerify} from '../../../serverQueries/User/register';
 import {sendOTP} from '../../../serverQueries/User/forgotPassword';
@@ -116,7 +115,7 @@ const LoginForm = ({route, navigation}) => {
             //style={styles.input}
             maxLength={12}
             placeholder={numberType}
-            mode = 'outlined'
+            mode="outlined"
             placeholderTextColor={colours.brown}
             onChangeText={(text) => setRegId(text)}
           />
@@ -126,12 +125,10 @@ const LoginForm = ({route, navigation}) => {
             secureTextEntry={togglePassVisible}
             placeholder="Password"
             placeholderTextColor={colours.brown}
-            mode = 'outlined'
+            mode="outlined"
             right={
               <TextInput.Icon
-                name={
-                  togglePassVisible ? 'eye-off-outline' : 'eye-outline'
-                }
+                name={togglePassVisible ? 'eye-off-outline' : 'eye-outline'}
                 onPress={() => setTogglePassvisible(!togglePassVisible)}
               />
             }
