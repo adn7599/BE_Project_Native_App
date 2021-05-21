@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {TouchableOpacity, View, StyleSheet} from 'react-native';
 import {
   DrawerContent,
@@ -24,8 +24,8 @@ const roleTitle = {
 };
 
 const SideDrawerContent = (props) => {
-  const {userCred, userDetails, deleteUserCred} = useUserCred();
-  const [active, setActive] = React.useState('Home');
+  const {userCred, userDetails, deleteUserCred,active} = useUserCred();
+  //const [active, setActive] = React.useState('Home');
 
   const CustomerDrawerContent = () => {
     return (
@@ -36,7 +36,7 @@ const SideDrawerContent = (props) => {
             icon="home"
             active={active === 'Home'}
             onPress={() => {
-              setActive('Home');
+              //setActive('Home');
               props.navigation.navigate('RequesterHome');
             }}
           />
@@ -47,7 +47,7 @@ const SideDrawerContent = (props) => {
             icon="cash"
             active={active === 'Pending payments'}
             onPress={() => {
-              setActive('Pending payments');
+              //setActive('Pending payments');
               props.navigation.navigate('RequesterPayment');
             }}
             style={styles.drawerFirstChild}
@@ -57,7 +57,7 @@ const SideDrawerContent = (props) => {
             icon="format-list-checks"
             active={active === 'Pending confirmation'}
             onPress={() => {
-              setActive('Pending confirmation');
+              //setActive('Pending confirmation');
               props.navigation.navigate('RequesterConfirm');
             }}
             style={styles.drawerFirstChild}
@@ -69,7 +69,7 @@ const SideDrawerContent = (props) => {
             icon="check-all"
             active={active === 'Completed orders'}
             onPress={() => {
-              setActive('Completed orders');
+              //setActive('Completed orders');
               props.navigation.navigate('RequesterConfirmedOrderHistory');
             }}
             style={styles.drawerFirstChild}
@@ -79,7 +79,7 @@ const SideDrawerContent = (props) => {
             icon="cancel"
             active={active === 'Cancelled orders'}
             onPress={() => {
-              setActive('Cancelled orders');
+              //setActive('Cancelled orders');
               props.navigation.navigate('RequesterCancelledOrderHistory');
             }}
             style={styles.drawerFirstChild}
@@ -98,7 +98,7 @@ const SideDrawerContent = (props) => {
             icon="home"
             active={active === 'Home'}
             onPress={() => {
-              setActive('Home');
+              //setActive('Home');
               props.navigation.navigate('ProviderHome');
             }}
           />
@@ -107,7 +107,7 @@ const SideDrawerContent = (props) => {
             icon="silo"
             active={active === 'Stock'}
             onPress={() => {
-              setActive('Stock');
+              //setActive('Stock');
               props.navigation.navigate('ProviderStock');
             }}
           />
@@ -118,7 +118,7 @@ const SideDrawerContent = (props) => {
             icon="check-all"
             active={active === 'Completed Orders'}
             onPress={() => {
-              setActive('Completed Orders');
+              //setActive('Completed Orders');
               props.navigation.navigate('ProviderConfirmedOrderHistory');
             }}
             style={styles.drawerFirstChild}
@@ -128,7 +128,7 @@ const SideDrawerContent = (props) => {
             icon="cancel"
             active={active === 'Cancelled Orders'}
             onPress={() => {
-              setActive('Cancelled Orders');
+              //setActive('Cancelled Orders');
               props.navigation.navigate('ProviderCancelledOrderHistory');
             }}
             style={styles.drawerFirstChild}
@@ -140,7 +140,7 @@ const SideDrawerContent = (props) => {
             icon="restore"
             active={active === 'Restock'}
             onPress={() => {
-              setActive('Restock');
+              //setActive('Restock');
               props.navigation.navigate('RequesterDashboard');
             }}
             style={styles.drawerFirstChild}
@@ -150,17 +150,17 @@ const SideDrawerContent = (props) => {
             icon="cash"
             active={active === 'Pending payments'}
             onPress={() => {
-              setActive('Pending payments');
+              //setActive('Pending payments');
               props.navigation.navigate('RequesterPayment');
             }}
             style={styles.drawerFirstChild}
           />
           <Drawer.Item
-            label="Pending confirmations"
+            label="Pending confirmation"
             icon="format-list-checks"
-            active={active === 'Pending confirmations'}
+            active={active === 'Pending confirmation'}
             onPress={() => {
-              setActive('Pending confirmations');
+              //setActive('Pending confirmations');
               props.navigation.navigate('RequesterConfirm');
             }}
             style={styles.drawerFirstChild}
@@ -170,7 +170,7 @@ const SideDrawerContent = (props) => {
             icon="check-all"
             active={active === 'Completed requests'}
             onPress={() => {
-              setActive('Completed requests');
+              //setActive('Completed requests');
               props.navigation.navigate('RequesterConfirmedOrderHistory');
             }}
             style={styles.drawerFirstChild}
@@ -180,7 +180,7 @@ const SideDrawerContent = (props) => {
             icon="cancel"
             active={active === 'Cancelled requests'}
             onPress={() => {
-              setActive('Cancelled requests');
+              //setActive('Cancelled requests');
               props.navigation.navigate('RequesterCancelledOrderHistory');
             }}
             style={styles.drawerFirstChild}
@@ -199,7 +199,7 @@ const SideDrawerContent = (props) => {
             icon="home"
             active={active === 'Home'}
             onPress={() => {
-              setActive('Home');
+              //setActive('Home');
               props.navigation.navigate('ProviderDashboard');
             }}
           />
@@ -208,7 +208,7 @@ const SideDrawerContent = (props) => {
             icon="silo"
             active={active === 'Stock'}
             onPress={() => {
-              setActive('Stock');
+              //setActive('Stock');
               props.navigation.navigate('ProviderStock');
             }}
           />
@@ -219,7 +219,7 @@ const SideDrawerContent = (props) => {
             icon="check-all"
             active={active === 'Completed Orders'}
             onPress={() => {
-              setActive('Completed Orders');
+              //setActive('Completed Orders');
               props.navigation.navigate('ProviderConfirmedOrderHistory');
             }}
             style={styles.drawerFirstChild}
@@ -229,7 +229,7 @@ const SideDrawerContent = (props) => {
             icon="cancel"
             active={active === 'Cancelled Orders'}
             onPress={() => {
-              setActive('Cancelled Orders');
+              //setActive('Cancelled Orders');
               props.navigation.navigate('ProviderCancelledOrderHistory');
             }}
             style={styles.drawerFirstChild}

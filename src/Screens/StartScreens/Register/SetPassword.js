@@ -7,8 +7,7 @@ import {
   ToastAndroid,
   Modal,
 } from 'react-native';
-import {Dialog, Portal, Paragraph, Text, TextInput} from 'react-native-paper';
-import {Button} from 'native-base';
+import {Dialog, Portal, Paragraph, Text, TextInput,Button} from 'react-native-paper';
 import colours from '../../../colours';
 
 import {accountRegister} from '../../../serverQueries/User/register';
@@ -73,7 +72,6 @@ const SetPassword = ({route, navigation}) => {
           value={password}
           style={Styles.textInput}
           placeholder="Enter password"
-          keyboardType="visible-password"
           secureTextEntry={togglePassVisible}
           onChangeText={(text) => setPassword(text)}
           right={
@@ -87,7 +85,6 @@ const SetPassword = ({route, navigation}) => {
           value={rePassword}
           style={Styles.textInput}
           placeholder="Re-enter password"
-          keyboardType="visible-password"
           secureTextEntry={toggleRePassVisible}
           onChangeText={(text) => setRePassword(text)}
           right={
@@ -111,7 +108,6 @@ const SetPassword = ({route, navigation}) => {
             <Dialog.Actions>
               <Button
                 uppercase={false}
-                style={[Styles.button, Styles.buttonClose]}
                 onPress={() => navigation.popToTop()}>
                 Okay
               </Button>

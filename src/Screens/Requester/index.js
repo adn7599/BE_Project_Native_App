@@ -37,7 +37,7 @@ import MyContainer from '../../Component/MyContainer';
 const CustomerDashboardScreen = ({navigation}) => {
   const [showProdList, setShowProdList] = useState(null);
   const [prodList, setProdList] = useState(null);
-  const {userCred, userDetails, deleteUserCred} = useUserCred();
+  const {userCred, userDetails, deleteUserCred,currentActivePage} = useUserCred();
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -74,6 +74,7 @@ const CustomerDashboardScreen = ({navigation}) => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('product screen focused');
       loadScreen();
+      currentActivePage(userCred.role === 'customer' ? 'Home' : 'Restock')
     });
     return unsubscribe;
   }, []);

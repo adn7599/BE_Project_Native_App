@@ -35,7 +35,7 @@ import MyFastImage from '../../Component/FastImage';
 
 const ProviderStock = ({navigation}) => {
   const [prodList, setProdList] = useState(null);
-  const {userCred, userDetails, deleteUserCred} = useUserCred();
+  const {userCred, userDetails, deleteUserCred,currentActivePage} = useUserCred();
   const selectedQueries =
     userCred.role === 'SP' ? suppProvQueries : distProvQueries;
 
@@ -62,6 +62,7 @@ const ProviderStock = ({navigation}) => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('Provider stock screen focused');
       loadScreen();
+      currentActivePage('Stock')
     });
     return unsubscribe;
   }, []);

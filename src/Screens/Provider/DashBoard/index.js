@@ -33,7 +33,7 @@ const ProviderDashboardScreen = ({navigation}) => {
 
   const theme = useTheme();
 
-  const {userCred, userDetails, deleteUserCred} = useUserCred();
+  const {userCred, userDetails, deleteUserCred,currentActivePage} = useUserCred();
 
   const selectedQueries =
     userCred.role === 'SP' ? suppProvQueries : distProvQueries;
@@ -92,6 +92,7 @@ const ProviderDashboardScreen = ({navigation}) => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('Provider Dashboard screen focused');
       loadScreen();
+      currentActivePage('Home')
     });
     return unsubscribe;
   }, []);

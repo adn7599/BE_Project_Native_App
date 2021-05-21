@@ -20,7 +20,7 @@ import MyContainer from '../../../../Component/MyContainer';
 const PaymentOrderScreen = ({navigation}) => {
   const [payResp, setPayResp] = useState(null);
 
-  const {userCred, userDetails, deleteUserCred} = useUserCred();
+  const {userCred, userDetails, deleteUserCred,currentActivePage} = useUserCred();
 
   const selectedQueries =
     userCred.role === 'customer' ? custReqQueries : suppReqQueries;
@@ -52,6 +52,7 @@ const PaymentOrderScreen = ({navigation}) => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('your orders(payment) screen focused');
       loadScreen();
+      currentActivePage('Pending payments')
     });
     return unsubscribe;
   }, []);

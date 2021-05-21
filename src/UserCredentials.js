@@ -8,7 +8,6 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import common from './Global/stylesheet';
 import SplashScreen from './Screens/StartScreens/SplashScreen';
 import {getUserDetails} from './serverQueries/User/login';
 
@@ -24,6 +23,8 @@ export const UserCredentials = ({children}) => {
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [timePassed, setTimePassed] = useState(false);
+
+  const [active,setActive] = useState('Home');
 
   const loadUserCred = async () => {
     try {
@@ -109,6 +110,10 @@ export const UserCredentials = ({children}) => {
     }
   };
 
+  const currentActivePage = (currentAvtive) => {
+      setActive(currentAvtive);
+  }
+
   useEffect(() => {
     loadUserCred();
     setTimeout(
@@ -123,7 +128,7 @@ export const UserCredentials = ({children}) => {
   if (isLoaded && timePassed) {
     return (
       <userCredContext.Provider
-        value={{userCred, userDetails, saveUserCred, deleteUserCred}}>
+        value={{userCred, userDetails, saveUserCred, deleteUserCred,active,currentActivePage}}>
         {children}
       </userCredContext.Provider>
     );

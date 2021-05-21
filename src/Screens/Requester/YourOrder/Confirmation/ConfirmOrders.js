@@ -21,7 +21,7 @@ import MyContainer from '../../../../Component/MyContainer';
 const ConfirmOrderScreen = ({navigation}) => {
   const [payResp, setPayResp] = useState(null);
 
-  const {userCred, userDetails, deleteUserCred} = useUserCred();
+  const {userCred, userDetails, deleteUserCred,currentActivePage} = useUserCred();
 
   const selectedQueries =
     userCred.role === 'customer' ? custReqQueries : suppReqQueries;
@@ -53,6 +53,7 @@ const ConfirmOrderScreen = ({navigation}) => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('your orders(payment) screen focused');
       loadScreen();
+      currentActivePage('Pending confirmation')
     });
     return unsubscribe;
   }, []);

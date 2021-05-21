@@ -15,7 +15,7 @@ import MyContainer from '../../../../Component/MyContainer';
 const CancelledOrdersScreen = ({navigation}) => {
   const [cancelledResp, setCancelledResp] = useState(null);
 
-  const {userCred, userDetails, deleteUserCred} = useUserCred();
+  const {userCred, userDetails, deleteUserCred,currentActivePage} = useUserCred();
 
   const selectedQueries =
     userCred.role === 'customer' ? custReqQueries : suppReqQueries;
@@ -47,6 +47,7 @@ const CancelledOrdersScreen = ({navigation}) => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('Confirmed order history screen focused');
       loadScreen();
+      currentActivePage(userCred.role === 'customer' ? 'Cancelled orders' : 'Cancelled requests')
     });
     return unsubscribe;
   }, []);
