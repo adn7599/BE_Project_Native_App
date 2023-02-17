@@ -9,8 +9,8 @@ export const ROLE = {
 };
 
 export const URL = {
-  TTP: 'https://be-project-ttp.herokuapp.com',
-  RELAY: 'https://be-project-relay.herokuapp.com',
+  TTP: 'https://bewildered-puce-crayfish.cyclic.app',
+  RELAY: 'https://sore-gold-walkingstick-kit.cyclic.app',
 };
 
 export const IMAGE_URL = `${URL.RELAY}/productImage`;
