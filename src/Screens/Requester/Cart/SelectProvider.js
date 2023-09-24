@@ -161,6 +161,7 @@ const SelectProviderScreen = ({route, navigation}) => {
                   {label: '300 m', value: 300},
                   {label: '400 m', value: 400},
                   {label: '500 m', value: 500},
+                  {label: 'Any', value: 50000000},
                 ]}
                 defaultValue={Range}
                 containerStyle={{height: 40}}
